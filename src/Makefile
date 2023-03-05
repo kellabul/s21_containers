@@ -13,10 +13,9 @@ GCOV_FILES = *.gcov
 LCOV_FILES = *.info
 
 SOURCE_FILES = s21_list.cc
-OBJECT_FILES = s21_list.o
 GTEST_SOURCE_FILES = $(TEST_NAME).cc
 
-.PHONY: all, clean, test, $(NAME).a
+.PHONY: all, clean, test
 .PHONY: compile_test, gcov_report, gcov, asan, compile_test_with_asan
 .PHONY: clang, doclang, cppcheck, valgrind, leaks
 
@@ -29,16 +28,11 @@ clean:
 test: compile_test
 	./$(TEST_NAME)
 
-$(NAME).a:
-	$(CC) $(FLAGS) -c $(SOURCE_FILES)
-	ar rc $(NAME).a $(OBJECT_FILES)
-
 compile_test: clean
 	$(CC) $(FLAGS) $(GTEST_SOURCE_FILES) $(SOURCE_FILES) -o $(TEST_NAME) $(GTEST_FLAGS) \
 	$(GCOV_FLAGS) -D S21_MATRIX_OOP_TESTING
 
 gcov_report: gcov
-	@rm -f $(LCOV_FILES) $(LCOV_REPORT_FOLDER)
 	lcov -t "$(NAME)" -o gcov_report.info -c -d . --rc lcov_branch_coverage=1 --no-external
 	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov_report.info --rc lcov_branch_coverage=1
 	open $(NAME)_report/index.html
