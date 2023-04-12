@@ -1,8 +1,3 @@
 #include "s21_list.h"
+#include <list>
 
-namespace s21 {
-  template <typename T>
-  class list {
-
-  };
-}  // namespace s21
