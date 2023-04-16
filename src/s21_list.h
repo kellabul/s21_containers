@@ -10,20 +10,18 @@ class list {
   using reference = T &;
   using const_reference = const T &;
 
-  // iterator	internal class ListIterator<T> defines the type for iterating
-  // through the container
+  using iterator = IteratorList;
+  using const_iterator = const IteratorList;
 
-  // const_iterator	internal class ListConstIterator<T> defines the constant
-  // type for iterating through the container
 
   using size_type = std::size_t;
 
  public:
-  list() : node_(new node_type()), size_(0) {}
+  list() : root_(new NodeList()), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
-  explicit list(size_type n) : head_
+  explicit list(size_type n) : head_;
   // list(std::initializer_list<value_type> const &items)	initializer list
-  
+
   // constructor, creates list initizialized using std::initializer_list
 
   // list(const list &l)	copy constructor
@@ -38,7 +36,10 @@ class list {
 
   // const_reference back()	access the last element
 
-  // iterator begin()	returns an iterator to the beginning
+  //returns an iterator to the beginning
+    iterator begin() {
+      return iterator(root_);
+    }
   // iterator end()	returns an iterator to the end
 
   // bool empty()	checks whether the container is empty
@@ -52,7 +53,12 @@ class list {
 
   // void erase(iterator pos)	erases element at pos
 
-  // void push_back(const_reference value)	adds an element to the end
+  // adds an element to the end
+  void push_back(const_reference value) {
+    auto new_node = new ListNode(value);
+    root.next_ = &new_node;
+    ++size;
+  }
 
   // void pop_back()	removes the last element
 
@@ -64,8 +70,8 @@ class list {
 
   // void merge(list& other)	merges two sorted lists
 
-  // void splice(const_iterator pos, list& other)	transfers elements from list
-  // other starting from pos
+  // void splice(const_iterator pos, list& other)	transfers elements from
+  // list other starting from pos
 
   // void reverse()	reverses the order of the elements
 
@@ -82,7 +88,16 @@ class list {
     NodeList *next_ = nullptr;
   };
 
-  NodeList node_;
+  class IteratorList {
+    Iterator(Node *node = nullptr) : node(node) {}
+    T operator*() { return node->value_; }
+    bool operator!=(const IteratorList &iter) { return node_ != iter.node; }
+    void operator++() { node = node->next_; } // do we need an exception here?
+    void operator--() { node = node->prev_; }
+    NodeList node_;
+  };
+
+  NodeList root_;
   size_type size_ = 0;
 };
 }  // namespace s21
