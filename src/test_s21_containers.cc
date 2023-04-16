@@ -1,7 +1,3 @@
-#include <gtest/gtest.h>
-
-#include "s21_containers.h"
-
 /*
 Простейшие логические
 EXPECT_TRUE(condition);
@@ -37,8 +33,15 @@ ADD_FAILURE();
 ADD_FAILURE_AT(«file_path», line_number);
 */
 
+#include <gtest/gtest.h>
+#include "s21_containers.h"
+#include <list>
+#include "string.h"
+
+
 TEST(list, Subtest_1) {
-  
+  std::list<int> one{1, 2, 3, 4, 5};
+  s21::list<int> two{1, 2, 3, 4, 5};
 }
 
 int main(int argc, char **argv) {
