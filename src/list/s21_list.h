@@ -1,24 +1,23 @@
 #ifndef CPP2_S21_CONTAINERS_S21_LIST_H_
 #define CPP2_S21_CONTAINERS_S21_LIST_H_
 
+#include "s21_list_iterator.h"
+#include "s21_list_node.h"
+
 namespace s21 {
 template <typename T>
 class list {
- private:
-  class IteratorList;
-  class NodeList;
-
  public:
   using value_type = T;
   using reference = T &;
   using const_reference = const T &;
-  using iterator = IteratorList;
-  using const_iterator = const IteratorList;
-  using node_type = NodeList;
+  using iterator = ListIterator<T>;
+  // using const_iterator = const ListIterator;
+  using node_type = ListNode<T>;
   using size_type = unsigned long long;
 
  public:
-  list() : head_(new NodeList()), size_(0) {}
+  list() : head_(new node_type()), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
   // explicit list(size_type n) : head_;
   // list(std::initializer_list<value_type> const &items)	initializer list
@@ -54,7 +53,7 @@ class list {
 
   // adds an element to the end
   void push_back(const_reference value) {
-    auto new_node = new NodeList(value);
+    auto new_node = new ListNode(value);
     head_.next_ = &new_node;
     ++size_;
   }
@@ -78,28 +77,8 @@ class list {
 
   // void sort()
 
- private:
-  class NodeList {
-    NodeList() = default;
-    explicit NodeList(const value_type value) : value_(value) {}
-    value_type value_ = 0;
-    NodeList *prev_ = nullptr;
-    NodeList *next_ = nullptr;
-  };
-
-  class IteratorList {
-    IteratorList(node_type node) : node_(node) {}
-    T operator*() { return node_->value_; }
-    bool operator!=(const IteratorList &iter) { return node_ != iter.node; }
-    void operator++() { node_ = node_->next_; }  // do we need an exception here?
-    void operator--() { node_ = node_->prev_; }
-    NodeList node_;
-  };
-
-
-
-  NodeList head_;
-  size_type size_ = 0;
+  node_type *head_;
+  size_type size_;
 };
 }  // namespace s21
 
