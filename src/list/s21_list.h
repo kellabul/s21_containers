@@ -17,10 +17,10 @@ class list {
   using size_type = unsigned long long;
 
  public:
-  list() : head_(new node_type()), size_(0) {}
+  list() : head_(new node_type()), tail_(head_), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
-  explicit list(size_type n) : size(n) {
-    while(n--) push_back(value_type());
+  explicit list(size_type n) : size_(n) {
+    while (n--) push_back(value_type());
   };
   // list(std::initializer_list<value_type> const &items)	initializer list
 
@@ -57,8 +57,14 @@ class list {
 
   // adds an element to the end
   void push_back(const_reference value) {
-    auto new_node = new ListNode(value);
-    
+    node_type *new_node = new ListNode(value);
+    if (!size_) {
+      head_ = tail_ = new_node;
+    } else {
+      tail_->next_ = new_node;
+      new_node->prev_ = tail_;
+      tail_ = new_node;
+    }
     ++size_;
   }
 
@@ -82,6 +88,7 @@ class list {
   // void sort()
 
   node_type *head_;
+  node_type *tail_;
   size_type size_;
 };
 }  // namespace s21
