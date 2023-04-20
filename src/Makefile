@@ -12,7 +12,7 @@ COVERAGE_RESULTS= *.gcda
 GCOV_FILES = *.gcov
 LCOV_FILES = *.info
 
-SOURCE_FILES = s21_list.cc
+SOURCE_FILES =
 GTEST_SOURCE_FILES = $(TEST_NAME).cc
 
 .PHONY: all, clean, test
