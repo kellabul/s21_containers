@@ -39,11 +39,25 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <iostream>
 #include <list>
 
-TEST(list, Subtest_1) {
+// TEST(list, Subtest_1) {
+//   s21::list<int> one;
+//   s21::list<int> two(234);
+//   auto iter = two.begin();
+//   EXPECT_EQ(234, *iter);
+// }
+
+TEST(list, push_back) {
   s21::list<int> one;
-  s21::list<int> two(234);
-  auto iter = two.begin();
-  std::cout << *iter;
+  one.push_back(111);
+  one.push_back(222);
+  one.push_back(444);
+  auto iter = one.begin();
+  std::cout << *iter << std::endl;
+  ++iter;
+  std::cout << *iter << std::endl;
+  ++iter;
+  std::cout << *iter << std::endl;
+  ++iter;
 }
 
 int main(int argc, char **argv) {

@@ -13,7 +13,7 @@ class ListIterator {
 
  public:
   ListIterator(node_type *node) : node_(node) {}
-  value_type operator*() { return node_->value(); }
+  value_type operator*() { return node_->value_; }
   bool operator!=(const ListIterator &iterator) {
     return node_ != iterator.node;
   }
