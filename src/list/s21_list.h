@@ -17,7 +17,7 @@ class list {
   using size_type = unsigned long long;
 
  public:
-  list() : head_(new node_type()), tail_(head_), size_(0) {}
+  list() : head_(nullptr), tail_(nullptr), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
   explicit list(size_type n) : size_(n) {
     while (n--) push_back(value_type());
@@ -40,7 +40,8 @@ class list {
 
   // returns an iterator to the beginning
   iterator begin() { return iterator(head_); }
-  // iterator end()	returns an iterator to the end
+  //returns an iterator to the end
+    iterator end() { return iterator(tail_); }
 
   // bool empty()	checks whether the container is empty
   // size_type size()	returns the number of elements
@@ -59,11 +60,15 @@ class list {
   void push_back(const_reference value) {
     node_type *new_node = new ListNode(value);
     if (!size_) {
-      head_ = tail_ = new_node;
+      head_ = new_node;
+      tail_ = new ListNode;
+      head_->next_ = tail_;
+      tail_->prev_ = head_;
     } else {
-      tail_->next_ = new_node;
-      new_node->prev_ = tail_;
-      tail_ = new_node;
+      tail_->prev_->next_ = new_node;
+      new_node->prev_ = tail_->prev_;
+      new_node->next_ = tail_;
+      tail_->prev_ = new_node;
     }
     ++size_;
   }
@@ -88,7 +93,7 @@ class list {
   // void sort()
 
   node_type *head_;
-  node_type *tail_;
+  node_type *tail_; // stands after last element
   size_type size_;
 };
 }  // namespace s21
