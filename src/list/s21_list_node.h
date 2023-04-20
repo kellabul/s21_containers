@@ -12,7 +12,7 @@ class ListNode {
   explicit ListNode(const value_type value) : value_(value) {}
   value_type &get_value() { return value_; }
 
-  value_type value_ = 0;
+  value_type value_;
   ListNode<T> *prev_ = nullptr;
   ListNode<T> *next_ = nullptr;
 };
