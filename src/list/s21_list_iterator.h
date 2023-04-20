@@ -1,5 +1,5 @@
-#ifndef CPP2_S21_CONTAINERS_S21_LIST_ITERATOR_H_
-#define CPP2_S21_CONTAINERS_S21_LIST_ITERATOR_H_
+#ifndef CPP2_S21_CONTAINERS_S21_LIST_LIST_ITERATOR_H_
+#define CPP2_S21_CONTAINERS_S21_LIST_LIST_ITERATOR_H_
 
 #include "s21_list_node.h"
 
@@ -9,17 +9,28 @@ class ListIterator {
  public:
   using value_type = T;
   using node_type = ListNode<T>;
+  using iterator = ListIterator;
 
  public:
-  ListIterator(node_type node) : node_(node) {}
-  value_type operator*() { return node_->value_; }
-  bool operator!=(const ListIterator &iter) { return node_ != iter.node; }
-  void operator++() { node_ = node_->next_; }  // do we need an exception here?
-  void operator--() { node_ = node_->prev_; }
+  ListIterator(node_type *node) : node_(node) {}
+  value_type operator*() { return node_->value(); }
+  bool operator!=(const ListIterator &iterator) {
+    return node_ != iterator.node;
+  }
+
+   // do we need an exception here?
+  iterator operator++() {
+    node_ = node_->next_;
+    return *this;
+  } 
+  iterator operator--() {
+    node_ = node_->prev_;
+    return *this;
+  }
 
  private:
-  node_type node_;
+  node_type *node_;
 };
 }  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_S21_LIST_H_
+#endif  // CPP2_S21_CONTAINERS_S21_LIST_LIST_H_

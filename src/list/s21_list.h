@@ -1,5 +1,5 @@
-#ifndef CPP2_S21_CONTAINERS_S21_LIST_H_
-#define CPP2_S21_CONTAINERS_S21_LIST_H_
+#ifndef CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
+#define CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
 
 #include "s21_list_iterator.h"
 #include "s21_list_node.h"
@@ -19,7 +19,9 @@ class list {
  public:
   list() : head_(new node_type()), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
-  // explicit list(size_type n) : head_;
+  explicit list(size_type n) : size(n) {
+    while(n--) push_back(value_type());
+  };
   // list(std::initializer_list<value_type> const &items)	initializer list
 
   // constructor, creates list initizialized using std::initializer_list
@@ -46,15 +48,17 @@ class list {
 
   // void clear()	clears the contents
 
-  // iterator insert(iterator pos, const_reference value)	inserts elements
-  // into concrete pos and returns the iterator that points to the new element
+  // inserts elements into concrete pos and returns the iterator that points to
+  // the new element
+  // iterator insert(iterator pos, const_reference value) {
+  // }
 
   // void erase(iterator pos)	erases element at pos
 
   // adds an element to the end
   void push_back(const_reference value) {
     auto new_node = new ListNode(value);
-    head_.next_ = &new_node;
+    
     ++size_;
   }
 
@@ -82,4 +86,4 @@ class list {
 };
 }  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_S21_LIST_H_
+#endif  // CPP2_S21_CONTAINERS_S21_LIST_LIST_H_

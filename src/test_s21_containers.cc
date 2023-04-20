@@ -35,13 +35,15 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <gtest/gtest.h>
 #include "s21_containers.h"
-#include <list>
-#include "string.h"
 
+#include <iostream>
+#include <list>
 
 TEST(list, Subtest_1) {
-  std::list<int> one;
-  s21::list<int> two;
+  s21::list<int> one;
+  s21::list<int> two(234);
+  auto iter = two.begin();
+  std::cout << *iter;
 }
 
 int main(int argc, char **argv) {
