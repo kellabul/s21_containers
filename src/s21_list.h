@@ -2,24 +2,25 @@
 #define CPP2_S21_CONTAINERS_S21_LIST_H_
 
 namespace s21 {
-
 template <typename T>
 class list {
+ private:
+  class IteratorList;
+  class NodeList;
+
  public:
   using value_type = T;
   using reference = T &;
   using const_reference = const T &;
-
   using iterator = IteratorList;
   using const_iterator = const IteratorList;
-
-
-  using size_type = std::size_t;
+  using node_type = NodeList;
+  using size_type = unsigned long long;
 
  public:
-  list() : root_(new NodeList()), size_(0) {}
+  list() : head_(new NodeList()), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
-  explicit list(size_type n) : head_;
+  // explicit list(size_type n) : head_;
   // list(std::initializer_list<value_type> const &items)	initializer list
 
   // constructor, creates list initizialized using std::initializer_list
@@ -36,10 +37,8 @@ class list {
 
   // const_reference back()	access the last element
 
-  //returns an iterator to the beginning
-    iterator begin() {
-      return iterator(root_);
-    }
+  // returns an iterator to the beginning
+  iterator begin() { return iterator(head_); }
   // iterator end()	returns an iterator to the end
 
   // bool empty()	checks whether the container is empty
@@ -55,9 +54,9 @@ class list {
 
   // adds an element to the end
   void push_back(const_reference value) {
-    auto new_node = new ListNode(value);
-    root.next_ = &new_node;
-    ++size;
+    auto new_node = new NodeList(value);
+    head_.next_ = &new_node;
+    ++size_;
   }
 
   // void pop_back()	removes the last element
@@ -80,24 +79,26 @@ class list {
   // void sort()
 
  private:
-  struct NodeList {
+  class NodeList {
     NodeList() = default;
-    explicit ListNode(const value_type value) : value_(value) {}
+    explicit NodeList(const value_type value) : value_(value) {}
     value_type value_ = 0;
     NodeList *prev_ = nullptr;
     NodeList *next_ = nullptr;
   };
 
   class IteratorList {
-    Iterator(Node *node = nullptr) : node(node) {}
-    T operator*() { return node->value_; }
+    IteratorList(node_type node) : node_(node) {}
+    T operator*() { return node_->value_; }
     bool operator!=(const IteratorList &iter) { return node_ != iter.node; }
-    void operator++() { node = node->next_; } // do we need an exception here?
-    void operator--() { node = node->prev_; }
+    void operator++() { node_ = node_->next_; }  // do we need an exception here?
+    void operator--() { node_ = node_->prev_; }
     NodeList node_;
   };
 
-  NodeList root_;
+
+
+  NodeList head_;
   size_type size_ = 0;
 };
 }  // namespace s21
