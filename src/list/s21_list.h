@@ -17,7 +17,7 @@ class list {
   using size_type = unsigned long long;
 
  public:
-  list() : head_(nullptr), tail_(nullptr), size_(0) {}
+  list() : head_(nullptr), tail_(new node_type()), size_(0) {}
   // list(size_type n)	parameterized constructor, creates the list of size n
   explicit list(size_type n) : size_(n) {
     while (n--) push_back(value_type());
@@ -30,7 +30,11 @@ class list {
 
   // list(list &&l)	move constructor
 
-  // ~list()	destructor
+  ~list() {while (--size)
+  {
+    erase(begin());
+  }
+  }
 
   // operator=(list &&l)	assignment operator overload for moving object
 
@@ -40,8 +44,8 @@ class list {
 
   // returns an iterator to the beginning
   iterator begin() { return iterator(head_); }
-  //returns an iterator to the end
-    iterator end() { return iterator(tail_); }
+  // returns an iterator to the end
+  iterator end() { return iterator(nullptr); }
 
   // bool empty()	checks whether the container is empty
   // size_type size()	returns the number of elements
@@ -56,14 +60,17 @@ class list {
 
   // void erase(iterator pos)	erases element at pos
 
+void erase(iterator pos) {
+  if (pos != tail_)
+  pos.DeleteNode();
+  --size_;
+}
+
   // adds an element to the end
   void push_back(const_reference value) {
     node_type *new_node = new ListNode(value);
     if (!size_) {
       head_ = new_node;
-      tail_ = new ListNode;
-      head_->next_ = tail_;
-      tail_->prev_ = head_;
     } else {
       tail_->prev_->next_ = new_node;
       new_node->prev_ = tail_->prev_;
@@ -73,7 +80,10 @@ class list {
     ++size_;
   }
 
-  // void pop_back()	removes the last element
+  // removes the last element
+  void pop_back() {  // do we need exception here
+    erase(end());
+  }
 
   // void push_front(const_reference value)	adds an element to the head
 
@@ -93,7 +103,7 @@ class list {
   // void sort()
 
   node_type *head_;
-  node_type *tail_; // stands after last element
+  node_type *tail_;  // stands after last element
   size_type size_;
 };
 }  // namespace s21

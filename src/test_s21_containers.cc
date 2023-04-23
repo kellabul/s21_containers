@@ -39,6 +39,9 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <iostream>
 #include <list>
 
+using std::cout;
+using std::endl;
+
 // TEST(list, Subtest_1) {
 //   s21::list<int> one;
 //   s21::list<int> two(234);
@@ -46,19 +49,32 @@ ADD_FAILURE_AT(«file_path», line_number);
 //   EXPECT_EQ(234, *iter);
 // }
 
-TEST(list, push_back) {
+TEST(list, push_back_and_iterator) {
   s21::list<int> one;
   one.push_back(111);
   one.push_back(222);
   one.push_back(444);
   auto iter = one.begin();
-  std::cout << *iter << std::endl;
+  EXPECT_EQ(111, *iter);
   ++iter;
-  std::cout << *iter << std::endl;
+  EXPECT_EQ(222, *iter);
   ++iter;
-  std::cout << *iter << std::endl;
+  EXPECT_EQ(444, *iter);
   ++iter;
 }
+
+TEST(list, erase) {
+  s21::list<int> one;
+  one.push_back(111);
+  one.push_back(222);
+  one.push_back(444);
+  auto iter = one.begin();
+  cout << *one.begin() << endl;
+  one.erase(iter);
+  cout << *one.begin() << endl;
+}
+
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
