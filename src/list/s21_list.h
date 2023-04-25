@@ -33,11 +33,11 @@ class list {
 
   // list(list &&l)	move constructor
 
-  ~list() {
-    while (--size_) {
-      erase(begin());
-    }
-  }
+  // ~list() {
+  //   while (--size_) {
+  //     erase(begin());
+  //   }
+  // }
 
   // operator=(list &&l)	assignment operator overload for moving object
 
@@ -46,12 +46,14 @@ class list {
   // const_reference back()	access the last element
 
   // returns an iterator to the beginning
-  iterator begin() { return iterator(tail_->prev_); }
+  iterator begin() { return iterator(tail_->next_); }
   // returns an iterator to the end
   iterator end() { return iterator(tail_); }
 
   // bool empty()	checks whether the container is empty
-  // size_type size()	returns the number of elements
+  // 	returns the number of elements
+  size_type size() const { return size_; }
+
   // size_type max_size()	returns the maximum possible number of elements
 
   // void clear()	clears the contents
@@ -67,8 +69,8 @@ class list {
   // void erase(iterator pos)	erases element at pos
 
   void erase(iterator pos) {
-    pos.DeleteNode();
     --size_;
+    pos.DeleteNode();
   }
 
   // adds an element to the end
@@ -83,14 +85,12 @@ class list {
   }
 
   // 	adds an element to the head
-void push_front(const_reference value) {
+  void push_front(const_reference value) {
     begin().AddNode(value);
     ++size_;
-}
+  }
   // 	removes the first element
-void pop_front() {
-    erase(begin());
-}
+  void pop_front() { erase(begin()); }
   // void swap(list& other)	swaps the contents
 
   // void merge(list& other)	merges two sorted lists
