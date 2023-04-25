@@ -60,7 +60,17 @@ TEST(list, push_back_and_iterator) {
   EXPECT_EQ(222, *iter);
   ++iter;
   EXPECT_EQ(444, *iter);
+}
+
+
+TEST(list, initializer_list) {
+  s21::list<int> one{111, 222, 444};
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
   ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
 }
 
 TEST(list, erase) {
@@ -71,6 +81,7 @@ TEST(list, erase) {
   one.erase(one.begin());
   EXPECT_EQ(222, *one.begin());
 }
+
 
 
 

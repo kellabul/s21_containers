@@ -1,6 +1,8 @@
 #ifndef CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
 #define CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
 
+#include <limits>
+
 #include "s21_list_iterator.h"
 #include "s21_list_node.h"
 
@@ -25,7 +27,12 @@ class list {
   explicit list(size_type n) : list() {
     while (n--) push_back(value_type());
   }
-  // list(std::initializer_list<value_type> const &items)	initializer list
+  // 	initializer list
+  list(std::initializer_list<value_type> const &items) : list() {
+    for (const auto &unit : items) {
+      push_back(unit);
+    }
+  }
 
   // constructor, creates list initizialized using std::initializer_list
 
@@ -33,11 +40,11 @@ class list {
 
   // list(list &&l)	move constructor
 
-  // ~list() {
-  //   while (--size_) {
-  //     erase(begin());
-  //   }
-  // }
+  ~list() {
+    for (auto iter = begin(); iter != end(); ++iter) {
+      erase(iter);
+    }
+  }
 
   // operator=(list &&l)	assignment operator overload for moving object
 
@@ -54,8 +61,9 @@ class list {
   // 	returns the number of elements
   size_type size() const { return size_; }
 
-  // size_type max_size()	returns the maximum possible number of elements
-
+  // 	returns the maximum possible number of elements
+  // size_type max_size() const {return
+  // std::numeric_limits<difference_type>::max(); }
   // void clear()	clears the contents
 
   // inserts elements into concrete pos and returns the iterator that points to
