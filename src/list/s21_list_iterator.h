@@ -9,41 +9,49 @@ class ListIterator {
  public:
   using value_type = T;
   using node_type = ListNode<T>;
-  using iterator = ListIterator;
+  using reference = T &;
+  using const_reference = const T &;
+  using iterator = ListIterator<T>;
+  // using const_iterator = const ListIterator;
+  using size_type = unsigned long long;
 
  public:
   ListIterator() = default;
-  ListIterator(node_type *node) : node_(node) {}
-  value_type operator*() { return node_->value_; }
+  ListIterator(node_type *node) : pointed_node_(node) {}
+  value_type operator*() { return pointed_node_->value_; }
   bool operator!=(const ListIterator &iterator) {
-    return node_ != iterator.node_;
+    return pointed_node_ != iterator.pointed_node_;
   }
 
   // do we need an exception here?
   iterator operator++() {
-    node_ = node_->next_;
+    pointed_node_ = pointed_node_->next_;
     return *this;
   }
   iterator operator--() {
-    node_ = node_->prev_;
+    pointed_node_ = pointed_node_->prev_;
     return *this;
   }
 
   void DeleteNode() {
-    if (node_->prev_) node_->prev_->next_ = node_->next_;
-    if (node_->next_) node_->next_->prev_ = node_->prev_;
-    delete node_;
+    pointed_node_->prev_->next_ = pointed_node_->next_;
+    pointed_node_->next_->prev_ = pointed_node_->prev_;
+    delete pointed_node_;
   }
 
-  void AddNode() {
-    node_type *new_node = new ListNode(value);
-    if (node_->next_) node_->next_->prev_ = node_;
-    node_->next_ = new_node;
-    new_node->prev_ = node_;
+  iterator AddNode(const_reference value) {
+    node_type *new_one = new node_type;
+    new_one->value_ = value;
+    new_one->next_ = pointed_node_;
+    new_one->prev_ = pointed_node_->prev_;
+    // there is always some node at pointed_node_->prev_
+    pointed_node_->prev_->next_ = new_one;
+    pointed_node_->prev_ = new_one;
+    return iterator(new_one);
   }
 
  private:
-  node_type *node_;
+  node_type *pointed_node_;
 };
 }  // namespace s21
 

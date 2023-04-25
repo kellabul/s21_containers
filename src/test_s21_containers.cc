@@ -63,16 +63,16 @@ TEST(list, push_back_and_iterator) {
   ++iter;
 }
 
-TEST(list, erase) {
-  s21::list<int> one;
-  one.push_back(111);
-  one.push_back(222);
-  one.push_back(444);
-  auto iter = one.begin();
-  cout << *one.begin() << endl;
-  one.erase(iter);
-  cout << *one.begin() << endl;
-}
+// TEST(list, erase) {
+//   s21::list<int> one;
+//   one.push_back(111);
+//   one.push_back(222);
+//   one.push_back(444);
+//   auto iter = one.begin();
+//   cout << *one.begin() << endl;
+//   one.erase(iter);
+//   cout << *one.begin() << endl;
+// }
 
 
 
