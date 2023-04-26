@@ -61,12 +61,27 @@ TEST(list, pop_back_and_empty) {
   EXPECT_EQ(0, one.size());
   EXPECT_EQ(true, one.empty());
   one.push_back(111);
-  one.push_back(111);
+  one.push_back(555);
   EXPECT_EQ(2, one.size());
   EXPECT_EQ(false, one.empty());
   one.pop_back();
   one.pop_back();
   EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+}
+
+TEST(list, push_front_and_pop_front) {
+  s21::list<int> one;
+  EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+  one.push_front(111);
+  one.push_front(555);
+  EXPECT_EQ(2, one.size());
+  EXPECT_EQ(555, *one.begin());
+  one.pop_front();
+  EXPECT_EQ(1, one.size());
+  EXPECT_EQ(111, *one.begin());
+  one.pop_front();
   EXPECT_EQ(true, one.empty());
 }
 

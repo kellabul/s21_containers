@@ -59,9 +59,7 @@ class list {
   iterator end() { return iterator(tail_); }
 
   // checks whether the container is empty
-bool empty() {
-  return (size_ == 0);
-}
+  bool empty() { return (size_ == 0); }
 
   // 	returns the number of elements
   size_type size() const { return size_; }
@@ -103,7 +101,9 @@ bool empty() {
     ++size_;
   }
   // 	removes the first element
-  void pop_front() { erase(begin()); }
+  void pop_front() {
+    erase(begin());
+  }
   // void swap(list& other)	swaps the contents
 
   // void merge(list& other)	merges two sorted lists
