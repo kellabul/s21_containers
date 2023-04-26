@@ -70,6 +70,12 @@ TEST(list, pop_back_and_empty) {
   EXPECT_EQ(true, one.empty());
 }
 
+TEST(list, front_and_back) {
+  s21::list<int> one{11, 22, 33, 44, 55, 66, 77};
+  EXPECT_EQ(11, one.front());
+  EXPECT_EQ(77, one.back());
+}
+
 TEST(list, push_front_and_pop_front) {
   s21::list<int> one;
   EXPECT_EQ(0, one.size());
@@ -85,8 +91,6 @@ TEST(list, push_front_and_pop_front) {
   EXPECT_EQ(true, one.empty());
 }
 
-
-
 TEST(list, initializer_list) {
   s21::list<int> one{111, 222, 444};
   auto iter = one.begin();
@@ -101,7 +105,6 @@ TEST(list, erase) {
   s21::list<std::string> alpha{"one", "two", "three"};
   alpha.erase(alpha.begin());
   EXPECT_EQ("two", *alpha.begin());
-
   s21::list<std::string> beta{"one", "oneone", "oneoneone"};
   auto iter = beta.begin();
   ++iter;
