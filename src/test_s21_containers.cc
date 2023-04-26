@@ -56,6 +56,21 @@ TEST(list, push_back_and_iterator) {
   EXPECT_EQ(444, *iter);
 }
 
+TEST(list, pop_back_and_empty) {
+  s21::list<int> one;
+  EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+  one.push_back(111);
+  one.push_back(111);
+  EXPECT_EQ(2, one.size());
+  EXPECT_EQ(false, one.empty());
+  one.pop_back();
+  one.pop_back();
+  EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+}
+
+
 
 TEST(list, initializer_list) {
   s21::list<int> one{111, 222, 444};

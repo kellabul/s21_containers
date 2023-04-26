@@ -58,7 +58,11 @@ class list {
   // returns an iterator to the end
   iterator end() { return iterator(tail_); }
 
-  // bool empty()	checks whether the container is empty
+  // checks whether the container is empty
+bool empty() {
+  return (size_ == 0);
+}
+
   // 	returns the number of elements
   size_type size() const { return size_; }
 
@@ -78,8 +82,8 @@ class list {
   // void erase(iterator pos)	erases element at pos
 
   void erase(iterator pos) {
-    --size_;
     pos.DeleteNode();
+    --size_;
   }
 
   // adds an element to the end
@@ -90,7 +94,7 @@ class list {
 
   // removes the last element
   void pop_back() {  // do we need exception here
-    erase(end());
+    erase(--end());
   }
 
   // 	adds an element to the head

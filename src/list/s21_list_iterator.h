@@ -28,6 +28,7 @@ class ListIterator {
     node_pointer_ = node_pointer_->next_;
     return *this;
   }
+  
   iterator &operator--() {
     node_pointer_ = node_pointer_->prev_;
     return *this;
