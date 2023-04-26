@@ -49,9 +49,11 @@ class list {
 
   // operator=(list &&l)	assignment operator overload for moving object
 
-  // const_reference front()	access the first element
+  // 	access the first element
+  const_reference front() const { return tail_->next_->value_; }
 
-  // const_reference back()	access the last element
+  // 	access the last element
+  const_reference back() const { return tail_->prev_->value_; }
 
   // returns an iterator to the beginning
   iterator begin() { return iterator(tail_->next_); }
@@ -101,9 +103,7 @@ class list {
     ++size_;
   }
   // 	removes the first element
-  void pop_front() {
-    erase(begin());
-  }
+  void pop_front() { erase(begin()); }
   // void swap(list& other)	swaps the contents
 
   // void merge(list& other)	merges two sorted lists
