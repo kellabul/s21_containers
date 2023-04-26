@@ -38,16 +38,10 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <iostream>
 #include <list>
+#include <string>
 
 using std::cout;
 using std::endl;
-
-// TEST(list, Subtest_1) {
-//   s21::list<int> one;
-//   s21::list<int> two(234);
-//   auto iter = two.begin();
-//   EXPECT_EQ(234, *iter);
-// }
 
 TEST(list, push_back_and_iterator) {
   s21::list<int> one;
@@ -74,15 +68,28 @@ TEST(list, initializer_list) {
 }
 
 TEST(list, erase) {
-  s21::list<int> one;
-  one.push_back(111);
-  one.push_back(222);
-  one.push_back(444);
-  one.erase(one.begin());
-  EXPECT_EQ(222, *one.begin());
+  s21::list<std::string> alpha{"one", "two", "three"};
+  alpha.erase(alpha.begin());
+  EXPECT_EQ("two", *alpha.begin());
+
+  s21::list<std::string> beta{"one", "oneone", "oneoneone"};
+  auto iter = beta.begin();
+  ++iter;
+  alpha.erase(iter);
+  iter = beta.begin();
+  EXPECT_EQ("one", *iter);
+  ++iter;
+  EXPECT_EQ("oneoneone", *iter);
 }
 
+// TEST(list, insert) {
+//   s21::list<std::string> alpha{"one", "two", "three"};
+//   alpha.insert(alpha.begin());
+//   EXPECT_EQ("two", *alpha.begin());
 
+//   s21::list<std::string> beta{"one", "oneone", "oneoneone"};
+
+// }
 
 
 int main(int argc, char **argv) {

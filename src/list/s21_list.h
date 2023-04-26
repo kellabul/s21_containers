@@ -23,6 +23,7 @@ class list {
     tail_->next_ = tail_;
     tail_->prev_ = tail_;
   }
+
   // list(size_type n)	parameterized constructor, creates the list of size n
   explicit list(size_type n) : list() {
     while (n--) push_back(value_type());
@@ -41,7 +42,7 @@ class list {
   // list(list &&l)	move constructor
 
   ~list() {
-    for (auto iter = begin(); iter != end(); ++iter) {
+    for (auto iter = begin(); iter != end(); iter = begin()) {
       erase(iter);
     }
   }
