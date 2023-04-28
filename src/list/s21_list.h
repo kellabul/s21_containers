@@ -35,17 +35,11 @@ class list {
     }
   }
 
-  // constructor, creates list initizialized using std::initializer_list
-
   // list(const list &l)	copy constructor
 
   // list(list &&l)	move constructor
 
-  ~list() {
-    for (auto iter = begin(); iter != end(); iter = begin()) {
-      erase(iter);
-    }
-  }
+  ~list() { clear(); }
 
   // operator=(list &&l)	assignment operator overload for moving object
 
@@ -67,9 +61,16 @@ class list {
   size_type size() const { return size_; }
 
   // 	returns the maximum possible number of elements
-  // size_type max_size() const {return
-  // std::numeric_limits<difference_type>::max(); }
-  // void clear()	clears the contents
+  size_type max_size() const {
+    return (std::numeric_limits<size_type>::max() / (sizeof(node_type) * 2));
+  }
+
+  // 	clears the contents
+  void clear() {
+    for (auto iter = begin(); iter != end(); iter = begin()) {
+      erase(iter);
+    }
+  }
 
   // inserts elements into concrete pos and returns the iterator that points to
   // the new element
@@ -79,8 +80,7 @@ class list {
     ;
   }
 
-  // void erase(iterator pos)	erases element at pos
-
+  // erases element at pos
   void erase(iterator pos) {
     pos.DeleteNode();
     --size_;
@@ -104,6 +104,7 @@ class list {
   }
   // 	removes the first element
   void pop_front() { erase(begin()); }
+
   // void swap(list& other)	swaps the contents
 
   // void merge(list& other)	merges two sorted lists
