@@ -25,20 +25,18 @@ EXPECT_NO_THROW(statement);
 Сравнение чисел с плавающей точкой
 EXPECT_FLOAT_EQ(expected, actual); — неточное сравнение float
 EXPECT_DOUBLE_EQ(expected, actual); — неточное сравнение double
-EXPECT_NEAR(val1, val2, abs_error); — разница между val1 и val2 не превышает погрешность abs_error
-Вызов отказа или успеха
-SUCCEED();
-FAIL();
-ADD_FAILURE();
+EXPECT_NEAR(val1, val2, abs_error); — разница между val1 и val2 не превышает
+погрешность abs_error Вызов отказа или успеха SUCCEED(); FAIL(); ADD_FAILURE();
 ADD_FAILURE_AT(«file_path», line_number);
 */
 
 #include <gtest/gtest.h>
-#include "s21_containers.h"
 
 #include <iostream>
 #include <list>
 #include <string>
+
+#include "s21_containers.h"
 
 using std::cout;
 using std::endl;
@@ -115,6 +113,12 @@ TEST(list, erase) {
   EXPECT_EQ("oneoneone", *iter);
 }
 
+TEST(list, max_size) {
+  s21::list<std::string> s21_list_obj;
+  std::list<std::string> std_list_obj;
+  EXPECT_EQ(s21_list_obj.max_size(), std_list_obj.max_size());
+}
+
 // TEST(list, insert) {
 //   s21::list<std::string> alpha{"one", "two", "three"};
 //   alpha.insert(alpha.begin());
@@ -123,7 +127,6 @@ TEST(list, erase) {
 //   s21::list<std::string> beta{"one", "oneone", "oneoneone"};
 
 // }
-
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
