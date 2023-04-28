@@ -54,6 +54,7 @@ TEST(list, push_back_and_iterator) {
   EXPECT_EQ(444, *iter);
 }
 
+
 TEST(list, pop_back_and_empty) {
   s21::list<int> one;
   EXPECT_EQ(0, one.size());
@@ -99,6 +100,18 @@ TEST(list, initializer_list) {
   EXPECT_EQ(444, *iter);
 }
 
+TEST(list, copy_constructor) {
+  s21::list<int> zero{111, 222, 444};
+  s21::list<int> one(zero);
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
+
+
 TEST(list, erase) {
   s21::list<std::string> alpha{"one", "two", "three"};
   alpha.erase(alpha.begin());
@@ -117,16 +130,27 @@ TEST(list, max_size) {
   s21::list<std::string> s21_list_obj;
   std::list<std::string> std_list_obj;
   EXPECT_EQ(s21_list_obj.max_size(), std_list_obj.max_size());
+  s21::list<char> s21_list_obj_2;
+  std::list<char> std_list_obj_2;
+  EXPECT_EQ(s21_list_obj_2.max_size(), std_list_obj_2.max_size());
 }
 
-// TEST(list, insert) {
-//   s21::list<std::string> alpha{"one", "two", "three"};
-//   alpha.insert(alpha.begin());
-//   EXPECT_EQ("two", *alpha.begin());
+TEST(list, insert) {
+  s21::list<std::string> alpha{"one", "two", "three"};
+  alpha.insert(alpha.begin(), "zero");
+  EXPECT_EQ("zero", *alpha.begin());
+  auto iter = alpha.insert(alpha.end(), "four");
+  EXPECT_EQ("four", *iter);
+  // ++iter;
+  // EXPECT_EQ(true, iter == alpha.end());
+  iter = alpha.begin();
+  ++iter;
+  iter = alpha.insert(iter, "zeroPointFive");
+  EXPECT_EQ("zeroPointFive", *iter);
+}
 
-//   s21::list<std::string> beta{"one", "oneone", "oneoneone"};
 
-// }
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

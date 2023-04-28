@@ -12,15 +12,18 @@ class ListIterator {
   using reference = T &;
   using const_reference = const T &;
   using iterator = ListIterator<T>;
-  // using const_iterator = const ListIterator;
   using size_type = unsigned long long;
 
  public:
   ListIterator() = default;
-  ListIterator(node_type *node) : node_pointer_(node) {}
-  value_type operator*() { return node_pointer_->value_; }
-  bool operator!=(const ListIterator &iterator) {
+  explicit ListIterator(node_type *node) : node_pointer_(node) {}
+  reference operator*() { return node_pointer_->value_; }
+
+  bool operator!=(const iterator &iterator) {
     return node_pointer_ != iterator.node_pointer_;
+  }
+  bool operator==(const iterator &iterator) {
+    return node_pointer_ == iterator.node_pointer_;
   }
 
   // do we need an exception here?
@@ -54,6 +57,47 @@ class ListIterator {
  private:
   node_type *node_pointer_;
 };
+
+template <typename T>
+class ListConstIterator {
+ public:
+  using value_type = T;
+  using node_type = ListNode<T>;
+  using const_reference = const T &;
+  using iterator = ListConstIterator<T>;
+  using size_type = unsigned long long;
+
+ public:
+  ListConstIterator() = default;
+  explicit ListConstIterator(const node_type *node) : node_pointer_(node) {}
+  const_reference operator*() { return node_pointer_->value_; }
+  bool operator!=(const iterator &iterator) {
+    return node_pointer_ != iterator.node_pointer_;
+  }
+  bool operator==(const iterator &iterator) {
+    return node_pointer_ == iterator.node_pointer_;
+  }
+
+  // do we need an exception here?
+  iterator &operator++() {
+    node_pointer_ = node_pointer_->next_;
+    return *this;
+  }
+  
+  iterator &operator--() {
+    node_pointer_ = node_pointer_->prev_;
+    return *this;
+  }
+
+
+
+ private:
+  const node_type *node_pointer_;
+};
+
+
+
+
 }  // namespace s21
 
 #endif  // CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
