@@ -15,7 +15,7 @@ class list {
   using reference = T &;
   using const_reference = const T &;
   using iterator = ListIterator<T>;
-  // using const_iterator = const ListIterator;
+  using const_iterator = ListConstIterator<T>;
   using size_type = unsigned long long;
 
  public:
@@ -35,7 +35,12 @@ class list {
     }
   }
 
-  // list(const list &l)	copy constructor
+  // 	copy constructor
+  list(const list &l) : list() {
+    for(const auto element : l) {
+      push_back(element);
+    }
+  }
 
   // list(list &&l)	move constructor
 
@@ -51,8 +56,11 @@ class list {
 
   // returns an iterator to the beginning
   iterator begin() { return iterator(tail_->next_); }
+  const_iterator begin() const { return const_iterator(tail_->next_); }
+
   // returns an iterator to the end
   iterator end() { return iterator(tail_); }
+  const_iterator end() const { return const_iterator(tail_); }
 
   // checks whether the container is empty
   bool empty() { return (size_ == 0); }
