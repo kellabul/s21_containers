@@ -88,7 +88,6 @@ class list {
   iterator insert(iterator pos, const_reference value) {
     ++size_;
     return pos.AddNode(value);
-    ;
   }
 
   // erases element at pos
@@ -117,10 +116,22 @@ class list {
   void pop_front() { erase(begin()); }
 
   // 	swaps the contents
+  // I don't seek for easy ways.
   void swap(list &other) {
     if (this != &other) {
-      std::swap(tail_, other.tail_);
+      SwapTails(tail_, other.tail_);
+      SwapTails(other.tail_, tail_);
+      std::swap(end_node_, other.end_node_);
       std::swap(size_, other.size_);
+    }
+  }
+
+  void SwapTails(node_type *first, node_type *second) {
+    if (first->next_ == first->prev_) {
+      first->next_ = first->prev_ = second;
+    } else {
+      first->next_->prev_ = second;
+      first->prev_->next_ = second;
     }
   }
 
