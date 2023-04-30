@@ -54,7 +54,6 @@ TEST(list, push_back_and_iterator) {
   EXPECT_EQ(444, *iter);
 }
 
-
 TEST(list, pop_back_and_empty) {
   s21::list<int> one;
   EXPECT_EQ(0, one.size());
@@ -111,20 +110,6 @@ TEST(list, copy_constructor) {
   EXPECT_EQ(444, *iter);
 }
 
-
-TEST(list, move_constructor) {
-  s21::list<int> zero{111, 222, 444};
-  s21::list<int> one(std::move(zero));
-  auto iter = one.begin();
-  EXPECT_EQ(111, *iter);
-  ++iter;
-  EXPECT_EQ(222, *iter);
-  ++iter;
-  EXPECT_EQ(444, *iter);
-  EXPECT_EQ(true, zero.empty());
-}
-
-
 TEST(list, erase) {
   s21::list<std::string> alpha{"one", "two", "three"};
   alpha.erase(alpha.begin());
@@ -176,8 +161,31 @@ TEST(list, swap) {
   EXPECT_EQ("three", *iter);
   beta.~list();
   EXPECT_EQ("four", *alpha.begin());
+  {
+    s21::list<std::string> gamma{"seven"};
+    alpha.swap(gamma);
+    EXPECT_EQ("four", *gamma.begin());
+  }
+  EXPECT_EQ("seven", *alpha.begin());
+
+  s21::list<std::string> delta;
+  alpha.swap(delta);
+  EXPECT_EQ("seven", *delta.begin());
+  EXPECT_EQ(true, alpha.empty());
 }
 
+
+TEST(list, move_constructor) {
+  s21::list<int> zero{111, 222, 444};
+  s21::list<int> one(std::move(zero));
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  EXPECT_EQ(true, zero.empty());
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
