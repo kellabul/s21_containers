@@ -37,12 +37,15 @@ class list {
 
   // 	copy constructor
   list(const list &l) : list() {
-    for(const auto element : l) {
+    for (const auto &element : l) {
       push_back(element);
     }
   }
 
-  // list(list &&l)	move constructor
+  // move constructor
+  list(list &&l) : list() {
+    swap(l);
+  }
 
   ~list() { clear(); }
 
@@ -113,7 +116,13 @@ class list {
   // 	removes the first element
   void pop_front() { erase(begin()); }
 
-  // void swap(list& other)	swaps the contents
+  // 	swaps the contents
+  void swap(list &other) {
+    if (this != &other) {
+      std::swap(tail_, other.tail_);
+      std::swap(size_, other.size_);
+    }
+  }
 
   // void merge(list& other)	merges two sorted lists
 
