@@ -209,6 +209,18 @@ TEST(list, unique) {
   EXPECT_EQ(444, *iter);
   ++iter;
   EXPECT_EQ(iter, zero.end());
+
+  s21::list<int> one{111, 222, 444};
+  one.unique();
+  iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+
+  s21::list<int> two;
+  EXPECT_NO_THROW(two.unique());
 }
 
 int main(int argc, char **argv) {
