@@ -166,7 +166,7 @@ class list {
   // void sort() {
 
   // }
-
+ private:
   node_type end_node_;
   node_type *tail_;
   size_type size_;
