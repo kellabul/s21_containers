@@ -4,7 +4,7 @@
 namespace s21 {
 template <typename T>
 struct ListNode {
-//  public:
+  //  public:
   T value_{};
   ListNode<T> *prev_ = nullptr;
   ListNode<T> *next_ = nullptr;

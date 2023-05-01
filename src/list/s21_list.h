@@ -30,8 +30,8 @@ class list {
   }
   // 	initializer list
   list(std::initializer_list<value_type> const &items) : list() {
-    for (const auto &unit : items) {
-      push_back(unit);
+    for (const auto &element : items) {
+      push_back(element);
     }
   }
 
@@ -133,16 +133,30 @@ class list {
     }
   }
 
-  // void merge(list& other)	merges two sorted lists
+  // 	merges two sorted lists
+  // void merge(list &other) {
+  //   if (this != &other) {
+
+  //   }
+  // }
 
   // void splice(const_iterator pos, list& other)	transfers elements from
   // list other starting from pos
 
-  // void reverse()	reverses the order of the elements
+  // 	reverses the order of the elements
+void reverse() {
+  auto pointer = tail_;
+  do {
+    std::swap(pointer->next_, pointer->prev_);
+    pointer = pointer->next_;
+  } while (pointer != tail_);
+}
 
   // void unique()	removes consecutive duplicate elements
 
-  // void sort()
+  // void sort() {
+    
+  // }
 
   node_type end_node_;
   node_type *tail_;

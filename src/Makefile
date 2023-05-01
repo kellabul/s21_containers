@@ -40,7 +40,7 @@ gcov_report: gcov
 gcov: compile_test
 	@rm -f $(COVERAGE_RESULTS) $(GCOV_FILES)
 	./$(TEST_NAME)
-	gcov $(SOURCE_FILES)
+	gcov $(GTEST_SOURCE_FILES)
 
 asan: compile_test_with_asan
 	./$(TEST_NAME)

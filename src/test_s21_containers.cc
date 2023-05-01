@@ -187,6 +187,20 @@ TEST(list, move_constructor) {
   EXPECT_EQ(true, zero.empty());
 }
 
+TEST(list, reverse) {
+  s21::list<int> zero{111, 222, 444};
+  zero.reverse();
+  auto iter = zero.begin();
+  EXPECT_EQ(444, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(111, *iter);
+}
+
+
+
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
