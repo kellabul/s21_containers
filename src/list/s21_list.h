@@ -43,9 +43,7 @@ class list {
   }
 
   // move constructor
-  list(list &&l) : list() {
-    swap(l);
-  }
+  list(list &&l) : list() { swap(l); }
 
   ~list() { clear(); }
 
@@ -127,7 +125,7 @@ class list {
   }
 
   void SwapTails(node_type *first, node_type *second) {
-    if (first->next_ == first->prev_) {
+    if (first->next_ == first) {
       first->next_ = first->prev_ = second;
     } else {
       first->next_->prev_ = second;
