@@ -19,10 +19,10 @@ class ListIterator {
   explicit ListIterator(node_type *node) : node_pointer_(node) {}
   reference operator*() { return node_pointer_->value_; }
 
-  bool operator!=(const iterator &iterator) {
+  bool operator!=(const iterator &iterator) const {
     return node_pointer_ != iterator.node_pointer_;
   }
-  bool operator==(const iterator &iterator) {
+  bool operator==(const iterator &iterator) const  {
     return node_pointer_ == iterator.node_pointer_;
   }
 

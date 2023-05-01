@@ -198,8 +198,18 @@ TEST(list, reverse) {
   EXPECT_EQ(111, *iter);
 }
 
-
-
+TEST(list, unique) {
+  s21::list<int> zero{111, 111, 111, 222, 222, 222, 444, 444, 444};
+  zero.unique();
+  auto iter = zero.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  ++iter;
+  EXPECT_EQ(iter, zero.end());
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
