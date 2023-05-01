@@ -144,18 +144,27 @@ class list {
   // list other starting from pos
 
   // 	reverses the order of the elements
-void reverse() {
-  auto pointer = tail_;
-  do {
-    std::swap(pointer->next_, pointer->prev_);
-    pointer = pointer->next_;
-  } while (pointer != tail_);
-}
+  void reverse() {
+    auto pointer = tail_;
+    do {
+      std::swap(pointer->next_, pointer->prev_);
+      pointer = pointer->next_;
+    } while (pointer != tail_);
+  }
 
-  // void unique()	removes consecutive duplicate elements
-
+  // 	removes consecutive duplicate elements
+  void unique() {
+    auto pointer = tail_->next_;
+    while (pointer->next_ != tail_) {
+      if (pointer->value_ == pointer->next_->value_) {
+        erase(iterator(pointer->next_));
+      } else {
+        pointer = pointer->next_;
+      }
+    }
+  }
   // void sort() {
-    
+
   // }
 
   node_type end_node_;
