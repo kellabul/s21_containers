@@ -20,6 +20,10 @@ class list {
 
  public:
   list() : end_node_(), tail_(&end_node_), size_(0U) {
+    BindTailToItself();
+  }
+
+  void BindTailToItself() {
     tail_->next_ = tail_;
     tail_->prev_ = tail_;
   }
@@ -94,6 +98,12 @@ class list {
     --size_;
   }
 
+  iterator EraseAndGoForward(iterator pos) {
+    iterator buffer = pos;
+    erase(pos);
+    return ++buffer;
+  }
+
   // adds an element to the end
   void push_back(const_reference value) {
     end().AddNode(value);
@@ -134,14 +144,27 @@ class list {
   }
 
   // 	merges two sorted lists
-  // void merge(list &other) {
-  //   if (this != &other) {
+  void merge(list &other) {
+    if (this != &other) {
+      auto iter = other.begin();
+      while (iter != other.end()) {
+        push_back(*iter);
+        iter = other.EraseAndGoForward(iter);
+      }
+    }
+  }
 
-  //   }
-  // }
-
-  // void splice(const_iterator pos, list& other)	transfers elements from
-  // list other starting from pos
+  // 	transfers elements from list other starting from pos
+  void splice(const_iterator pos, list &other) {
+    if (!other.empty()){
+      auto next_pos = pos;
+      ++next_pos;
+      pos.BindNode(other.begin());
+      --other.end().BindNode(next_pos);
+      other.size_ = 0;
+      other.BindTailToItself();
+    }
+  }
 
   // 	reverses the order of the elements
   void reverse() {
@@ -154,12 +177,10 @@ class list {
 
   // 	removes consecutive duplicate elements
   void unique() {
-    auto pointer = tail_->next_;
-    while (pointer->next_ != tail_) {
-      if (pointer->value_ == pointer->next_->value_) {
-        erase(iterator(pointer->next_));
-      } else {
-        pointer = pointer->next_;
+    for (auto iter = begin(); iter != end();) {
+      if (*iter == *(++iter)) {
+        iter = EraseAndGoForward(iter);
+        --iter;
       }
     }
   }
