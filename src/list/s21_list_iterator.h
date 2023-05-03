@@ -22,7 +22,7 @@ class ListIterator {
   bool operator!=(const iterator &iterator) const {
     return node_pointer_ != iterator.node_pointer_;
   }
-  bool operator==(const iterator &iterator) const  {
+  bool operator==(const iterator &iterator) const {
     return node_pointer_ == iterator.node_pointer_;
   }
 
@@ -31,7 +31,7 @@ class ListIterator {
     node_pointer_ = node_pointer_->next_;
     return *this;
   }
-  
+
   iterator &operator--() {
     node_pointer_ = node_pointer_->prev_;
     return *this;
@@ -54,6 +54,16 @@ class ListIterator {
     return iterator(new_one);
   }
 
+  void BindNode(iterator &iter) {
+    node_pointer_->next_ = iter.node_pointer_;
+    iter.node_pointer_->prev_ = node_pointer_;
+  }
+
+  node_type get_node_pointer () const {
+    return node_pointer_;
+  }
+
+
  private:
   node_type *node_pointer_;
 };
@@ -64,39 +74,41 @@ class ListConstIterator {
   using value_type = T;
   using node_type = ListNode<T>;
   using const_reference = const T &;
-  using iterator = ListConstIterator<T>;
+  using const_iterator = ListConstIterator<T>;
+  using iterator = ListIterator<T>;
   using size_type = unsigned long long;
 
  public:
   ListConstIterator() = default;
   explicit ListConstIterator(const node_type *node) : node_pointer_(node) {}
+  explicit ListConstIterator(const iterator iter) : node_pointer_(iter.get_node_pointer()) {}
+
   const_reference operator*() { return node_pointer_->value_; }
-  bool operator!=(const iterator &iterator) {
-    return node_pointer_ != iterator.node_pointer_;
+  bool operator!=(const const_iterator &iter) {
+    return node_pointer_ != iter.node_pointer_;
   }
-  bool operator==(const iterator &iterator) {
-    return node_pointer_ == iterator.node_pointer_;
+  bool operator==(const const_iterator &iter) {
+    return node_pointer_ == iter.node_pointer_;
   }
 
   // do we need an exception here?
-  iterator &operator++() {
+  const_iterator &operator++() {
     node_pointer_ = node_pointer_->next_;
     return *this;
   }
-  
-  iterator &operator--() {
+
+  const_iterator &operator--() {
     node_pointer_ = node_pointer_->prev_;
     return *this;
   }
 
-
+  void operator=(iterator iter) {
+    node_pointer_ = iter.get_node_pointer();
+  }
 
  private:
   const node_type *node_pointer_;
 };
-
-
-
 
 }  // namespace s21
 
