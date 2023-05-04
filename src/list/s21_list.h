@@ -49,7 +49,14 @@ class list {
 
   ~list() { clear(); }
 
-  // operator=(list &&l)	assignment operator overload for moving object
+  // assignment operator overload for moving object
+  list &operator=(list &&l) {
+    if (this != &l) {
+      swap(l);
+      l.clear();
+    }
+    return *this;
+  }
 
   // 	access the first element
   const_reference front() const { return tail_->next_->value_; }
@@ -156,14 +163,14 @@ class list {
   // 	transfers elements from list other starting from pos
   void splice(iterator pos, list &other) {
     if (!other.empty()) {
-      for(auto iter = other.begin(); iter != other.end(); ++iter, ++pos) {
+      for (auto iter = other.begin(); iter != other.end(); ++iter, ++pos) {
         pos = insert(pos, *iter);
         iter = other.EraseAndGoBack(iter);
       }
     }
   }
 
-  // splice with iterator, not const_iterator
+  // splice with non const iterator
   // void splice(iterator pos, list &other) {
   //   if (!other.empty()) {
   //     auto next_pos = pos;

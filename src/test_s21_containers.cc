@@ -236,6 +236,21 @@ TEST(list, splice) {
   EXPECT_EQ(444, *iter);
 }
 
+TEST(list, assignment_operator) {
+  s21::list<int> one{111, 123, 444};
+  s21::list<int> two;
+  two = std::move(one);
+  EXPECT_EQ(true, one.empty());
+  auto iter = two.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(123, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
+
+
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
