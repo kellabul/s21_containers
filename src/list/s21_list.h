@@ -19,9 +19,7 @@ class list {
   using size_type = unsigned long long;
 
  public:
-  list() : end_node_(), tail_(&end_node_), size_(0U) {
-    BindTailToItself();
-  }
+  list() : end_node_(), tail_(&end_node_), size_(0U) { BindTailToItself(); }
 
   void BindTailToItself() {
     tail_->next_ = tail_;
@@ -33,7 +31,7 @@ class list {
     while (n--) push_back(value_type());
   }
   // 	initializer list
-  list(std::initializer_list<value_type> const &items) : list() {
+  explicit list(std::initializer_list<value_type> const &items) : list() {
     for (const auto &element : items) {
       push_back(element);
     }
@@ -98,10 +96,11 @@ class list {
     --size_;
   }
 
-  iterator EraseAndGoForward(iterator pos) {
+  iterator EraseAndGoBack(iterator pos) {
     iterator buffer = pos;
+    --buffer;
     erase(pos);
-    return ++buffer;
+    return buffer;
   }
 
   // adds an element to the end
@@ -155,16 +154,26 @@ class list {
   }
 
   // 	transfers elements from list other starting from pos
-  void splice(const_iterator pos, list &other) {
-    if (!other.empty()){
-      auto next_pos = pos;
-      ++next_pos;
-      pos.BindNode(other.begin());
-      --other.end().BindNode(next_pos);
-      other.size_ = 0;
-      other.BindTailToItself();
+  void splice(iterator pos, list &other) {
+    if (!other.empty()) {
+      for(auto iter = other.begin(); iter != other.end(); ++iter, ++pos) {
+        pos = insert(pos, *iter);
+        iter = other.EraseAndGoBack(iter);
+      }
     }
   }
+
+  // splice with iterator, not const_iterator
+  // void splice(iterator pos, list &other) {
+  //   if (!other.empty()) {
+  //     auto next_pos = pos;
+  //     ++next_pos;
+  //     pos.BindNode(other.begin());
+  //     (--other.end()).BindNode(next_pos);
+  //     other.size_ = 0;
+  //     other.BindTailToItself();
+  //   }
+  // }
 
   // 	reverses the order of the elements
   void reverse() {
@@ -178,12 +187,9 @@ class list {
   // 	removes consecutive duplicate elements
   void unique() {
     auto iter = begin();
-    while ( iter != end()) {
+    while (iter != end()) {
       if (*iter == *(++iter)) {
-        auto buffer = iter;
-        --buffer;
-        erase(iter);
-        iter = buffer;
+        iter = EraseAndGoBack(iter);
       }
     }
   }
