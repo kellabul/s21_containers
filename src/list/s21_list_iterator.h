@@ -15,7 +15,7 @@ class ListIterator {
   using size_type = unsigned long long;
 
  public:
-  ListIterator() = default;
+  ListIterator() = delete;
   explicit ListIterator(node_type *node) : node_pointer_(node) {}
   reference operator*() { return node_pointer_->value_; }
 
@@ -54,15 +54,12 @@ class ListIterator {
     return iterator(new_one);
   }
 
-  void BindNode(iterator &iter) {
+  void BindNode(const iterator &iter) {
     node_pointer_->next_ = iter.node_pointer_;
     iter.node_pointer_->prev_ = node_pointer_;
   }
 
-  node_type get_node_pointer () const {
-    return node_pointer_;
-  }
-
+  node_type *get_node_pointer() const { return node_pointer_; }
 
  private:
   node_type *node_pointer_;
@@ -79,9 +76,10 @@ class ListConstIterator {
   using size_type = unsigned long long;
 
  public:
-  ListConstIterator() = default;
+  ListConstIterator() = delete;
   explicit ListConstIterator(const node_type *node) : node_pointer_(node) {}
-  explicit ListConstIterator(const iterator iter) : node_pointer_(iter.get_node_pointer()) {}
+  ListConstIterator(const iterator &iter)
+      : node_pointer_(iter.get_node_pointer()) {}
 
   const_reference operator*() { return node_pointer_->value_; }
   bool operator!=(const const_iterator &iter) {
@@ -102,9 +100,7 @@ class ListConstIterator {
     return *this;
   }
 
-  void operator=(iterator iter) {
-    node_pointer_ = iter.get_node_pointer();
-  }
+  operator iterator() const { return iterator(node_pointer_); }
 
  private:
   const node_type *node_pointer_;
