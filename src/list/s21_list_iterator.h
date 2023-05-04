@@ -32,9 +32,21 @@ class ListIterator {
     return *this;
   }
 
+  iterator &operator++(int) {
+    auto buffer(node_pointer_);
+    node_pointer_ = node_pointer_->next_;
+    return *buffer;
+  }
+
   iterator &operator--() {
     node_pointer_ = node_pointer_->prev_;
     return *this;
+  }
+
+  iterator &operator--(int) {
+    auto buffer(node_pointer_);
+    node_pointer_ = node_pointer_->prev_;
+    return *buffer;
   }
 
   void DeleteNode() {
