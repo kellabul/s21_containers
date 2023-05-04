@@ -160,8 +160,8 @@ class list {
     }
   }
 
-  // 	transfers elements from list other starting from pos
-  void splice(iterator pos, list &other) {
+  	// transfers elements from list other starting from pos
+  void splice(const_iterator pos, list &other) {
     if (!other.empty()) {
       for (auto iter = other.begin(); iter != other.end(); ++iter, ++pos) {
         pos = insert(pos, *iter);
@@ -171,7 +171,7 @@ class list {
   }
 
   // splice with non const iterator
-  // void splice(iterator pos, list &other) {
+  // void splice(const_iterator pos, list &other) {
   //   if (!other.empty()) {
   //     auto next_pos = pos;
   //     ++next_pos;
@@ -181,6 +181,9 @@ class list {
   //     other.BindTailToItself();
   //   }
   // }
+
+
+
 
   // 	reverses the order of the elements
   void reverse() {
