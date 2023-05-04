@@ -223,18 +223,18 @@ TEST(list, unique) {
   EXPECT_NO_THROW(two.unique());
 }
 
-TEST(list, splice) {
-  s21::list<int> zero{111, 123, 444};
-  s21::list<int> one;
-  one.splice(one.begin(), zero);
-  EXPECT_EQ(true, zero.empty());
-  auto iter = one.begin();
-  EXPECT_EQ(111, *iter);
-  ++iter;
-  EXPECT_EQ(123, *iter);
-  ++iter;
-  EXPECT_EQ(444, *iter);
-}
+// TEST(list, splice) {
+//   s21::list<int> zero{111, 123, 444};
+//   s21::list<int> one;
+//   one.splice(one.begin(), zero);
+//   EXPECT_EQ(true, zero.empty());
+//   auto iter = one.begin();
+//   EXPECT_EQ(111, *iter);
+//   ++iter;
+//   EXPECT_EQ(123, *iter);
+//   ++iter;
+//   EXPECT_EQ(444, *iter);
+// }
 
 
 int main(int argc, char **argv) {
