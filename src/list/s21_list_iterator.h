@@ -100,7 +100,9 @@ class ListConstIterator {
     return *this;
   }
 
-  operator iterator() const { return iterator(node_pointer_); }
+  operator iterator() const {
+    return iterator(const_cast<node_type *>(node_pointer_));
+  }
 
  private:
   const node_type *node_pointer_;

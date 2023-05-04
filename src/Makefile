@@ -30,7 +30,7 @@ test: compile_test
 
 compile_test: clean
 	$(CC) $(FLAGS) $(GTEST_SOURCE_FILES) $(SOURCE_FILES) -o $(TEST_NAME) $(GTEST_FLAGS) \
-	$(GCOV_FLAGS) -D S21_MATRIX_OOP_TESTING
+	$(GCOV_FLAGS)
 
 gcov_report: gcov
 	lcov -t "$(NAME)" -o gcov_report.info -c -d . --rc lcov_branch_coverage=1 --no-external
@@ -47,7 +47,7 @@ asan: compile_test_with_asan
 
 compile_test_with_asan: clean
 	$(CC) $(FLAGS) $(GTEST_SOURCE_FILES) $(SOURCE_FILES) -o $(TEST_NAME) $(GTEST_FLAGS) \
-	$(GCOV_FLAGS) -D S21_MATRIX_OOP_TESTING $(ASAN_FLAGS)
+	$(GCOV_FLAGS) $(ASAN_FLAGS)
 
 copy_clang:
 	cp ../materials/linters/.clang-format .
