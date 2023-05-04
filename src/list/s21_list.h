@@ -177,10 +177,13 @@ class list {
 
   // 	removes consecutive duplicate elements
   void unique() {
-    for (auto iter = begin(); iter != end();) {
+    auto iter = begin();
+    while ( iter != end()) {
       if (*iter == *(++iter)) {
-        iter = EraseAndGoForward(iter);
-        --iter;
+        auto buffer = iter;
+        --buffer;
+        erase(iter);
+        iter = buffer;
       }
     }
   }
