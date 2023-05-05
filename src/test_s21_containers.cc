@@ -249,6 +249,16 @@ TEST(list, assignment_operator) {
   EXPECT_EQ(444, *iter);
 }
 
+TEST(list, sort_sub_funcs) {
+  s21::list<int> one{111, 222, 333, 444, 555};
+  EXPECT_EQ(333, *one.Middle());
+  one.push_back(666);
+  EXPECT_EQ(444, *one.Middle());
+  one.push_back(777);
+  EXPECT_EQ(444, *one.Middle());
+  
+}
+
 
 
 

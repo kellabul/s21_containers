@@ -160,7 +160,7 @@ class list {
     }
   }
 
-  	// transfers elements from list other starting from pos
+  // transfers elements from list other starting from pos
   void splice(const_iterator pos, list &other) {
     if (!other.empty()) {
       for (auto iter = other.begin(); iter != other.end(); ++iter, ++pos) {
@@ -182,9 +182,6 @@ class list {
   //   }
   // }
 
-
-
-
   // 	reverses the order of the elements
   void reverse() {
     auto pointer = tail_;
@@ -203,9 +200,42 @@ class list {
       }
     }
   }
-  // void sort() {
 
-  // }
+  // merge sort
+  void sort() {
+    if (size_ > 1) {
+      MergeSort(begin());
+    }
+  }
+
+  void &MergeSort(iterator begin, iterator middle, iterator end) {
+    if (head == end) return;
+    iterator middle_iter = Middle();
+
+    head_iter = MergeSort(head_iter, );
+  }
+
+
+    MergeSortedLists(iterator begin, iterator middle, iterator end){
+      iterator first_end = middle;
+      while(begin != first_end && middle != end) {
+        if (*begin > *middle) {
+          
+        }
+      }
+    }
+
+
+
+
+  iterator Middle() {
+    auto iter = begin();
+    for (size_type i = 0; i < size_ / 2; ++i) {
+      ++iter;
+    }
+    return iter;
+  }
+
  private:
   node_type end_node_;
   node_type *tail_;
