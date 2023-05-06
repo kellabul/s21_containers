@@ -225,37 +225,55 @@ class list {
 
   node_type *MergeSortedArrays(node_type *first, node_type *second) {
     // if there is no elements in one of the half, return other half
-    if (first == tail_) return second;
-    if (second == tail_) return first;
-
+    node_type *tmp;
     if (first->value_ < second->value_) {
-      // at last MergeSortedArrays will yeild part of second array with every
-      //  element bigger than (or equal to) the biggest element of first array
-      first->next_ = MergeSortedArrays(first->next_, second);
-      // attach current node to that part
-      first->next_->prev_ = first;
-      // return smallest element with element of two halfs attachend to it
-      return first;
+      tmp = first;
+      first = first->next_;
     } else {
-      // same logic if second value is smaller or equal to first value
-      second->next_ = MergeSortedArrays(first, second->next_);
-      second->next_->prev_ = second;
-      return second;
+      tmp = second;
+      second = second->next_;
     }
+    node_type *start = tmp;
+    while (first != tail_ && second != tail_) {
+      if (first->value_ < second->value_) {
+        tmp->next_ = first;
+        tmp->next_->prev_ = tmp;
+        tmp = tmp->next_;
+        first = first->next_;
+      } else {
+        tmp->next_ = second;
+        tmp->next_->prev_ = tmp;
+        tmp = tmp->next_;
+        second = second->next_;
+      }
+    }
+
+    if (first == tail_) {
+      tmp->next_ = second;
+      tmp->next_->prev_ = tmp;
+      tmp = tmp->next_;
+      second = second->next_;
+    } else {
+      tmp->next_ = first;
+      tmp->next_->prev_ = tmp;
+    }
+
+    return start;
   }
 
   // go to the middle of the list and attach that node to the tail_
   // return address of the middle + 1 node (start of the second half)
   node_type *DevideIntoTwoParts(node_type *begin) {
-    node_type *fast_pointer = begin;
-    node_type *slow_pointer = begin;
-    while (fast_pointer->next_ != tail_ &&
-           fast_pointer->next_->next_ != tail_) {
-      fast_pointer = fast_pointer->next_->next_;
-      slow_pointer = slow_pointer->next_;
+    iterator fast_iter(begin);
+    iterator slow_iter(begin);
+    while (fast_iter.get_node_pointer()->next_ != tail_ &&
+           fast_iter.get_node_pointer()->next_->next_ != tail_) {
+      ++fast_iter;
+      ++fast_iter;
+      ++slow_iter;
     }
-    node_type *tmp = slow_pointer->next_;
-    slow_pointer->next_ = tail_;
+    node_type *tmp = slow_iter.get_node_pointer()->next_;
+    slow_iter.get_node_pointer()->next_ = tail_;
     return tmp;
   }
 

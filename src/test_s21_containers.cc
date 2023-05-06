@@ -292,6 +292,13 @@ TEST(list, merge) {
   EXPECT_EQ(true, two.empty());
 }
 
+// TEST(list, sort_big) {
+//   s21::list<int> one;
+//   for (int i = 0; i < 1'000'000'000; ++i)
+//   one.push_back(i);
+//   one.sort();
+// }
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
