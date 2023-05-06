@@ -152,35 +152,25 @@ class list {
   // 	merges two sorted lists
   void merge(list &other) {
     if (this != &other) {
-      auto iter = other.begin();
-      while (iter != other.end()) {
-        push_back(*iter);
-        iter = other.EraseAndGoForward(iter);
-      }
+      splice(begin(), other);
+      sort();
     }
   }
 
   // transfers elements from list other starting from pos
-  void splice(const_iterator pos, list &other) {
+  void splice(const_iterator pos, list &other) { SpliceNonConst(pos, other); }
+
+  void SpliceNonConst(iterator pos, list &other) {
     if (!other.empty()) {
-      for (auto iter = other.begin(); iter != other.end(); ++iter, ++pos) {
-        pos = insert(pos, *iter);
-        iter = other.EraseAndGoBack(iter);
-      }
+      auto next_pos = pos;
+      ++next_pos;
+      pos.BindNode(other.begin());
+      (--other.end()).BindNode(next_pos);
+      size_ += other.size_;
+      other.size_ = 0;
+      other.BindTailToItself();
     }
   }
-
-  // splice with non const iterator
-  // void splice(const_iterator pos, list &other) {
-  //   if (!other.empty()) {
-  //     auto next_pos = pos;
-  //     ++next_pos;
-  //     pos.BindNode(other.begin());
-  //     (--other.end()).BindNode(next_pos);
-  //     other.size_ = 0;
-  //     other.BindTailToItself();
-  //   }
-  // }
 
   // 	reverses the order of the elements
   void reverse() {
@@ -204,36 +194,67 @@ class list {
   // merge sort
   void sort() {
     if (size_ > 1) {
-      MergeSort(begin());
+      // MergeSort returns pointer to the first element in sorted element
+      tail_->next_ = MergeSort(tail_->next_);
+      // seek to the last element in the sorted array
+      node_type *max_node = tail_->next_;
+      while (max_node->next_ != tail_) max_node = max_node->next_;
+      // and attach it to the tail, so list will be looped
+      tail_->prev_ = max_node;
     }
   }
 
-  void &MergeSort(iterator begin, iterator middle, iterator end) {
-    if (head == end) return;
-    iterator middle_iter = Middle();
-
-    head_iter = MergeSort(head_iter, );
+  node_type *MergeSort(node_type *begin) {
+    // if there is no elements or one element, return pointer to it's begin
+    if (begin == tail_ || begin->next_ == tail_) return begin;
+    // find the middle
+    node_type *middle = DevideIntoTwoParts(begin);
+    // devide each until there is only one element
+    begin = MergeSort(begin);
+    middle = MergeSort(middle);
+    // then sort and merge those two elements (if there only one element in
+    // every half, it means that those arrays are sorted) and then every other
+    // half will be sorted
+    return MergeSortedArrays(begin, middle);
   }
 
+  node_type *MergeSortedArrays(node_type *first, node_type *second) {
+    // if there is no elements in one of the half, return other half
+    if (first == tail_) return second;
+    if (second == tail_) return first;
 
-    MergeSortedLists(iterator begin, iterator middle, iterator end){
-      iterator first_end = middle;
-      while(begin != first_end && middle != end) {
-        if (*begin > *middle) {
-          
-        }
-      }
+    if (first->value_ < second->value_) {
+      // at last MergeSortedArrays will yeild part of second array with every
+      //  element bigger than (or equal to) the biggest element of first array
+      first->next_ = MergeSortedArrays(first->next_, second);
+      // attach current node to that part
+      first->next_->prev_ = first;
+      // attach smallest element to tail_
+      first->prev_ = tail_;
+      // return smallest element with element of two halfs attachend to it
+      return first;
+    } else {
+      // same logic if second value is smaller or equal to first value
+      second->next_ = MergeSortedArrays(first, second->next_);
+      second->next_->prev_ = second;
+      second->prev_ = tail_;
+      return second;
     }
+  }
 
-
-
-
-  iterator Middle() {
-    auto iter = begin();
-    for (size_type i = 0; i < size_ / 2; ++i) {
-      ++iter;
+  // go to the middle of the list and attach that node to the tail_
+  // return address of the middle + 1 node (start of the second half)
+  node_type *DevideIntoTwoParts(node_type *begin) {
+    node_type *fast_pointer = begin;
+    node_type *slow_pointer = begin;
+    while (fast_pointer->next_ != tail_ &&
+           fast_pointer->next_->next_ != tail_) {
+      fast_pointer = fast_pointer->next_->next_;
+      slow_pointer = slow_pointer->next_;
     }
-    return iter;
+    node_type *tmp = slow_pointer->next_;
+    slow_pointer->next_ = tail_;
+    return tmp;
   }
 
  private:

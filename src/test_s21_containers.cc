@@ -174,7 +174,6 @@ TEST(list, swap) {
   EXPECT_EQ(true, alpha.empty());
 }
 
-
 TEST(list, move_constructor) {
   s21::list<int> zero{111, 222, 444};
   s21::list<int> one(std::move(zero));
@@ -234,6 +233,7 @@ TEST(list, splice) {
   EXPECT_EQ(123, *iter);
   ++iter;
   EXPECT_EQ(444, *iter);
+  EXPECT_EQ(3, one.size());
 }
 
 TEST(list, assignment_operator) {
@@ -249,18 +249,48 @@ TEST(list, assignment_operator) {
   EXPECT_EQ(444, *iter);
 }
 
-TEST(list, sort_sub_funcs) {
-  s21::list<int> one{111, 222, 333, 444, 555};
-  EXPECT_EQ(333, *one.Middle());
-  one.push_back(666);
-  EXPECT_EQ(444, *one.Middle());
-  one.push_back(777);
-  EXPECT_EQ(444, *one.Middle());
-  
+TEST(list, sort) {
+  s21::list<int> one{222, 33, 111, 444, 333, 3213, 555};
+  one.sort();
+  auto iter = one.begin();
+  EXPECT_EQ(33, *iter);
+  --iter;
+  --iter;
+  EXPECT_EQ(3213, *iter);
+  ++iter;
+  ++iter;
+  ++iter;
+  EXPECT_EQ(111, *iter);
+
+  s21::list<int> two{4, 0, 3, 2, 1, 7, 6, 5};
+  two.sort();
+  iter = two.begin();
+  for (size_t i = 0; i < two.size(); ++i) {
+    EXPECT_EQ(i, *iter);
+    ++iter;
+  }
+  ++iter;
+  EXPECT_EQ(0, *iter);
+  ++iter;
+  EXPECT_EQ(1, *iter);
+  iter = two.end();
+  for (int i = two.size() - 1; i >= 0; --i) {
+    --iter;
+    EXPECT_EQ(i, *iter);
+  }
 }
 
-
-
+TEST(list, merge) {
+  s21::list<int> one{4, 0, 3, 2};
+  s21::list<int> two{1, 7, 6, 5};
+  one.merge(two);
+  auto iter = two.begin();
+  for (size_t i = 0; i < two.size(); ++i) {
+    EXPECT_EQ(i, *iter);
+    ++iter;
+  }
+  EXPECT_EQ(true, two.empty());
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
