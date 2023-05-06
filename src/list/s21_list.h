@@ -170,6 +170,7 @@ class list {
     if (size_ > 1) {
       // MergeSort returns pointer to the first element in sorted element
       tail_->next_ = MergeSort(tail_->next_);
+      tail_->next_->prev_ = tail_;
       // seek to the last element in the sorted array
       node_type *last_node = tail_->next_;
       while (last_node->next_ != tail_) last_node = last_node->next_;
@@ -233,15 +234,12 @@ class list {
       first->next_ = MergeSortedArrays(first->next_, second);
       // attach current node to that part
       first->next_->prev_ = first;
-      // attach smallest element to tail_
-      first->prev_ = tail_;
       // return smallest element with element of two halfs attachend to it
       return first;
     } else {
       // same logic if second value is smaller or equal to first value
       second->next_ = MergeSortedArrays(first, second->next_);
       second->next_->prev_ = second;
-      second->prev_ = tail_;
       return second;
     }
   }
