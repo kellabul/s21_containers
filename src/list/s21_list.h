@@ -21,11 +21,6 @@ class list {
  public:
   list() : end_node_(), tail_(&end_node_), size_(0U) { BindTailToItself(); }
 
-  void BindTailToItself() {
-    tail_->next_ = tail_;
-    tail_->prev_ = tail_;
-  }
-
   // list(size_type n)	parameterized constructor, creates the list of size n
   explicit list(size_type n) : list() {
     while (n--) push_back(value_type());
@@ -73,7 +68,7 @@ class list {
   const_iterator end() const { return const_iterator(tail_); }
 
   // checks whether the container is empty
-  bool empty() { return (size_ == 0); }
+  bool empty() const { return (size_ == 0); }
 
   // 	returns the number of elements
   size_type size() const { return size_; }
@@ -140,13 +135,13 @@ class list {
     }
   }
 
-  void SwapTails(node_type *first, node_type *second) {
-    if (first->next_ == first) {
-      first->next_ = first->prev_ = second;
-    } else {
-      first->next_->prev_ = second;
-      first->prev_->next_ = second;
-    }
+  // 	reverses the order of the elements
+  void reverse() {
+    auto pointer = tail_;
+    do {
+      std::swap(pointer->next_, pointer->prev_);
+      pointer = pointer->next_;
+    } while (pointer != tail_);
   }
 
   // 	merges two sorted lists
@@ -159,27 +154,6 @@ class list {
 
   // transfers elements from list other starting from pos
   void splice(const_iterator pos, list &other) { SpliceNonConst(pos, other); }
-
-  void SpliceNonConst(iterator pos, list &other) {
-    if (!other.empty()) {
-      auto next_pos = pos;
-      ++next_pos;
-      pos.BindNode(other.begin());
-      (--other.end()).BindNode(next_pos);
-      size_ += other.size_;
-      other.size_ = 0;
-      other.BindTailToItself();
-    }
-  }
-
-  // 	reverses the order of the elements
-  void reverse() {
-    auto pointer = tail_;
-    do {
-      std::swap(pointer->next_, pointer->prev_);
-      pointer = pointer->next_;
-    } while (pointer != tail_);
-  }
 
   // 	removes consecutive duplicate elements
   void unique() {
@@ -197,10 +171,40 @@ class list {
       // MergeSort returns pointer to the first element in sorted element
       tail_->next_ = MergeSort(tail_->next_);
       // seek to the last element in the sorted array
-      node_type *max_node = tail_->next_;
-      while (max_node->next_ != tail_) max_node = max_node->next_;
+      node_type *last_node = tail_->next_;
+      while (last_node->next_ != tail_) last_node = last_node->next_;
       // and attach it to the tail, so list will be looped
-      tail_->prev_ = max_node;
+      tail_->prev_ = last_node;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // ---------------------------------helpers---------------------------------
+  // -------------------------------------------------------------------------
+
+  void SwapTails(node_type *first, node_type *second) {
+    if (first->next_ == first) {
+      first->next_ = first->prev_ = second;
+    } else {
+      first->next_->prev_ = second;
+      first->prev_->next_ = second;
+    }
+  }
+
+  void BindTailToItself() {
+    tail_->next_ = tail_;
+    tail_->prev_ = tail_;
+  }
+
+  void SpliceNonConst(iterator pos, list &other) {
+    if (!other.empty()) {
+      auto next_pos = pos;
+      ++next_pos;
+      pos.BindNode(other.begin());
+      (--other.end()).BindNode(next_pos);
+      size_ += other.size_;
+      other.size_ = 0;
+      other.BindTailToItself();
     }
   }
 
