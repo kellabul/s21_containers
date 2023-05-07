@@ -137,11 +137,11 @@ class list {
 
   // 	reverses the order of the elements
   void reverse() {
-    auto pointer = tail_;
+    auto iter = end();
     do {
-      std::swap(pointer->next_, pointer->prev_);
-      pointer = pointer->next_;
-    } while (pointer != tail_);
+      iter.SwapNodePointers();
+      ++iter;
+    } while (iter != end());
   }
 
   // 	merges two sorted lists
@@ -165,11 +165,26 @@ class list {
     }
   }
 
-
+  // merge sort
+  void sort() {
+    if (size_ > 1) {
+      // MergeSort returns pointer to the first element in sorted element
+      iterator iter = end();
+      iterator sorted_arr_begin = MergeSort(begin());
+      iter.BindNode(sorted_arr_begin);
+      // seek to the last element in the sorted array
+      iter = begin();
+      while (!iter.NextNodeEqual(end())) ++iter;
+      // and attach it to the tail, so list will be looped
+      iter.BindNode(end());
+    }
+  }
 
   // -------------------------------------------------------------------------
   // ---------------------------------helpers---------------------------------
   // -------------------------------------------------------------------------
+
+private:
 
   void SwapTails(node_type *first, node_type *second) {
     if (first->next_ == first) {
@@ -197,87 +212,61 @@ class list {
     }
   }
 
-
-  // merge sort
-  void sort() {
-    if (size_ > 1) {
-      // MergeSort returns pointer to the first element in sorted element
-      tail_->next_ = MergeSort(tail_->next_);
-      tail_->next_->prev_ = tail_;
-      // seek to the last element in the sorted array
-      node_type *last_node = tail_->next_;
-      while (last_node->next_ != tail_) last_node = last_node->next_;
-      // and attach it to the tail, so list will be looped
-      tail_->prev_ = last_node;
-    }
-  }
-
-
-  node_type *MergeSort(node_type *begin) {
+  iterator MergeSort(iterator begin) {
     // if there is no elements or one element, return pointer to it's begin
-    if (begin == tail_ || begin->next_ == tail_) return begin;
+    if (begin == end() || begin.NextNodeEqual(end())) return begin;
     // find the middle
-    node_type *middle = DevideIntoTwoParts(begin);
+    iterator middle = DevideIntoTwoParts(begin);
     // devide each until there is only one element
     begin = MergeSort(begin);
     middle = MergeSort(middle);
     // then sort and merge those two elements (if there only one element in
     // every half, it means that those arrays are sorted) and then every other
     // half will be sorted
-    return MergeSortedArrays(begin, middle);
+    return MergeSortedLists(begin, middle);
   }
 
-  node_type *MergeSortedArrays(node_type *first, node_type *second) {
+  iterator MergeSortedLists(iterator first, iterator second) {
     // if there is no elements in one of the half, return other half
-    node_type *tmp;
-    if (first->value_ < second->value_) {
+    iterator tmp;
+    if (*first < *second) {
       tmp = first;
-      first = first->next_;
+      ++first;
     } else {
       tmp = second;
-      second = second->next_;
+      ++second;
     }
-    node_type *start = tmp;
-    while (first != tail_ && second != tail_) {
-      if (first->value_ < second->value_) {
-        tmp->next_ = first;
-        tmp->next_->prev_ = tmp;
-        tmp = tmp->next_;
-        first = first->next_;
+    // stash the start of the sorted list
+    iterator start = tmp;
+    while (first != end() && second != end()) {
+      if (*first < *second) {
+        tmp.BindNodeAndGoForward(first);
       } else {
-        tmp->next_ = second;
-        tmp->next_->prev_ = tmp;
-        tmp = tmp->next_;
-        second = second->next_;
+        tmp.BindNodeAndGoForward(second);
       }
     }
-
-    if (first == tail_) {
-      tmp->next_ = second;
-      tmp->next_->prev_ = tmp;
-      tmp = tmp->next_;
-      second = second->next_;
+    if (first == end()) {
+      tmp.BindNode(second);
     } else {
-      tmp->next_ = first;
-      tmp->next_->prev_ = tmp;
+      tmp.BindNode(first);
     }
-
+    // stash the start of the start list
     return start;
   }
 
   // go to the middle of the list and attach that node to the tail_
   // return address of the middle + 1 node (start of the second half)
-  node_type *DevideIntoTwoParts(node_type *begin) {
-    iterator fast_iter(begin);
-    iterator slow_iter(begin);
-    while (fast_iter.next_node_pointer() != tail_ &&
-           fast_iter.next_node_pointer()->next_ != tail_) {
-      ++fast_iter;
-      ++fast_iter;
+  iterator DevideIntoTwoParts(iterator begin_iter) {
+    iterator slow_iter(begin_iter);
+    while (!begin_iter.NextNodeEqual(end()) &&
+           !begin_iter.NextNextNodeEqual(end())) {
+      ++begin_iter;
+      ++begin_iter;
       ++slow_iter;
     }
-    node_type *middle = slow_iter.next_node_pointer();
-    slow_iter.next_node_pointer() = tail_;
+    iterator middle = slow_iter;
+    ++middle;
+    slow_iter.BindNodeNext(end());
     return middle;
   }
 
