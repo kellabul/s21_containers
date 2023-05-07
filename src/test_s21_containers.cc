@@ -68,6 +68,11 @@ TEST(list, pop_back_and_empty) {
   EXPECT_EQ(true, one.empty());
 }
 
+TEST(list, n_constructor) {
+  s21::list<int> one(20);
+  EXPECT_EQ(20, one.size());
+}
+
 TEST(list, front_and_back) {
   s21::list<int> one{11, 22, 33, 44, 55, 66, 77};
   EXPECT_EQ(11, one.front());
@@ -234,6 +239,15 @@ TEST(list, splice) {
   ++iter;
   EXPECT_EQ(444, *iter);
   EXPECT_EQ(3, one.size());
+
+  s21::list<int> two{2, 3, 4};
+  s21::list<int> three{1, 5, 6};
+  three.splice(++three.begin(), two);
+  iter = three.begin();
+  for (int i = 1; i < 7; ++i, ++iter) {
+    EXPECT_EQ(i, *iter);
+  }
+  EXPECT_EQ(0, two.size());
 }
 
 TEST(list, assignment_operator) {
@@ -246,6 +260,8 @@ TEST(list, assignment_operator) {
   ++iter;
   EXPECT_EQ(123, *iter);
   ++iter;
+  EXPECT_EQ(444, *iter);
+  two = std::move(two);
   EXPECT_EQ(444, *iter);
 }
 

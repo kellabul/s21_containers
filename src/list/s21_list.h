@@ -27,14 +27,14 @@ class list {
   }
   // 	initializer list
   explicit list(std::initializer_list<value_type> const &items) : list() {
-    for (const auto &element : items) {
+    for (const value_type &element : items) {
       push_back(element);
     }
   }
 
   // 	copy constructor
   list(const list &l) : list() {
-    for (const auto &element : l) {
+    for (const value_type &element : l) {
       push_back(element);
     }
   }
@@ -112,9 +112,7 @@ class list {
   }
 
   // removes the last element
-  void pop_back() {  // do we need exception here
-    erase(--end());
-  }
+  void pop_back() { erase(--end()); }
 
   // 	adds an element to the head
   void push_front(const_reference value) {
@@ -184,8 +182,7 @@ class list {
   // ---------------------------------helpers---------------------------------
   // -------------------------------------------------------------------------
 
-private:
-
+ private:
   void SwapTails(node_type *first, node_type *second) {
     if (first->next_ == first) {
       first->next_ = first->prev_ = second;

@@ -38,7 +38,7 @@ gcov_report: gcov
 	open $(NAME)_report/index.html
 
 gcov: compile_test
-	@rm -f $(COVERAGE_RESULTS) $(GCOV_FILES)
+	# @rm -f $(COVERAGE_RESULTS) $(GCOV_FILES)
 	./$(TEST_NAME)
 	gcov $(GTEST_SOURCE_FILES) $(SOURCE_FILES)
 
