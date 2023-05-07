@@ -165,19 +165,7 @@ class list {
     }
   }
 
-  // merge sort
-  void sort() {
-    if (size_ > 1) {
-      // MergeSort returns pointer to the first element in sorted element
-      tail_->next_ = MergeSort(tail_->next_);
-      tail_->next_->prev_ = tail_;
-      // seek to the last element in the sorted array
-      node_type *last_node = tail_->next_;
-      while (last_node->next_ != tail_) last_node = last_node->next_;
-      // and attach it to the tail, so list will be looped
-      tail_->prev_ = last_node;
-    }
-  }
+
 
   // -------------------------------------------------------------------------
   // ---------------------------------helpers---------------------------------
@@ -208,6 +196,22 @@ class list {
       other.BindTailToItself();
     }
   }
+
+
+  // merge sort
+  void sort() {
+    if (size_ > 1) {
+      // MergeSort returns pointer to the first element in sorted element
+      tail_->next_ = MergeSort(tail_->next_);
+      tail_->next_->prev_ = tail_;
+      // seek to the last element in the sorted array
+      node_type *last_node = tail_->next_;
+      while (last_node->next_ != tail_) last_node = last_node->next_;
+      // and attach it to the tail, so list will be looped
+      tail_->prev_ = last_node;
+    }
+  }
+
 
   node_type *MergeSort(node_type *begin) {
     // if there is no elements or one element, return pointer to it's begin
@@ -266,15 +270,15 @@ class list {
   node_type *DevideIntoTwoParts(node_type *begin) {
     iterator fast_iter(begin);
     iterator slow_iter(begin);
-    while (fast_iter.get_node_pointer()->next_ != tail_ &&
-           fast_iter.get_node_pointer()->next_->next_ != tail_) {
+    while (fast_iter.next_node_pointer() != tail_ &&
+           fast_iter.next_node_pointer()->next_ != tail_) {
       ++fast_iter;
       ++fast_iter;
       ++slow_iter;
     }
-    node_type *tmp = slow_iter.get_node_pointer()->next_;
-    slow_iter.get_node_pointer()->next_ = tail_;
-    return tmp;
+    node_type *middle = slow_iter.next_node_pointer();
+    slow_iter.next_node_pointer() = tail_;
+    return middle;
   }
 
  private:
