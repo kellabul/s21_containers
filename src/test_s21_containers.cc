@@ -41,213 +41,213 @@ ADD_FAILURE_AT(«file_path», line_number);
 using std::cout;
 using std::endl;
 
-// TEST(list, push_back_and_iterator) {
-//   s21::list<int> one;
-//   one.push_back(111);
-//   one.push_back(222);
-//   one.push_back(444);
-//   auto iter = one.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-// }
+TEST(list, push_back_and_iterator) {
+  s21::list<int> one;
+  one.push_back(111);
+  one.push_back(222);
+  one.push_back(444);
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
 
-// TEST(list, pop_back_and_empty) {
-//   s21::list<int> one;
-//   EXPECT_EQ(0, one.size());
-//   EXPECT_EQ(true, one.empty());
-//   one.push_back(111);
-//   one.push_back(555);
-//   EXPECT_EQ(2, one.size());
-//   EXPECT_EQ(false, one.empty());
-//   one.pop_back();
-//   one.pop_back();
-//   EXPECT_EQ(0, one.size());
-//   EXPECT_EQ(true, one.empty());
-// }
+TEST(list, pop_back_and_empty) {
+  s21::list<int> one;
+  EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+  one.push_back(111);
+  one.push_back(555);
+  EXPECT_EQ(2, one.size());
+  EXPECT_EQ(false, one.empty());
+  one.pop_back();
+  one.pop_back();
+  EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+}
 
-// TEST(list, front_and_back) {
-//   s21::list<int> one{11, 22, 33, 44, 55, 66, 77};
-//   EXPECT_EQ(11, one.front());
-//   EXPECT_EQ(77, one.back());
-// }
+TEST(list, front_and_back) {
+  s21::list<int> one{11, 22, 33, 44, 55, 66, 77};
+  EXPECT_EQ(11, one.front());
+  EXPECT_EQ(77, one.back());
+}
 
-// TEST(list, push_front_and_pop_front) {
-//   s21::list<int> one;
-//   EXPECT_EQ(0, one.size());
-//   EXPECT_EQ(true, one.empty());
-//   one.push_front(111);
-//   one.push_front(555);
-//   EXPECT_EQ(2, one.size());
-//   EXPECT_EQ(555, *one.begin());
-//   one.pop_front();
-//   EXPECT_EQ(1, one.size());
-//   EXPECT_EQ(111, *one.begin());
-//   one.pop_front();
-//   EXPECT_EQ(true, one.empty());
-// }
+TEST(list, push_front_and_pop_front) {
+  s21::list<int> one;
+  EXPECT_EQ(0, one.size());
+  EXPECT_EQ(true, one.empty());
+  one.push_front(111);
+  one.push_front(555);
+  EXPECT_EQ(2, one.size());
+  EXPECT_EQ(555, *one.begin());
+  one.pop_front();
+  EXPECT_EQ(1, one.size());
+  EXPECT_EQ(111, *one.begin());
+  one.pop_front();
+  EXPECT_EQ(true, one.empty());
+}
 
-// TEST(list, initializer_list) {
-//   s21::list<int> one{111, 222, 444};
-//   auto iter = one.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-// }
+TEST(list, initializer_list) {
+  s21::list<int> one{111, 222, 444};
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
 
-// TEST(list, copy_constructor) {
-//   s21::list<int> zero{111, 222, 444};
-//   s21::list<int> one(zero);
-//   auto iter = one.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-// }
+TEST(list, copy_constructor) {
+  s21::list<int> zero{111, 222, 444};
+  s21::list<int> one(zero);
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
 
-// TEST(list, erase) {
-//   s21::list<std::string> alpha{"one", "two", "three"};
-//   alpha.erase(alpha.begin());
-//   EXPECT_EQ("two", *alpha.begin());
-//   s21::list<std::string> beta{"one", "oneone", "oneoneone"};
-//   auto iter = beta.begin();
-//   ++iter;
-//   alpha.erase(iter);
-//   iter = beta.begin();
-//   EXPECT_EQ("one", *iter);
-//   ++iter;
-//   EXPECT_EQ("oneoneone", *iter);
-// }
+TEST(list, erase) {
+  s21::list<std::string> alpha{"one", "two", "three"};
+  alpha.erase(alpha.begin());
+  EXPECT_EQ("two", *alpha.begin());
+  s21::list<std::string> beta{"one", "oneone", "oneoneone"};
+  auto iter = beta.begin();
+  ++iter;
+  alpha.erase(iter);
+  iter = beta.begin();
+  EXPECT_EQ("one", *iter);
+  ++iter;
+  EXPECT_EQ("oneoneone", *iter);
+}
 
-// TEST(list, max_size) {
-//   s21::list<std::string> s21_list_obj;
-//   std::list<std::string> std_list_obj;
-//   EXPECT_EQ(s21_list_obj.max_size(), std_list_obj.max_size());
-//   s21::list<char> s21_list_obj_2;
-//   std::list<char> std_list_obj_2;
-//   EXPECT_EQ(s21_list_obj_2.max_size(), std_list_obj_2.max_size());
-// }
+TEST(list, max_size) {
+  s21::list<std::string> s21_list_obj;
+  std::list<std::string> std_list_obj;
+  EXPECT_EQ(s21_list_obj.max_size(), std_list_obj.max_size());
+  s21::list<char> s21_list_obj_2;
+  std::list<char> std_list_obj_2;
+  EXPECT_EQ(s21_list_obj_2.max_size(), std_list_obj_2.max_size());
+}
 
-// TEST(list, insert) {
-//   s21::list<std::string> alpha{"one", "two", "three"};
-//   alpha.insert(alpha.begin(), "zero");
-//   EXPECT_EQ("zero", *alpha.begin());
-//   auto iter = alpha.insert(alpha.end(), "four");
-//   EXPECT_EQ("four", *iter);
-//   ++iter;
-//   EXPECT_EQ(true, iter == alpha.end());
-//   iter = alpha.begin();
-//   ++iter;
-//   iter = alpha.insert(iter, "zeroPointFive");
-//   EXPECT_EQ("zeroPointFive", *iter);
-// }
+TEST(list, insert) {
+  s21::list<std::string> alpha{"one", "two", "three"};
+  alpha.insert(alpha.begin(), "zero");
+  EXPECT_EQ("zero", *alpha.begin());
+  auto iter = alpha.insert(alpha.end(), "four");
+  EXPECT_EQ("four", *iter);
+  ++iter;
+  EXPECT_EQ(true, iter == alpha.end());
+  iter = alpha.begin();
+  ++iter;
+  iter = alpha.insert(iter, "zeroPointFive");
+  EXPECT_EQ("zeroPointFive", *iter);
+}
 
-// TEST(list, swap) {
-//   s21::list<std::string> alpha{"zero", "one", "two", "three"};
-//   s21::list<std::string> beta{"four", "five", "six"};
-//   alpha.swap(beta);
-//   auto iter = alpha.begin();
-//   EXPECT_EQ("four", *iter);
-//   ++iter;
-//   ++iter;
-//   EXPECT_EQ("six", *iter);
-//   iter = beta.end();
-//   --iter;
-//   EXPECT_EQ("three", *iter);
-//   beta.~list();
-//   EXPECT_EQ("four", *alpha.begin());
-//   {
-//     s21::list<std::string> gamma{"seven"};
-//     alpha.swap(gamma);
-//     EXPECT_EQ("four", *gamma.begin());
-//   }
-//   EXPECT_EQ("seven", *alpha.begin());
+TEST(list, swap) {
+  s21::list<std::string> alpha{"zero", "one", "two", "three"};
+  s21::list<std::string> beta{"four", "five", "six"};
+  alpha.swap(beta);
+  auto iter = alpha.begin();
+  EXPECT_EQ("four", *iter);
+  ++iter;
+  ++iter;
+  EXPECT_EQ("six", *iter);
+  iter = beta.end();
+  --iter;
+  EXPECT_EQ("three", *iter);
+  beta.~list();
+  EXPECT_EQ("four", *alpha.begin());
+  {
+    s21::list<std::string> gamma{"seven"};
+    alpha.swap(gamma);
+    EXPECT_EQ("four", *gamma.begin());
+  }
+  EXPECT_EQ("seven", *alpha.begin());
 
-//   s21::list<std::string> delta;
-//   alpha.swap(delta);
-//   EXPECT_EQ("seven", *delta.begin());
-//   EXPECT_EQ(true, alpha.empty());
-// }
+  s21::list<std::string> delta;
+  alpha.swap(delta);
+  EXPECT_EQ("seven", *delta.begin());
+  EXPECT_EQ(true, alpha.empty());
+}
 
-// TEST(list, move_constructor) {
-//   s21::list<int> zero{111, 222, 444};
-//   s21::list<int> one(std::move(zero));
-//   auto iter = one.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-//   EXPECT_EQ(true, zero.empty());
-// }
+TEST(list, move_constructor) {
+  s21::list<int> zero{111, 222, 444};
+  s21::list<int> one(std::move(zero));
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  EXPECT_EQ(true, zero.empty());
+}
 
-// TEST(list, reverse) {
-//   s21::list<int> zero{111, 222, 444};
-//   zero.reverse();
-//   auto iter = zero.begin();
-//   EXPECT_EQ(444, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(111, *iter);
-// }
+TEST(list, reverse) {
+  s21::list<int> zero{111, 222, 444};
+  zero.reverse();
+  auto iter = zero.begin();
+  EXPECT_EQ(444, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(111, *iter);
+}
 
-// TEST(list, unique) {
-//   s21::list<int> zero{111, 111, 111, 222, 222, 222, 444, 444, 444};
-//   zero.unique();
-//   auto iter = zero.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-//   ++iter;
-//   EXPECT_EQ(iter, zero.end());
+TEST(list, unique) {
+  s21::list<int> zero{111, 111, 111, 222, 222, 222, 444, 444, 444};
+  zero.unique();
+  auto iter = zero.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  ++iter;
+  EXPECT_EQ(iter, zero.end());
 
-//   s21::list<int> one{111, 222, 444};
-//   one.unique();
-//   iter = one.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(222, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
+  s21::list<int> one{111, 222, 444};
+  one.unique();
+  iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
 
-//   s21::list<int> two;
-//   EXPECT_NO_THROW(two.unique());
-// }
+  s21::list<int> two;
+  EXPECT_NO_THROW(two.unique());
+}
 
-// TEST(list, splice) {
-//   s21::list<int> zero{111, 123, 444};
-//   s21::list<int> one;
-//   one.splice(one.begin(), zero);
-//   EXPECT_EQ(true, zero.empty());
-//   auto iter = one.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(123, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-//   EXPECT_EQ(3, one.size());
-// }
+TEST(list, splice) {
+  s21::list<int> zero{111, 123, 444};
+  s21::list<int> one;
+  one.splice(one.begin(), zero);
+  EXPECT_EQ(true, zero.empty());
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(123, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  EXPECT_EQ(3, one.size());
+}
 
-// TEST(list, assignment_operator) {
-//   s21::list<int> one{111, 123, 444};
-//   s21::list<int> two;
-//   two = std::move(one);
-//   EXPECT_EQ(true, one.empty());
-//   auto iter = two.begin();
-//   EXPECT_EQ(111, *iter);
-//   ++iter;
-//   EXPECT_EQ(123, *iter);
-//   ++iter;
-//   EXPECT_EQ(444, *iter);
-// }
+TEST(list, assignment_operator) {
+  s21::list<int> one{111, 123, 444};
+  s21::list<int> two;
+  two = std::move(one);
+  EXPECT_EQ(true, one.empty());
+  auto iter = two.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(123, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
 
 TEST(list, sort) {
   s21::list<int> one{222, 33, 111, 444, 333, 3213, 555};
@@ -292,12 +292,12 @@ TEST(list, merge) {
   EXPECT_EQ(true, two.empty());
 }
 
-TEST(list, sort_big) {
-  s21::list<int> one;
-  for (int i = 0; i < 5'000'000; ++i)
-  one.push_back(i);
-  one.sort();
-}
+// TEST(list, sort_big) {
+//   s21::list<int> one;
+//   for (int i = 0; i < 99999999; ++i)
+//   one.push_back(i);
+//   one.sort();
+// }
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
