@@ -71,7 +71,10 @@ class ListIterator {
     iter.node_pointer_->prev_ = node_pointer_;
   }
 
-  node_type *get_node_pointer() const { return node_pointer_; }
+  node_type *&node_pointer() { return node_pointer_; }
+  node_type *&next_node_pointer() { return node_pointer_->next_; }
+  node_type *node_pointer() const { return node_pointer_; }
+  node_type *next_node_pointer() const { return node_pointer_->next_; }
 
  private:
   node_type *node_pointer_;
@@ -91,7 +94,7 @@ class ListConstIterator {
   ListConstIterator() = delete;
   explicit ListConstIterator(const node_type *node) : node_pointer_(node) {}
   ListConstIterator(const iterator &iter)
-      : node_pointer_(iter.get_node_pointer()) {}
+      : node_pointer_(iter.node_pointer()) {}
 
   const_reference operator*() { return node_pointer_->value_; }
   bool operator!=(const const_iterator &iter) {
