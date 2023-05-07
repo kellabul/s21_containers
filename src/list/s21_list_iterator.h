@@ -26,21 +26,19 @@ class ListIterator {
     return node_pointer_ == iterator.node_pointer_;
   }
 
-  // do we need an exception here?
   iterator &operator++() {
     node_pointer_ = node_pointer_->next_;
     return *this;
   }
 
-  iterator operator++(int) {
+  iterator &operator++(int) {
     iterator buffer(node_pointer_);
     node_pointer_ = node_pointer_->next_;
     return buffer;
   }
 
-  iterator &operator+(int n) {
-    while (n--)
-    node_pointer_ = node_pointer_->next_;
+  iterator operator+(int n) {
+    while (n--) node_pointer_ = node_pointer_->next_;
     return *this;
   }
 
@@ -49,10 +47,8 @@ class ListIterator {
     return *this;
   }
 
-
-  iterator &operator-(int n) {
-    while (n--)
-    node_pointer_ = node_pointer_->prev_;
+  iterator operator-(int n) {
+    while (n--) node_pointer_ = node_pointer_->prev_;
     return *this;
   }
 
@@ -136,7 +132,6 @@ class ListConstIterator {
     return node_pointer_ == iter.node_pointer_;
   }
 
-  // do we need an exception here?
   const_iterator &operator++() {
     node_pointer_ = node_pointer_->next_;
     return *this;
