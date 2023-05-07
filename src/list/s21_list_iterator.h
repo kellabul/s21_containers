@@ -93,10 +93,7 @@ class ListIterator {
     std::swap(node_pointer_->next_, node_pointer_->prev_);
   }
 
-  node_type *&node_pointer() { return node_pointer_; }
-  node_type *&next_node_pointer() { return node_pointer_->next_; }
   node_type *node_pointer() const { return node_pointer_; }
-  node_type *next_node_pointer() const { return node_pointer_->next_; }
 
  private:
   node_type *node_pointer_;

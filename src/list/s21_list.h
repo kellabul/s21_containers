@@ -260,8 +260,7 @@ private:
     iterator slow_iter(begin_iter);
     while (!begin_iter.NextNodeEqual(end()) &&
            !begin_iter.NextNextNodeEqual(end())) {
-      ++begin_iter;
-      ++begin_iter;
+      ++(++begin_iter);
       ++slow_iter;
     }
     iterator middle = slow_iter;
