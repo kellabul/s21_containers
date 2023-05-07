@@ -80,7 +80,7 @@ class list {
 
   // 	clears the contents
   void clear() {
-    for (auto iter = begin(); iter != end(); iter = begin()) {
+    for (iterator iter = begin(); iter != end(); iter = begin()) {
       erase(iter);
     }
   }
@@ -137,7 +137,7 @@ class list {
 
   // 	reverses the order of the elements
   void reverse() {
-    auto iter = end();
+    iterator iter = end();
     do {
       iter.SwapNodePointers();
       ++iter;
@@ -157,7 +157,7 @@ class list {
 
   // 	removes consecutive duplicate elements
   void unique() {
-    auto iter = begin();
+    iterator iter = begin();
     while (iter != end()) {
       if (*iter == *(++iter)) {
         iter = EraseAndGoBack(iter);
@@ -202,10 +202,10 @@ private:
 
   void SpliceNonConst(iterator pos, list &other) {
     if (!other.empty()) {
-      auto next_pos = pos;
-      ++next_pos;
-      pos.BindNode(other.begin());
-      (--other.end()).BindNode(next_pos);
+      iterator previous_pos = pos;
+      --previous_pos;
+      previous_pos.BindNode(other.begin());
+      (--other.end()).BindNode(pos);
       size_ += other.size_;
       other.size_ = 0;
       other.BindTailToItself();
