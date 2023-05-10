@@ -182,7 +182,7 @@ class list {
   // ---------------------------------helpers---------------------------------
   // -------------------------------------------------------------------------
 
- private:
+  //  private:
   void SwapTails(node_type *first, node_type *second) {
     if (first->next_ == first) {
       first->next_ = first->prev_ = second;
@@ -192,7 +192,7 @@ class list {
     }
   }
 
-  void BindTailToItself() {
+  inline void BindTailToItself() {
     tail_->next_ = tail_;
     tail_->prev_ = tail_;
   }
@@ -263,6 +263,75 @@ class list {
     ++middle;
     slow_iter.BindNodeNext(end());
     return middle;
+  }
+
+  // ================================================================================
+  // =================== more effective way to sort, wo iterators ===================
+  // ================================================================================
+  
+ public:
+  // merge sort without iterators, more effective
+  void sort_fast() {
+    if (size_ > 1) {
+      tail_->next_ = MergeSortFast(tail_->next_);
+      tail_->next_->prev_ = tail_;
+      node_type *last_node = tail_->next_;
+      while (last_node->next_ != tail_) last_node = last_node->next_;
+      tail_->prev_ = last_node;
+    }
+  }
+
+ private:
+  node_type *MergeSortFast(node_type *begin) {
+    if (begin == tail_ || begin->next_ == tail_) return begin;
+    node_type *middle = DevideIntoTwoPartsFast(begin);
+    begin = MergeSortFast(begin);
+    middle = MergeSortFast(middle);
+    return MergeSortedArraysFast(begin, middle);
+  }
+
+  node_type *MergeSortedArraysFast(node_type *first, node_type *second) {
+    node_type *tmp;
+    if (first->value_ < second->value_) {
+      tmp = first;
+      first = first->next_;
+    } else {
+      tmp = second;
+      second = second->next_;
+    }
+    node_type *start = tmp;
+    while (first != tail_ && second != tail_) {
+      if (first->value_ < second->value_) {
+        tmp->next_ = first;
+        first->prev_ = tmp;
+        first = first->next_;
+      } else {
+        tmp->next_ = second;
+        second->prev_ = tmp;
+        second = second->next_;
+      }
+      tmp = tmp->next_;
+    }
+
+    if (first == tail_) {
+      tmp->next_ = second;
+      second->prev_ = tmp;
+    } else {
+      tmp->next_ = first;
+      first->prev_ = tmp;
+    }
+    return start;
+  }
+
+  node_type *DevideIntoTwoPartsFast(node_type *begin) {
+    node_type *middle = begin;
+    while (begin->next_ != tail_ && begin->next_->next_ != tail_) {
+      begin = begin->next_->next_;
+      middle = middle->next_;
+    }
+    node_type *tmp = middle->next_;
+    middle->next_ = tail_;
+    return tmp;
   }
 
  private:
