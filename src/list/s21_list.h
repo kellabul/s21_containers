@@ -172,7 +172,7 @@ class list {
       iter.BindNode(sorted_arr_begin);
       // seek to the last element in the sorted array
       iter = begin();
-      while (!iter.NextNodeEqual(end())) ++iter;
+      while (iter.NextNodeNotEqual(end())) ++iter;
       // and attach it to the tail, so list will be looped
       iter.BindNode(end());
     }
@@ -211,7 +211,7 @@ class list {
 
   iterator MergeSort(iterator begin) {
     // if there is no elements or one element, return pointer to it's begin
-    if (begin == end() || begin.NextNodeEqual(end())) return begin;
+    if (begin == end() || !begin.NextNodeNotEqual(end())) return begin;
     // find the middle
     iterator middle = DevideIntoTwoParts(begin);
     // devide each until there is only one element
@@ -247,7 +247,6 @@ class list {
     } else {
       tmp.BindNode(first);
     }
-    // stash the start of the start list
     return start;
   }
 
@@ -255,9 +254,9 @@ class list {
   // return address of the middle + 1 node (start of the second half)
   iterator DevideIntoTwoParts(iterator begin_iter) {
     iterator slow_iter(begin_iter);
-    while (!begin_iter.NextNodeEqual(end()) &&
-           !begin_iter.NextNextNodeEqual(end())) {
-      ++(++begin_iter);
+    while (begin_iter.NextNodeNotEqual(end()) &&
+           begin_iter.NextNextNodeNotEqual(end())) {
+      begin_iter += 2;
       ++slow_iter;
     }
     iterator middle = slow_iter;
