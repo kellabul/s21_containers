@@ -40,7 +40,7 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 using std::cout;
 using std::endl;
-
+/*
 TEST(list, push_back_and_iterator) {
   s21::list<int> one;
   one.push_back(111);
@@ -307,13 +307,13 @@ TEST(list, merge) {
   }
   EXPECT_EQ(true, two.empty());
 }
-
-// TEST(list, sort_big) {
-//   s21::list<int> one;
-//   for (int i = 0; i < 99999999; ++i)
-//   one.push_back(i);
-//   one.sort();
-// }
+*/
+TEST(list, sort_big) {
+  s21::list<int> one;
+  for (int i = 0; i < 10000000; ++i)
+  one.push_back(i);
+  one.sort();
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

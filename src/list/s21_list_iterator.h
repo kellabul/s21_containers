@@ -42,6 +42,12 @@ class ListIterator {
     return *this;
   }
 
+  iterator &operator+=(int n) {
+    while (n--) node_pointer_ = node_pointer_->next_;
+    return *this;
+  }
+
+
   iterator &operator--() {
     node_pointer_ = node_pointer_->prev_;
     return *this;
@@ -84,12 +90,12 @@ class ListIterator {
     node_pointer_->next_ = iter.node_pointer_;
   }
 
-  bool NextNodeEqual(const iterator &iter) {
-    return node_pointer_->next_ == iter.node_pointer_;
+  bool NextNodeNotEqual(const iterator &iter) {
+    return node_pointer_->next_ != iter.node_pointer_;
   }
 
-  bool NextNextNodeEqual(const iterator &iter) {
-    return node_pointer_->next_->next_ == iter.node_pointer_;
+  bool NextNextNodeNotEqual(const iterator &iter) {
+    return node_pointer_->next_->next_ != iter.node_pointer_;
   }
 
   void BindNodeAndGoForward(iterator &iter) {
@@ -102,7 +108,7 @@ class ListIterator {
     std::swap(node_pointer_->next_, node_pointer_->prev_);
   }
 
-  node_type *node_pointer() const { return node_pointer_; }
+  node_type *get_node_pointer() const { return node_pointer_; }
 
  private:
   node_type *node_pointer_;
@@ -122,7 +128,7 @@ class ListConstIterator {
   ListConstIterator() : node_pointer_(nullptr){};
   explicit ListConstIterator(const node_type *node) : node_pointer_(node) {}
   ListConstIterator(const iterator &iter)
-      : node_pointer_(iter.node_pointer()) {}
+      : node_pointer_(iter.get_node_pointer()) {}
 
   const_reference operator*() { return node_pointer_->value_; }
   bool operator!=(const const_iterator &iter) {
