@@ -40,7 +40,7 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 using std::cout;
 using std::endl;
-/*
+
 TEST(list, push_back_and_iterator) {
   s21::list<int> one;
   one.push_back(111);
@@ -307,13 +307,78 @@ TEST(list, merge) {
   }
   EXPECT_EQ(true, two.empty());
 }
-*/
-TEST(list, sort_big) {
-  s21::list<int> one;
-  for (int i = 0; i < 10000000; ++i)
-  one.push_back(i);
-  one.sort();
+
+TEST(list, sort_fast) {
+  s21::list<int> one{222, 33, 111, 444, 333, 3213, 555};
+  one.sort_fast();
+  auto iter = one.begin();
+  EXPECT_EQ(33, *iter);
+  --iter;
+  --iter;
+  EXPECT_EQ(3213, *iter);
+  ++iter;
+  ++iter;
+  ++iter;
+  EXPECT_EQ(111, *iter);
+
+  s21::list<int> two{4, 0, 3, 2, 1, 7, 6, 5};
+  two.sort_fast();
+  iter = two.begin();
+  for (size_t i = 0; i < two.size(); ++i) {
+    EXPECT_EQ(i, *iter);
+    ++iter;
+  }
+  ++iter;
+  EXPECT_EQ(0, *iter);
+  ++iter;
+  EXPECT_EQ(1, *iter);
+  iter = two.end();
+  for (int i = two.size() - 1; i >= 0; --i) {
+    --iter;
+    EXPECT_EQ(i, *iter);
+  }
 }
+
+// s21::list<int> sort_list;
+
+// TEST(list, fill_sort) {
+//   for (int i = 0; i < 10'000'000; ++i) sort_list.push_back(rand());
+// }
+
+// TEST(list, sort_big_me) {
+//   s21::list<int> sort_list_me(sort_list);
+//   sort_list_me.sort_fast();
+//   auto iter = sort_list_me.begin();
+//   for (int i = 0; i < 11; ++i) {
+//     cout << *iter << " ";
+//     ++iter;
+//   }
+//   cout << endl;
+//   iter = --sort_list_me.end();
+//   for (int i = 0; i < 5; ++i) {
+//     cout << *iter << " ";
+//     --iter;
+//   }
+//   cout << endl;
+// }
+
+
+// TEST(list, sort_big) {
+//   s21::list<int> sort_list_iter(sort_list);
+//   sort_list_iter.sort();
+//   auto iter = sort_list_iter.begin();
+//   for (int i = 0; i < 11; ++i) {
+//     cout << *iter << " ";
+//     ++iter;
+//   }
+//   cout << endl;
+//   iter = --sort_list_iter.end();
+//   for (int i = 0; i < 5; ++i) {
+//     cout << *iter << " ";
+//     --iter;
+//   }
+//   cout << endl;
+// }
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
