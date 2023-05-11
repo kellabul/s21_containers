@@ -312,7 +312,6 @@ class list {
       }
       tmp = tmp->next_;
     }
-
     if (first == tail_) {
       tmp->next_ = second;
       second->prev_ = tmp;

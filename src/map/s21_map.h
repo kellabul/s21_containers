@@ -7,32 +7,26 @@
 #include "s21_map_node.h"
 
 namespace s21 {
-template <typename T>
+template <typename Key, typename T>
 class map {
  public:
-  using value_type = T;
-  // key_type	Key the first template parameter (Key)
+  using key_type = Key;
+  using mapped_type = T;
+  using value_type = std::pair<const key_type, mapped_type>;
+  using reference = value_type &;
+  using const_reference = const value_type &;
 
-  // mapped_type	T the second template parameter (T)
-
-  // value_type	std::pair<const key_type,mapped_type> Key-value pair
-
-  // reference	value_type & defines the type of the reference to an element
-
-  // const_reference	const value_type & defines the type of the constant
-  // reference
-
-  // iterator	internal class MapIterator<K, T> or BinaryTree::iterator as
-  // internal iterator of tree subclass; defines the type for iterating through
-  // the container
+  // using iterator =	internal class MapIterator<K, T> or BinaryTree::iterator
+  // as internal iterator of tree subclass; defines the type for iterating
+  // through the container
 
   // const_iterator	internal class MapConstIterator<K, T> or
   // BinaryTree::const_iterator as internal const iterator of tree subclass;
   // defines the constant type for iterating through the container
 
-  // size_type	size_t defines the type of the container size (standard type is
-  // size_t)
+  using size_type = std::size_t;
 
+ public:
   // map()	default constructor, creates an empty map
 
   // map(std::initializer_list<value_type> const &items)	initializer list
@@ -66,8 +60,8 @@ class map {
   // and returns an iterator to where the element is in the container and bool
   // denoting whether the insertion took place
 
-  // std::pair<iterator, bool> insert(const Key& key, const T& obj)	inserts a
-  // value by key and returns an iterator to where the element is in the
+  // std::pair<iterator, bool> insert(const Key& key, const T& obj)	inserts
+  // a value by key and returns an iterator to where the element is in the
   // container and bool denoting whether the insertion took place
 
   // std::pair<iterator, bool> insert_or_assign(const Key& key, const T& obj);
