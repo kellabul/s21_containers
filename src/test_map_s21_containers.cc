@@ -41,7 +41,7 @@ ADD_FAILURE_AT(«file_path», line_number);
 using std::cout;
 using std::endl;
 
-TEST(list, push_back_and_iterator) {
+TEST(map, push_back_and_iterator) {
   s21::list<int> one;
   one.push_back(111);
   one.push_back(222);
