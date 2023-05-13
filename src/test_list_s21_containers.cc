@@ -339,22 +339,23 @@ TEST(list, sort_fast) {
   }
 }
 
+
 // s21::list<int> sort_list;
 
 // TEST(list, fill_sort) {
 //   for (int i = 0; i < 10'000'000; ++i) sort_list.push_back(rand());
 // }
 
-// TEST(list, sort_big_me) {
-//   s21::list<int> sort_list_me(sort_list);
-//   sort_list_me.sort_fast();
-//   auto iter = sort_list_me.begin();
+// TEST(list, sort_big_fast) {
+//   s21::list<int> sort_list_fast(sort_list);
+//   sort_list_fast.sort_fast();
+//   auto iter = sort_list_fast.begin();
 //   for (int i = 0; i < 11; ++i) {
 //     cout << *iter << " ";
 //     ++iter;
 //   }
 //   cout << endl;
-//   iter = --sort_list_me.end();
+//   iter = --sort_list_fast.end();
 //   for (int i = 0; i < 5; ++i) {
 //     cout << *iter << " ";
 //     --iter;
