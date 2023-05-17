@@ -57,6 +57,15 @@ TEST(BRTREE, basic) {
   EXPECT_EQ(beta.GetValue("four"), "chetire");
 }
 
+TEST(BRTREE, max_min) {
+  s21::BRTree<int, int> one;
+  for (int i = -20; i <= 20; ++i)
+  one.Insert(i*2, 0);
+  EXPECT_EQ(one.MaxKey(), 40);
+  EXPECT_EQ(one.MinKey(), -40);
+}
+
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

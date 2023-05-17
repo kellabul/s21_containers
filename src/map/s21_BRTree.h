@@ -30,7 +30,23 @@ class BRTree {
 
   void Clear() { ClearTree(root_); }
 
+  void DeleteNode(node_type *node) {}
+
+  key_type MaxKey() { return MaxNode(root_)->key_; }
+
+  key_type MinKey() { return MinNode(root_)->key_; }
+
  private:
+  node_type *MinNode(node_type *node) {
+    while (node->left_ != nullptr) node = node->left_;
+    return node;
+  }
+
+  node_type *MaxNode(node_type *node) {
+    while (node->right_ != nullptr) node = node->right_;
+    return node;
+  }
+
   void ClearTree(node_type *node) {
     if (node == nullptr) return;
     ClearTree(node->left_);
