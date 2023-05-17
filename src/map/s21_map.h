@@ -5,6 +5,7 @@
 
 #include "s21_map_iterator.h"
 #include "s21_map_node.h"
+#include "s21_BRTree.h"
 
 namespace s21 {
 template <typename Key, typename T>
@@ -81,8 +82,6 @@ class map {
 
  public:
  private:
-  node_type end_node_;
-  node_type *tail_;
   size_type size_;
 };
 }  // namespace s21

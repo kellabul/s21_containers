@@ -4,6 +4,6 @@
 #include <iostream>  // для удобства, в конце, возможно, удалим (если не забудем))
 
 #include "list/s21_list.h"
-
+#include "map/s21_map.h"
 
 #endif  // CPP2_S21_CONTAINERS_S21_CONTAINERS_H_

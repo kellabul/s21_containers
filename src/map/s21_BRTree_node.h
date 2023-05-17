@@ -3,24 +3,24 @@
 
 namespace s21 {
 template <typename Key, typename T>
-class BRTreeNode {
+struct BRTreeNode {
  public:
   using key_type = Key;
   using value_type = T;
-  using node_type = BRTreeNode;
+  using node_type = BRTreeNode<key_type, value_type>;;
   const bool kRed = true;
   const bool kBlack = false;
 
  public:
-  BRTree(key_type key = {}, value_type value = {})
+  BRTreeNode(key_type key = {}, value_type value = {})
       : key_(key),
-        value_(value_),
+        value_(value),
         left_(nullptr),
         right_(nullptr),
         parent_(nullptr),
         color_(kRed) {}
 
- private:
+ public:
   key_type key_;
   value_type value_;
   node_type* left_;

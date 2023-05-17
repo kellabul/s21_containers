@@ -40,18 +40,21 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 using std::cout;
 using std::endl;
+using std::string;
 
-TEST(map, push_back_and_iterator) {
-  s21::list<int> one;
-  one.push_back(111);
-  one.push_back(222);
-  one.push_back(444);
-  auto iter = one.begin();
-  EXPECT_EQ(111, *iter);
-  ++iter;
-  EXPECT_EQ(222, *iter);
-  ++iter;
-  EXPECT_EQ(444, *iter);
+TEST(BRTREE, basic) {
+  s21::BRTree<string, int> alpha("one", 1);
+  EXPECT_EQ(alpha.GetValue("one"), 1);
+
+  s21::BRTree<string, string> beta;
+  beta.Insert("one", "odin");
+  beta.Insert("two", "dva");
+  beta.Insert("three", "tri");
+  beta.Insert("four", "chetire");
+  EXPECT_EQ(beta.GetValue("one"), "odin");
+  EXPECT_EQ(beta.GetValue("two"), "dva");
+  EXPECT_EQ(beta.GetValue("three"), "tri");
+  EXPECT_EQ(beta.GetValue("four"), "chetire");
 }
 
 int main(int argc, char **argv) {
