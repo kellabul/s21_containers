@@ -18,7 +18,7 @@ class BRTree {
 
   BRTree(key_type key, value_type value) : root_(new node_type(key, value)){};
 
-  ~BRTree() { delete root_; }
+  ~BRTree() { Clear(); }
 
   void Insert(const key_type &key, const value_type &value) {
     InsertNode(root_, key, value);
@@ -28,7 +28,16 @@ class BRTree {
 
   value_type GetValue(const key_type key) { return Find(key)->value_; }
 
+  void Clear() { ClearTree(root_); }
+
  private:
+  void ClearTree(node_type *node) {
+    if (node == nullptr) return;
+    ClearTree(node->left_);
+    ClearTree(node->right_);
+    delete node;
+  }
+
   node_type *FindNode(node_type *node, const key_type &key) {
     if (node == nullptr) return nullptr;
     if (node->key_ == key) return node;
