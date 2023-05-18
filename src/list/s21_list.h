@@ -334,8 +334,8 @@ class list {
   }
 
  private:
-  node_type end_node_;
   node_type *tail_;
+  node_type end_node_;
   size_type size_;
 };
 }  // namespace s21

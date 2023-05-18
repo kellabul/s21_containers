@@ -21,22 +21,53 @@ class BRTree {
   ~BRTree() { Clear(); }
 
   void Insert(const key_type &key, const value_type &value) {
-    InsertNode(root_, key, value);
+    InsertNode(root_, key, value, nullptr);
   }
 
   node_type *Find(const key_type &key) { return FindNode(root_, key); }
 
+  // what if Find(key) == nullptr?
   value_type GetValue(const key_type key) { return Find(key)->value_; }
 
   void Clear() { ClearTree(root_); }
-
-  void DeleteNode(node_type *node) {}
 
   key_type MaxKey() { return MaxNode(root_)->key_; }
 
   key_type MinKey() { return MinNode(root_)->key_; }
 
+  void Delete(key_type key) { DeleteNode(Find(key)); }
+
+  void PrintTree
+
  private:
+  void DeleteNode(node_type *node) {
+    if (node == nullptr) return;
+    if (node->left_ != nullptr && node->right_ != nullptr) {
+      node_type *tmp = MaxNode(node->left_);
+      SwapNodes(tmp, node);
+      DeleteNode(tmp);
+    } else if (node->left_ != nullptr) {
+      node.Swap(node->left_);
+      delete node->left_;
+      node->left_ = nullptr;
+    } else if (node->right_ != nullptr) {
+      node.Swap(node->left_);
+      delete node->left_;
+      node->left_ = nullptr;
+    } else {
+      if (node->parent_ && node->parent_->left_ == node)
+        node->parent_->left_ = nullptr;
+      else (node->parent_)
+        node->parent_->right_ = nullptr;
+      delete node;
+    }
+  }
+
+  void SwapNodes(node_type *node) {
+    std::swap(value_, node->value_);
+    std::swap(key_, node->key_);
+  }
+
   node_type *MinNode(node_type *node) {
     while (node->left_ != nullptr) node = node->left_;
     return node;
@@ -64,14 +95,15 @@ class BRTree {
     }
   }
 
-  void InsertNode(node_type *&node, const key_type &key,
-                  const value_type &value) {
+  void InsertNode( node_type *&node, const key_type &key,
+                  const value_type &value, node_type *parent) {
     if (node == nullptr) {
       node = new node_type(key, value);
+      node->parent_ = parent
     } else if (key < node->key_) {
-      InsertNode(node->left_, key, value);
+      InsertNode(node->left_, key, value, node);
     } else {
-      InsertNode(node->right_, key, value);
+      InsertNode(node->right_, key, value, node);
     }
   }
 
