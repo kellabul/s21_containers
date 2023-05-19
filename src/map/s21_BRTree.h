@@ -107,11 +107,12 @@ class BRTree {
 
   node_type *FindNode(node_type *node, const key_type &key) {
     if (node == nullptr) return nullptr;
-    if (node->key_ == key) return node;
-    if (key < node->key_) {
+    if (key > node->key_) {
+      return FindNode(node->right_, key);
+    } else if (key < node->key_) {
       return FindNode(node->left_, key);
     } else {
-      return FindNode(node->right_, key);
+      return node;
     }
   }
 

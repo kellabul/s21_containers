@@ -76,10 +76,12 @@ TEST(BRTREE, delete_node) {
   one.Insert(6, 6);
   one.Insert(8, 8);
   one.Insert(9, 9);
+  one.Insert(10, 10);
+  one.Insert(11, 11);
   one.Insert(0, 0);
   // one.Insert(0, 1111);
   one.Print();
-  one.Delete(5);
+  one.Delete(10);
   one.Print();
 }
 
