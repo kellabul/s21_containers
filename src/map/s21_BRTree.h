@@ -35,37 +35,57 @@ class BRTree {
 
   key_type MinKey() { return MinNode(root_)->key_; }
 
-  void Delete(key_type key) { DeleteNode(Find(key)); }
+  void Delete(key_type key) { DeleteNode(root_, key); }
 
-  void PrintTree
+  void Print() {
+    PrintTree(root_);
+    std::cout << std::endl;
+  }
+
+  void PrintTree(node_type *node) {
+    if (node == nullptr) return;
+    // std::cout << "node: " << node->value_;
+    // if (node->left_) std::cout << " left: " << node->left_->value_;
+    // if (node->right_) std::cout << " right: " << node->right_->value_;
+    // if (node->parent_) std::cout << " parent: " << node->parent_->value_;
+    // std::cout << std::endl;
+    PrintTree(node->left_);
+    std::cout << node->value_ << " ";
+    PrintTree(node->right_);
+  }
 
  private:
-  void DeleteNode(node_type *node) {
+  void DeleteNode(node_type *&node, key_type &key) {
     if (node == nullptr) return;
-    if (node->left_ != nullptr && node->right_ != nullptr) {
+    if (key < node->key_) {
+      DeleteNode(node->left_, key);
+    } else if (key > node->key_) {
+      DeleteNode(node->right_, key);
+      // here key == node->key_
+    } else if (node->left_ != nullptr && node->right_ != nullptr) {
       node_type *tmp = MaxNode(node->left_);
-      SwapNodes(tmp, node);
-      DeleteNode(tmp);
+      SwapKeyAndValue(tmp, node);
+      DeleteNode(node->left_, tmp->key_);
     } else if (node->left_ != nullptr) {
-      node.Swap(node->left_);
-      delete node->left_;
-      node->left_ = nullptr;
+      node_type *tmp = node;
+      node = node->left_;
+      node->parent_ = tmp->parent_;
+      delete tmp;
     } else if (node->right_ != nullptr) {
-      node.Swap(node->left_);
-      delete node->left_;
-      node->left_ = nullptr;
+      node_type *tmp = node;
+      node = node->right_;
+      node->parent_ = tmp->parent_;
+      delete tmp;
+      // here node->right_ == nullptr && node->left_ = nullptr
     } else {
-      if (node->parent_ && node->parent_->left_ == node)
-        node->parent_->left_ = nullptr;
-      else (node->parent_)
-        node->parent_->right_ = nullptr;
       delete node;
+      node = nullptr;
     }
   }
 
-  void SwapNodes(node_type *node) {
-    std::swap(value_, node->value_);
-    std::swap(key_, node->key_);
+  void SwapKeyAndValue(node_type *first, node_type *second) {
+    std::swap(first->key_, second->value_);
+    std::swap(first->key_, second->key_);
   }
 
   node_type *MinNode(node_type *node) {
@@ -95,11 +115,11 @@ class BRTree {
     }
   }
 
-  void InsertNode( node_type *&node, const key_type &key,
+  void InsertNode(node_type *&node, const key_type &key,
                   const value_type &value, node_type *parent) {
     if (node == nullptr) {
       node = new node_type(key, value);
-      node->parent_ = parent
+      node->parent_ = parent;
     } else if (key < node->key_) {
       InsertNode(node->left_, key, value, node);
     } else {

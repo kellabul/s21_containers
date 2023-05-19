@@ -32,6 +32,7 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <gtest/gtest.h>
 
+#include <cmath>
 #include <iostream>
 #include <list>
 #include <string>
@@ -59,12 +60,28 @@ TEST(BRTREE, basic) {
 
 TEST(BRTREE, max_min) {
   s21::BRTree<int, int> one;
-  for (int i = -20; i <= 20; ++i)
-  one.Insert(i*2, 0);
+  for (int i = -20; i <= 20; ++i) one.Insert(i * 2, 0);
   EXPECT_EQ(one.MaxKey(), 40);
   EXPECT_EQ(one.MinKey(), -40);
 }
 
+TEST(BRTREE, delete_node) {
+  s21::BRTree<int, int> one;
+  one.Insert(5, 5);
+  one.Insert(3, 3);
+  one.Insert(7, 7);
+  one.Insert(4, 4);
+  one.Insert(2, 2);
+  one.Insert(1, 1);
+  one.Insert(6, 6);
+  one.Insert(8, 8);
+  one.Insert(9, 9);
+  one.Insert(0, 0);
+  // one.Insert(0, 1111);
+  one.Print();
+  one.Delete(5);
+  one.Print();
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
