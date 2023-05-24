@@ -4,7 +4,7 @@
 #include "s21_BRTree_node.h"
 
 namespace s21 {
-template <typename Key, typename T>
+template <typename Key>
 class BRTree {
  public:
   using key_type = Key;
