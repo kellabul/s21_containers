@@ -1,33 +1,35 @@
-#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_BRTREE_H_
-#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_BRTREE_H_
+#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
+#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 
-#include "s21_BRTree_node.h"
+#include "s21_RBTree_node.h"
 
 namespace s21 {
 template <typename Key>
-class BRTree {
+class RBTree {
  public:
   using key_type = Key;
   using value_type = T;
-  using node_type = BRTreeNode<key_type, value_type>;
+  using node_type = RBTreeNode<key_type, value_type>;
+
   const bool kRed = true;
   const bool kBlack = false;
+  const node_type kNill{value_type{}, kBlack};
 
  public:
-  BRTree() : root_(nullptr){};
+  RBTree() : root_(nullptr){};
 
-  BRTree(key_type key, value_type value) : root_(new node_type(key, value)){};
+  RBTree(key_type key) : root_(new node_type(key)){};
 
-  ~BRTree() { Clear(); }
+  ~RBTree() { Clear(); }
 
   void Insert(const key_type &key, const value_type &value) {
-    InsertNode(root_, key, value, nullptr);
+    InsertNode(root_, key, nullptr);
   }
 
   node_type *Find(const key_type &key) { return FindNode(root_, key); }
 
   // what if Find(key) == nullptr?
-  value_type GetValue(const key_type key) { return Find(key)->value_; }
+  value_type GetValue(const key_type key) { return Find(key); }
 
   void Clear() { ClearTree(root_); }
 
@@ -44,13 +46,13 @@ class BRTree {
 
   void PrintTree(node_type *node) {
     if (node == nullptr) return;
-    // std::cout << "node: " << node->value_;
-    // if (node->left_) std::cout << " left: " << node->left_->value_;
-    // if (node->right_) std::cout << " right: " << node->right_->value_;
-    // if (node->parent_) std::cout << " parent: " << node->parent_->value_;
+    // std::cout << "node: " << node->key_;
+    // if (node->left_) std::cout << " left: " << node->left_->key_;
+    // if (node->right_) std::cout << " right: " << node->right_->key_;
+    // if (node->parent_) std::cout << " parent: " << node->parent_->key_;
     // std::cout << std::endl;
     PrintTree(node->left_);
-    std::cout << node->value_ << " ";
+    std::cout << node->key_ << " ";
     PrintTree(node->right_);
   }
 
@@ -64,7 +66,7 @@ class BRTree {
       // here key == node->key_
     } else if (node->left_ != nullptr && node->right_ != nullptr) {
       node_type *tmp = MaxNode(node->left_);
-      SwapKeyAndValue(tmp, node);
+      std::swap(tmp.key, node.key);
       DeleteNode(node->left_, tmp->key_);
     } else if (node->left_ != nullptr) {
       node_type *tmp = node;
@@ -81,11 +83,6 @@ class BRTree {
       delete node;
       node = nullptr;
     }
-  }
-
-  void SwapKeyAndValue(node_type *first, node_type *second) {
-    std::swap(first->key_, second->value_);
-    std::swap(first->key_, second->key_);
   }
 
   node_type *MinNode(node_type *node) {
@@ -116,15 +113,14 @@ class BRTree {
     }
   }
 
-  void InsertNode(node_type *&node, const key_type &key,
-                  const value_type &value, node_type *parent) {
+  void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
     if (node == nullptr) {
-      node = new node_type(key, value);
+      node = new node_type(key);
       node->parent_ = parent;
     } else if (key < node->key_) {
-      InsertNode(node->left_, key, value, node);
+      InsertNode(node->left_, key, node);
     } else {
-      InsertNode(node->right_, key, value, node);
+      InsertNode(node->right_, key, node);
     }
   }
 
@@ -133,4 +129,4 @@ class BRTree {
 };
 }  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_BRTREE_H_
+#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_

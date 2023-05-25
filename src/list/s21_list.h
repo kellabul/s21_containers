@@ -266,11 +266,10 @@ class list {
   }
 
   // ================================================================================
-  // =================== more effective way to sort, wo iterators ===================
+  // ================ more effective way to sort, without iterators =================
   // ================================================================================
   
  public:
-  // merge sort without iterators, more effective
   void sort_fast() {
     if (size_ > 1) {
       tail_->next_ = MergeSortFast(tail_->next_);
@@ -334,8 +333,8 @@ class list {
   }
 
  private:
-  node_type *tail_;
   node_type end_node_;
+  node_type *tail_;
   size_type size_;
 };
 }  // namespace s21
