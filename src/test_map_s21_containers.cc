@@ -43,11 +43,11 @@ using std::cout;
 using std::endl;
 using std::string;
 
-TEST(BRTREE, basic) {
-  s21::BRTree<string, int> alpha("one", 1);
+TEST(RBTree, basic) {
+  s21::RBTree<string, int> alpha("one", 1);
   EXPECT_EQ(alpha.GetValue("one"), 1);
 
-  s21::BRTree<string, string> beta;
+  s21::RBTree<string, string> beta;
   beta.Insert("one", "odin");
   beta.Insert("two", "dva");
   beta.Insert("three", "tri");
@@ -58,15 +58,15 @@ TEST(BRTREE, basic) {
   EXPECT_EQ(beta.GetValue("four"), "chetire");
 }
 
-TEST(BRTREE, max_min) {
-  s21::BRTree<int, int> one;
+TEST(RBTree, max_min) {
+  s21::RBTree<int, int> one;
   for (int i = -20; i <= 20; ++i) one.Insert(i * 2, 0);
   EXPECT_EQ(one.MaxKey(), 40);
   EXPECT_EQ(one.MinKey(), -40);
 }
 
-TEST(BRTREE, delete_node) {
-  s21::BRTree<int, int> one;
+TEST(RBTree, delete_node) {
+  s21::RBTree<int, int> one;
   one.Insert(5, 5);
   one.Insert(3, 3);
   one.Insert(7, 7);
