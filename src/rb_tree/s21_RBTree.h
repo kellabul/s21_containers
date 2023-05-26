@@ -8,28 +8,31 @@ template <typename Key>
 class RBTree {
  public:
   using key_type = Key;
-  using value_type = T;
-  using node_type = RBTreeNode<key_type, value_type>;
+  using node_type = RBTreeNode<key_type>;
 
   const bool kRed = true;
   const bool kBlack = false;
-  const node_type kNill{value_type{}, kBlack};
 
  public:
-  RBTree() : root_(nullptr){};
-
-  RBTree(key_type key) : root_(new node_type(key)){};
-
-  ~RBTree() { Clear(); }
-
-  void Insert(const key_type &key, const value_type &value) {
-    InsertNode(root_, key, nullptr);
+  RBTree()
+      : nil_{new node_type{key_type{}, nullptr, nullptr, nullptr, kBlack}},
+        root_(nil_) {
+    nil_->parent_ = nil_;
+    nil_->right_ = nil_;
+    nil_->left_ = nil_;
   }
+
+  ~RBTree() {
+    Clear();
+    delete nil_;
+  }
+
+  void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
   node_type *Find(const key_type &key) { return FindNode(root_, key); }
 
   // what if Find(key) == nullptr?
-  value_type GetValue(const key_type key) { return Find(key); }
+  key_type GetValue(const key_type key) { return Find(key)->key_; }
 
   void Clear() { ClearTree(root_); }
 
@@ -45,15 +48,49 @@ class RBTree {
   }
 
   void PrintTree(node_type *node) {
-    if (node == nullptr) return;
-    // std::cout << "node: " << node->key_;
-    // if (node->left_) std::cout << " left: " << node->left_->key_;
-    // if (node->right_) std::cout << " right: " << node->right_->key_;
-    // if (node->parent_) std::cout << " parent: " << node->parent_->key_;
-    // std::cout << std::endl;
+    if (node == nil_) return;
+    std::cout << "node: " << node->key_;
+    if (node->parent_ != nil_)
+      std::cout << " parent: " << node->parent_->key_ << " ["
+                << node->parent_->color_;
+    if (node->left_ != nil_)
+      std::cout << " left: " << node->left_->key_ << " ["
+                << node->left_->color_;
+    if (node->right_ != nil_)
+      std::cout << " right: " << node->right_->key_ << " ["
+                << node->right_->color_;
+    std::cout << std::endl;
     PrintTree(node->left_);
-    std::cout << node->key_ << " ";
+    // std::cout << node->key_ << " ";
     PrintTree(node->right_);
+  }
+
+  void LeftTurn(node_type *&parent_node, node_type *&child_node) {
+    // here parent_node->right_ == child_node
+    node_type *tmp = child_node->left_;
+    child_node->left_ = parent_node;
+    child_node->parent_ = parent_node->parent_;
+    parent_node->parent_ = child_node;
+    parent_node->right_ = tmp;
+    child_node->color_ = parent_node->color_;
+    parent_node->color_ = kRed;
+  }
+
+  void RightTurn(node_type *&parent_node, node_type *&child_node) {
+    // here parent_node->left_ == child_node
+    node_type *tmp = child_node->right_;
+    child_node->right_ = parent_node;
+    child_node->parent_ = parent_node->parent_;
+    parent_node->parent_ = child_node;
+    parent_node->left_ = tmp;
+    child_node->color_ = parent_node->color_;
+    parent_node->color_ = kRed;
+  }
+
+  void ColorSwap(node_type *parent_node) {
+      parent_node->color_ = kRed;
+      parent_node->left.color_ = kBlack;
+      parent_node->right.color_ = kBlack;
   }
 
  private:
@@ -96,7 +133,7 @@ class RBTree {
   }
 
   void ClearTree(node_type *node) {
-    if (node == nullptr) return;
+    if (node == nil_) return;
     ClearTree(node->left_);
     ClearTree(node->right_);
     delete node;
@@ -113,10 +150,10 @@ class RBTree {
     }
   }
 
-  void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
-    if (node == nullptr) {
-      node = new node_type(key);
-      node->parent_ = parent;
+  void InsertNode(node_type *&node, const key_type &key, node_type *&parent) {
+    if (node == nil_) {
+      node = new node_type(key, parent, nil_, nil_);
+      if (parent->color_ == kRed || node == root_) BalanceTree(parent);
     } else if (key < node->key_) {
       InsertNode(node->left_, key, node);
     } else {
@@ -124,7 +161,19 @@ class RBTree {
     }
   }
 
+  void BalanceTree(node_type *&node){
+    if (node->parent_->right_ == kRed && node->parent_->left_ == kRed) {
+      ColorSwap(node->parent_);
+      BalanceTree(node->parent_);
+    }
+
+    root_->color_ = kBlack;
+  }
+
+
+
  private:
+  node_type *nil_;
   node_type *root_;
 };
 }  // namespace s21
