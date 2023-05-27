@@ -64,16 +64,15 @@ TEST(RBTree, basic) {
 
 TEST(RBTree, delete_node) {
   s21::RBTree<int> one;
-  one.Insert(5);
-  one.Insert(3);
-  one.Insert(7);
-  one.Insert(4);
+  one.Insert(11);
   one.Insert(2);
+  one.Insert(14);
   one.Insert(1);
-  one.Insert(6);
+  one.Insert(7);
+  one.Insert(15);
+  one.Insert(5);
   one.Insert(8);
-  one.Insert(9);
-  one.Insert(0);
+  one.Insert(4);
   // one.Insert(0, 1111);
   one.Print();
   // one.Delete(10);
