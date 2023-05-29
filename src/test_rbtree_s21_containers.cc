@@ -78,8 +78,13 @@ TEST(RBTree, print) {
   std::string output = testing::internal::GetCapturedStdout();
   std::string expected_string(R"([ 3 ](-)
    └————— [ 1 ](-)
+<<<<<<< HEAD
    │         └————— [ 0 ](-)
    │         └————— [ 2 ](-)
+=======
+             └————— [ 0 ](-)
+             └————— [ 2 ](-)
+>>>>>>> 8242dd7e12538dd5283462712e2879471dc8172b
    └————— [ 5 ](-)
              └————— [ 4 ](-)
              └————— [ 7 ](+)

@@ -50,14 +50,22 @@ class RBTree {
     std::cout << space << "[ " << node->key_ << " ]"
               << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
     std::string arrow = "   └————— ";
+<<<<<<< HEAD
     std::string blank = (is_which_child == kLeft) ? "   │      " : "          ";
+=======
+    std::string blank = "          ";
+>>>>>>> 8242dd7e12538dd5283462712e2879471dc8172b
     size_t start_pos = space.find(arrow);
     if (start_pos != std::string::npos)
       space.replace(start_pos, arrow.size(), blank);
     space += arrow;
     PrintTree(node->left_, space, kLeft);
     // std::cout << node->key_ << " ";
+<<<<<<< HEAD
     PrintTree(node->right_, space, kRight);
+=======
+    PrintTree(node->right_, space);
+>>>>>>> 8242dd7e12538dd5283462712e2879471dc8172b
   }
 
  private:
@@ -90,8 +98,13 @@ class RBTree {
 
   void BalanceAfterDeletionBlackWithNoChlidren(node_type *parent) {}
 
+<<<<<<< HEAD
   void DeleteBlackWithOneChild(node_type *node, bool is_which_child) {
     node_type *child = (is_which_child == kLeft) ? node->left_ : node->right_;
+=======
+  void DeleteBlackWithOneChild(node_type *node, bool hasLeftChild) {
+    node_type *child = hasLeftChild ? node->left_ : node->right_;
+>>>>>>> 8242dd7e12538dd5283462712e2879471dc8172b
     std::swap(child->key_, node->key_);
     delete child;
     node->left_ = nil_;
