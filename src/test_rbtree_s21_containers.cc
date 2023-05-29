@@ -58,7 +58,6 @@ TEST(RBTree, basic) {
 TEST(RBTree, max_min) {
   s21::RBTree<int> one;
   for (int i = -20; i <= 20; ++i) one.Insert(i * 2);
-  one.Print();
   EXPECT_EQ(one.MaxKey(), 40);
   EXPECT_EQ(one.MinKey(), -40);
 }
@@ -75,9 +74,29 @@ TEST(RBTree, delete_node) {
   one.Insert(8);
   one.Insert(4);
   // one.Insert(0, 1111);
-  one.Print();
   // one.Delete(10);
   // one.Print();
+}
+
+TEST(RBTree, print) {
+  s21::RBTree<int> one;
+  for (int i = 0; i <= 10; ++i) one.Insert(i);
+  testing::internal::CaptureStdout();
+  one.Print();
+  std::string output = testing::internal::GetCapturedStdout();
+  std::string expected_string(R"([3](-)
+ L_____ [1](-)
+         L_____ [0](-)
+         L_____ [2](-)
+ L_____ [5](-)
+         L_____ [4](-)
+         L_____ [7](+)
+                 L_____ [6](-)
+                 L_____ [9](-)
+                         L_____ [8](+)
+                         L_____ [10](+)
+)");
+  EXPECT_EQ(expected_string, output);
 }
 
 int main(int argc, char **argv) {
