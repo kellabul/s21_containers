@@ -95,138 +95,151 @@ class RBTree {
   }
 
  private:
-  void DeleteNode(node_type *&node, key_type &key) {
-    if (node == nullptr) return;
+  void DeleteNode(node_type *node, const key_type &key) {
+    if (node == nil_) return;
     if (key < node->key_) {
       DeleteNode(node->left_, key);
     } else if (key > node->key_) {
       DeleteNode(node->right_, key);
       // here key == node->key_
-    } else if (node->left_ != nullptr && node->right_ != nullptr) {
-      node_type *tmp = MaxNode(node->left_);
-      std::swap(tmp.key, node.key);
-      DeleteNode(node->left_, tmp->key_);
-    } else if (node->left_ != nullptr) {
-      node_type *tmp = node;
-      node = node->left_;
-      node->parent_ = tmp->parent_;
-      delete tmp;
-    } else if (node->right_ != nullptr) {
-      node_type *tmp = node;
-      node = node->right_;
-      node->parent_ = tmp->parent_;
-      delete tmp;
-      // here node->right_ == nullptr && node->left_ = nullptr
+    } else if (node->left_ != nil_ && node->right_ != nil_) {
+      node_type *max_child = MaxChild(node->left_);
+      std::swap(max_child->key, node->key);
+      DeleteNode(node->left_, max_child->key_);
+    } else if (node->left_ != nil_) {
+      DeleteBlackWithOneChild(node, true);
+    } else if (node->right_ != nil_) {
+      DeleteBlackWithOneChild(node, false);
     } else {
+      bool node_is_black = (node->color_ == kBlack);
+      node_type *parent = node->parent_;
+      if (node == parent->left_)
+        parent->left_ = nil_;
+      else
+        parent->right_ = nil_;
       delete node;
-      node = nullptr;
+      if (node_is_black) BalanceAfterDeletionBlackWithNoChlidren(parent);
     }
   }
+}
 
-  node_type *MinNode(node_type *node) {
-    while (node->left_ != nullptr) node = node->left_;
+void BalanceAfterDeletionBlackWithNoChlidren(parent) {
+  
+}
+
+    void
+    DeleteBlackWithOneChild(node_type *node, bool hasLeftChild) {
+  node_type *child = hasLeftChild ? node->left_ : node->right_;
+  std::swap(child->key_, node->key_);
+  delete child;
+  node->left_ = nil_;
+  node->right_ = nil_;
+}
+
+node_type *MinChild(node_type *node) {
+  while (node->left_ != nil_) node = node->left_;
+  return node;
+}
+
+node_type *MaxChild(node_type *node) {
+  while (node->right_ != nil_) node = node->right_;
+  return node;
+}
+
+void ClearTree(node_type *node) {
+  if (node == nil_) return;
+  ClearTree(node->left_);
+  ClearTree(node->right_);
+  delete node;
+}
+
+node_type *FindNode(node_type *node, const key_type &key) {
+  if (node == nil_) return nil_;
+  if (key > node->key_) {
+    return FindNode(node->right_, key);
+  } else if (key < node->key_) {
+    return FindNode(node->left_, key);
+  } else {
     return node;
   }
+}
 
-  node_type *MaxNode(node_type *node) {
-    while (node->right_ != nullptr) node = node->right_;
-    return node;
+void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
+  if (node == nil_) {
+    node = new node_type(key, parent, nil_, nil_);
+    CheckMinMax(node);
+    BalanceTree(node);
+  } else if (key < node->key_) {
+    InsertNode(node->left_, key, node);
+  } else if (key > node->key_) {
+    InsertNode(node->right_, key, node);
   }
+}
 
-  void ClearTree(node_type *node) {
-    if (node == nil_) return;
-    ClearTree(node->left_);
-    ClearTree(node->right_);
-    delete node;
+void CheckMinMax(node_type *node) {
+  if (node == root_) {
+    nil_->left_ = node;
+    nil_->right_ = node;
+  } else if (node > nil_->left_) {
+    nil_->left_ = node;
+  } else if (node < nil_->right_) {
+    nil_->right_ = node;
   }
+}
 
-  node_type *FindNode(node_type *node, const key_type &key) {
-    if (node == nil_) return nil_;
-    if (key > node->key_) {
-      return FindNode(node->right_, key);
-    } else if (key < node->key_) {
-      return FindNode(node->left_, key);
+void BalanceTree(node_type *node) {
+  while (node->parent_->color_ == kRed) {
+    if (node->parent_ == node->parent_->parent_->left_) {
+      LeftBalance(node);
     } else {
-      return node;
+      RightBalance(node);
     }
   }
+  root_->color_ = kBlack;
+}
 
-  void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
-    if (node == nil_) {
-      node = new node_type(key, parent, nil_, nil_);
-      CheckMinMax(node);
-      BalanceTree(node);
-    } else if (key < node->key_) {
-      InsertNode(node->left_, key, node);
-    } else if (key > node->key_) {
-      InsertNode(node->right_, key, node);
-    }
+void LeftBalance(node_type *&node) {
+  node_type *node_uncle = node->parent_->parent_->right_;
+  node_type *grandparent = node->parent_->parent_;
+  if (node_uncle->color_ == kRed) {
+    node->parent_->color_ = kBlack;
+    node_uncle->color_ = kBlack;
+    grandparent->color_ = kRed;
+    node = grandparent;
+  } else if (node == node->parent_->right_) {  // uncle is black
+    node = node->parent_;
+    LeftTurn(node);
+  } else {  // uncle is black, node is left child
+    node->parent_->color_ = kBlack;
+    grandparent->color_ = kRed;
+    RightTurn(grandparent);
   }
+}
 
-  void CheckMinMax(node_type *node) {
-    if (node == root_) {
-      nil_->left_ = node;
-      nil_->right_ = node;
-    } else if (node > nil_->left_) {
-      nil_->left_ = node;
-    } else if (node < nil_->right_) {
-      nil_->right_ = node;
-    }
+void RightBalance(node_type *&node) {
+  node_type *node_uncle = node->parent_->parent_->left_;
+  node_type *grandparent = node->parent_->parent_;
+  if (node_uncle->color_ == kRed) {
+    node->parent_->color_ = kBlack;
+    node_uncle->color_ = kBlack;
+    grandparent->color_ = kRed;
+    node = grandparent;
+  } else if (node == node->parent_->left_) {  // uncle is black
+    node = node->parent_;
+    RightTurn(node);
+  } else {  // uncle is black, node is left child
+    node->parent_->color_ = kBlack;
+    grandparent->color_ = kRed;
+    LeftTurn(grandparent);
   }
+}
 
-  void BalanceTree(node_type *node) {
-    while (node->parent_->color_ == kRed) {
-      if (node->parent_ == node->parent_->parent_->left_) {
-        LeftBalance(node);
-      } else {
-        RightBalance(node);
-      }
-    }
-    root_->color_ = kBlack;
-  }
-
-  void LeftBalance(node_type *&node) {
-    node_type *node_uncle = node->parent_->parent_->right_;
-    node_type *grandparent = node->parent_->parent_;
-    if (node_uncle->color_ == kRed) {
-      node->parent_->color_ = kBlack;
-      node_uncle->color_ = kBlack;
-      grandparent->color_ = kRed;
-      node = grandparent;
-    } else if (node == node->parent_->right_) {  // uncle is black
-      node = node->parent_;
-      LeftTurn(node);
-    } else {  // uncle is black, node is left child
-      node->parent_->color_ = kBlack;
-      grandparent->color_ = kRed;
-      RightTurn(grandparent);
-    }
-  }
-
-  void RightBalance(node_type *&node) {
-    node_type *node_uncle = node->parent_->parent_->left_;
-    node_type *grandparent = node->parent_->parent_;
-    if (node_uncle->color_ == kRed) {
-      node->parent_->color_ = kBlack;
-      node_uncle->color_ = kBlack;
-      grandparent->color_ = kRed;
-      node = grandparent;
-    } else if (node == node->parent_->left_) {  // uncle is black
-      node = node->parent_;
-      RightTurn(node);
-    } else {  // uncle is black, node is left child
-      node->parent_->color_ = kBlack;
-      grandparent->color_ = kRed;
-      LeftTurn(grandparent);
-    }
-  }
-
- private:
-  // nil_->left_ points to max value, nil->right_ pints to min value
-  // nil_->parent_ can't be used anywhere because of LeftTurn and RightTurn
-  node_type *nil_;
-  node_type *root_;
-  size_t size_;
+private:
+// nil_->left_ points to max value, nil->right_ pints to min value
+// nil_->parent_ can't be used anywhere because of LeftTurn and RightTurn
+node_type *nil_;
+node_type *root_;
+size_t size_;
 };
 }  // namespace s21
 

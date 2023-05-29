@@ -62,22 +62,6 @@ TEST(RBTree, max_min) {
   EXPECT_EQ(one.MinKey(), -40);
 }
 
-TEST(RBTree, delete_node) {
-  s21::RBTree<int> one;
-  one.Insert(11);
-  one.Insert(2);
-  one.Insert(14);
-  one.Insert(1);
-  one.Insert(7);
-  one.Insert(15);
-  one.Insert(5);
-  one.Insert(8);
-  one.Insert(4);
-  // one.Insert(0, 1111);
-  // one.Delete(10);
-  // one.Print();
-}
-
 TEST(RBTree, print) {
   s21::RBTree<int> one;
   for (int i = 0; i <= 10; ++i) one.Insert(i);
@@ -97,6 +81,38 @@ TEST(RBTree, print) {
                          L_____ [10](+)
 )");
   EXPECT_EQ(expected_string, output);
+}
+
+TEST(RBTree, delete_node) {
+  s21::RBTree<int> one;
+  one.Insert(20);
+  one.Insert(10);
+  one.Insert(25);
+  one.Insert(23);
+  one.Insert(30);
+  one.Insert(4);
+  one.Insert(16);
+  one.Insert(14);
+  one.Insert(17);
+  one.Insert(19);
+  one.Insert(2);
+  one.Insert(12);
+  one.Insert(15);
+  one.Insert(5);
+    one.Insert(3);
+
+  one.Insert(19);
+
+  // one.Insert(11);
+  // one.Insert(2);
+  // one.Insert(14);
+  // one.Insert(1);
+  // one.Insert(7);
+  // one.Insert(15);
+  // one.Insert(5);
+  // one.Insert(8);
+  // one.Insert(4);
+  one.Print();
 }
 
 int main(int argc, char **argv) {
