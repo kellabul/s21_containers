@@ -41,19 +41,17 @@ class RBTree {
 
   void Delete(key_type key) { DeleteNode(root_, key); }
 
-  void Print() {
-    std::string space("");
-    PrintTree(root_, space);
-    std::cout << std::endl;
-  }
+  void Print() { PrintTree(root_, ""); }
 
   void PrintTree(node_type *node, std::string space) {
     if (node == nil_) return;
     std::cout << space << "[" << node->key_ << "]"
-              << "(" << (node->color_ ? "RED" : "--") << ")" << std::endl;
-    std::string arrow(" L_____ ");
+              << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
+    std::string arrow = " L_____ ";
+    std::string blank = "        ";
     size_t start_pos = space.find(arrow);
-    if (start_pos != std::string::npos) space.replace(start_pos, arrow.size(), "       ");
+    if (start_pos != std::string::npos)
+      space.replace(start_pos, arrow.size(), blank);
     space += arrow;
     PrintTree(node->left_, space);
     // std::cout << node->key_ << " ";
@@ -158,7 +156,6 @@ class RBTree {
       node = new node_type(key, parent, nil_, nil_);
       CheckMinMax(node);
       BalanceTree(node);
-      ++size_;
     } else if (key < node->key_) {
       InsertNode(node->left_, key, node);
     } else if (key > node->key_) {
@@ -229,7 +226,7 @@ class RBTree {
   // nil_->parent_ can't be used anywhere because of LeftTurn and RightTurn
   node_type *nil_;
   node_type *root_;
-  size_t size_ = 0;
+  size_t size_;
 };
 }  // namespace s21
 
