@@ -55,12 +55,13 @@ TEST(RBTree, basic) {
   EXPECT_EQ(beta.GetValue("four"), "four");
 }
 
-// TEST(RBTree, max_min) {
-//   s21::RBTree<int, int> one;
-//   for (int i = -20; i <= 20; ++i) one.Insert(i * 2, 0);
-//   EXPECT_EQ(one.MaxKey(), 40);
-//   EXPECT_EQ(one.MinKey(), -40);
-// }
+TEST(RBTree, max_min) {
+  s21::RBTree<int> one;
+  for (int i = -20; i <= 20; ++i) one.Insert(i * 2);
+  one.Print();
+  EXPECT_EQ(one.MaxKey(), 40);
+  EXPECT_EQ(one.MinKey(), -40);
+}
 
 TEST(RBTree, delete_node) {
   s21::RBTree<int> one;

@@ -17,7 +17,6 @@ class RBTree {
   RBTree()
       : nil_{new node_type{key_type{}, nullptr, nullptr, nullptr, kBlack}},
         root_(nil_) {
-    nil_->parent_ = nil_;
     nil_->right_ = nil_;
     nil_->left_ = nil_;
   }
@@ -36,34 +35,33 @@ class RBTree {
 
   void Clear() { ClearTree(root_); }
 
-  key_type MaxKey() { return MaxNode(root_)->key_; }
+  key_type MaxKey() { return nil_->left_->key_; }
 
-  key_type MinKey() { return MinNode(root_)->key_; }
+  key_type MinKey() { return nil_->right_->key_; }
 
   void Delete(key_type key) { DeleteNode(root_, key); }
 
   void Print() {
-    PrintTree(root_);
+    std::string space("");
+    PrintTree(root_, space);
     std::cout << std::endl;
   }
 
-  void PrintTree(node_type *node) {
+  void PrintTree(node_type *node, std::string space) {
     if (node == nil_) return;
-
-    std::cout << "node: " << node->key_ << " [" << node->color_;
-    if (node->parent_ != nil_) std::cout << " parent: " << node->parent_->key_;
-    if (node->left_ != nil_) std::cout << " left: " << node->left_->key_;
-    if (node->right_ != nil_) std::cout << " right: " << node->right_->key_;
-    std::cout << std::endl;
-
-    PrintTree(node->left_);
+    std::cout << space << "[" << node->key_ << "]"
+              << "(" << (node->color_ ? "RED" : "--") << ")" << std::endl;
+    std::string arrow(" L_____ ");
+    size_t start_pos = space.find(arrow);
+    if (start_pos != std::string::npos) space.replace(start_pos, arrow.size(), "       ");
+    space += arrow;
+    PrintTree(node->left_, space);
     // std::cout << node->key_ << " ";
-    PrintTree(node->right_);
+    PrintTree(node->right_, space);
   }
 
-  void LeftTurn(node_type *parent_node, node_type *child_node) {
-    // here parent_node->right_ == child_node
-
+  void LeftTurn(node_type *parent_node) {
+    node_type *child_node = parent_node->right_;
     parent_node->right_ = child_node->left_;
     if (child_node->left_ != nil_) child_node->left_->parent_ = parent_node;
     child_node->parent_ = parent_node->parent_;
@@ -75,16 +73,10 @@ class RBTree {
       parent_node->parent_->right_ = child_node;
     child_node->left_ = parent_node;
     parent_node->parent_ = child_node;
-
-    // node_type *tmp = child_node->left_;
-    // child_node->left_ = parent_node;
-    // child_node->parent_ = parent_node->parent_;
-    // parent_node->parent_ = child_node;
-    // parent_node->right_ = tmp;
-    // child_node->color_ = parent_node->color_;
-    // parent_node->color_ = kRed;
   }
-  void RightTurn(node_type *parent_node, node_type *child_node) {
+
+  void RightTurn(node_type *parent_node) {
+    node_type *child_node = parent_node->left_;
     parent_node->left_ = child_node->right_;
     if (child_node->right_ != nil_) child_node->right_->parent_ = parent_node;
     child_node->parent_ = parent_node->parent_;
@@ -97,17 +89,6 @@ class RBTree {
     child_node->right_ = parent_node;
     parent_node->parent_ = child_node;
   }
-
-  // void RightTurn(node_type *parent_node, node_type *child_node) {
-  //   // here parent_node->left_ == child_node
-  //   node_type *tmp = child_node->right_;
-  //   child_node->right_ = parent_node;
-  //   child_node->parent_ = parent_node->parent_;
-  //   parent_node->parent_ = child_node;
-  //   parent_node->left_ = tmp;
-  //   child_node->color_ = parent_node->color_;
-  //   parent_node->color_ = kRed;
-  // }
 
   void ColorSwap(node_type *parent_node) {
     parent_node->color_ = kRed;
@@ -175,11 +156,24 @@ class RBTree {
   void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
     if (node == nil_) {
       node = new node_type(key, parent, nil_, nil_);
+      CheckMinMax(node);
       BalanceTree(node);
+      ++size_;
     } else if (key < node->key_) {
       InsertNode(node->left_, key, node);
-    } else {
+    } else if (key > node->key_) {
       InsertNode(node->right_, key, node);
+    }
+  }
+
+  void CheckMinMax(node_type *node) {
+    if (node == root_) {
+      nil_->left_ = node;
+      nil_->right_ = node;
+    } else if (node > nil_->left_) {
+      nil_->left_ = node;
+    } else if (node < nil_->right_) {
+      nil_->right_ = node;
     }
   }
 
@@ -204,11 +198,11 @@ class RBTree {
       node = grandparent;
     } else if (node == node->parent_->right_) {  // uncle is black
       node = node->parent_;
-      LeftTurn(node, node->right_);
+      LeftTurn(node);
     } else {  // uncle is black, node is left child
       node->parent_->color_ = kBlack;
       grandparent->color_ = kRed;
-      RightTurn(grandparent, node->parent_);
+      RightTurn(grandparent);
     }
   }
 
@@ -222,17 +216,20 @@ class RBTree {
       node = grandparent;
     } else if (node == node->parent_->left_) {  // uncle is black
       node = node->parent_;
-      RightTurn(node, node->left_);
+      RightTurn(node);
     } else {  // uncle is black, node is left child
       node->parent_->color_ = kBlack;
       grandparent->color_ = kRed;
-      LeftTurn(grandparent, node->parent_);
+      LeftTurn(grandparent);
     }
   }
 
  private:
+  // nil_->left_ points to max value, nil->right_ pints to min value
+  // nil_->parent_ can't be used anywhere because of LeftTurn and RightTurn
   node_type *nil_;
   node_type *root_;
+  size_t size_ = 0;
 };
 }  // namespace s21
 
