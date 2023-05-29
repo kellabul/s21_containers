@@ -45,7 +45,8 @@ class RBTree {
 
   void Print() { PrintTree(root_, ""); }
 
-  void PrintTree(node_type *node, std::string space, bool is_which_child = true) {
+  void PrintTree(node_type *node, std::string space,
+                 bool is_which_child = true) {
     if (node == nil_) return;
     std::cout << space << "[ " << node->key_ << " ]"
               << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
@@ -170,11 +171,11 @@ class RBTree {
       node = grandparent;
     } else if (node == node->parent_->right_) {  // uncle is black
       node = node->parent_;
-      LeftTurn(node);
+      TurnTreeBranches(node, kLeft);
     } else {  // uncle is black, node is left child
       node->parent_->color_ = kBlack;
       grandparent->color_ = kRed;
-      RightTurn(grandparent);
+      TurnTreeBranches(grandparent, kRight);
     }
     return node;
   }
@@ -189,21 +190,31 @@ class RBTree {
       node = grandparent;
     } else if (node == node->parent_->left_) {  // uncle is black
       node = node->parent_;
-      RightTurn(node);
+      TurnTreeBranches(node, kRight);
     } else {  // uncle is black, node is left child
       node->parent_->color_ = kBlack;
       grandparent->color_ = kRed;
-      LeftTurn(grandparent);
+      TurnTreeBranches(grandparent, kLeft);
     }
     return node;
   }
 
-  void LeftTurn(node_type *node) {
-    node_type *child_node = node->right_;
-    node->right_ = child_node->left_;
-    child_node->left_->parent_ = node;
-    child_node->left_ = node;
-    child_node->parent_ = node->parent_;
+  void TurnTreeBranches(node_type *node, bool which_turn) {
+    node_type *child_node;
+    if (which_turn == kLeft) {
+      child_node = node->right_;
+      node->right_ = node->left_;
+      node->right_ = child_node->left_;
+      child_node->left_->parent_ = node;
+      child_node->left_ = node;
+      child_node->parent_ = node->parent_;
+    } else {
+      child_node = node->left_;
+      node->left_ = child_node->right_;
+      child_node->right_->parent_ = node;
+      child_node->right_ = node;
+      child_node->parent_ = node->parent_;
+    }
     if (node == root_) {
       root_ = child_node;
     } else if (node == node->parent_->left_) {
@@ -214,25 +225,9 @@ class RBTree {
     node->parent_ = child_node;
   }
 
-  void RightTurn(node_type *node) {
-    node_type *child_node = node->left_;
-    node->left_ = child_node->right_;
-    child_node->right_->parent_ = node;
-    child_node->right_ = node;
-    child_node->parent_ = node->parent_;
-    if (node == root_) {
-      root_ = child_node;
-    } else if (node == node->parent_->right_) {
-      node->parent_->right_ = child_node;
-    } else {
-      node->parent_->left_ = child_node;
-    }
-    node->parent_ = child_node;
-  }
-
  private:
   // nil_->left_ points to max value, nil->right_ pints to min value
-  // nil_->parent_ can't be used anywhere because of LeftTurn and RightTurn
+  // nil_->parent_ can't be used anywhere because of TurnTreeBranches
   node_type *nil_;
   node_type *root_;
   size_t size_;
