@@ -12,7 +12,6 @@ class ListIterator {
   using reference = T &;
   using const_reference = const T &;
   using iterator = ListIterator<T>;
-  using size_type = unsigned long long;
 
  public:
   ListIterator() : node_pointer_(nullptr){};
@@ -122,7 +121,6 @@ class ListConstIterator {
   using const_reference = const T &;
   using const_iterator = ListConstIterator<T>;
   using iterator = ListIterator<T>;
-  using size_type = unsigned long long;
 
  public:
   ListConstIterator() : node_pointer_(nullptr){};

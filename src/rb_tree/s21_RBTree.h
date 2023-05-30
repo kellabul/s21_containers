@@ -52,14 +52,15 @@ class RBTree {
               << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
     std::string arrow = "   └————— ";
     std::string blank =
-        (which_child_is_node == kLeft) ? "   │      " : "          ";
+        (which_child_is_node == kRight) ? "   │      " : "          ";
     size_t start_pos = space.find(arrow);
     if (start_pos != std::string::npos)
       space.replace(start_pos, arrow.size(), blank);
     space += arrow;
+    PrintTree(node->right_, space, kRight);
     PrintTree(node->left_, space, kLeft);
     // std::cout << node->key_ << " ";
-    PrintTree(node->right_, space, kRight);
+    
   }
 
   void PrintValues() {
@@ -130,11 +131,11 @@ class RBTree {
       direction_to_turn = kLeft;
     }
     if (parent->color_ == kRed) {  // other_child->color_ == kBlack
-      //std::cout << 1 << std::endl;
+      // std::cout << 1 << std::endl;
       parent->color_ = kBlack;
       other_child->color_ = kRed;
       if (first_grandchild->color_ == kRed) {
-        //std::cout << 2 << std::endl;
+        // std::cout << 2 << std::endl;
         first_grandchild->color_ = kBlack;
         TurnTreeBranches(parent, direction_to_turn);
       }
@@ -143,30 +144,30 @@ class RBTree {
         if (second_grandchild != nil_ &&
             second_grandchild->left_->color_ == kBlack &&
             second_grandchild->right_->color_ == kBlack) {
-          //std::cout << 3 << std::endl;
+          // std::cout << 3 << std::endl;
           other_child->color_ = kBlack;
           second_grandchild->color_ = kRed;
           TurnTreeBranches(parent, direction_to_turn);
         } else if (second_grandchild != nil_ &&
                    grandgrandchild->color_ == kRed) {
-          //std::cout << 4 << std::endl;
+          // std::cout << 4 << std::endl;
           second_grandchild->color_ = kBlack;
           TurnTreeBranches(other_child, !direction_to_turn);
           TurnTreeBranches(parent, direction_to_turn);
         }
       } else {  // parent->color_ == kBlack, other_child->color_ == kBlack
         if (second_grandchild->color_ == kRed) {
-          //std::cout << 5 << std::endl;
+          // std::cout << 5 << std::endl;
           second_grandchild->color_ = kBlack;
           TurnTreeBranches(other_child, !direction_to_turn);
           TurnTreeBranches(parent, direction_to_turn);
         } else if (first_grandchild->color_ ==
                    kRed) {  // this part wasn't in istructions
-          //std::cout << 6 << std::endl;
+          // std::cout << 6 << std::endl;
           first_grandchild->color_ = kBlack;
           TurnTreeBranches(parent, direction_to_turn);
         } else {
-          //std::cout << 7 << std::endl;
+          // std::cout << 7 << std::endl;
           other_child->color_ = kRed;
           if (parent == parent->parent_->left_) {
             which_child_was_deleted = kLeft;
