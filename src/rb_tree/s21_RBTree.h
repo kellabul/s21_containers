@@ -46,12 +46,13 @@ class RBTree {
   void Print() { PrintTree(root_, ""); }
 
   void PrintTree(node_type *node, std::string space,
-                 bool is_which_child = true) {
+                 bool which_child_is_node = true) {
     if (node == nil_) return;
     std::cout << space << "[ " << node->key_ << " ]"
               << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
     std::string arrow = "   └————— ";
-    std::string blank = (is_which_child == kLeft) ? "   │      " : "          ";
+    std::string blank =
+        (which_child_is_node == kLeft) ? "   │      " : "          ";
     size_t start_pos = space.find(arrow);
     if (start_pos != std::string::npos)
       space.replace(start_pos, arrow.size(), blank);
@@ -71,28 +72,84 @@ class RBTree {
       // here key == node->key_
     } else if (node->left_ != nil_ && node->right_ != nil_) {
       node_type *max_child = MaxChild(node->left_);
-      std::swap(max_child->key, node->key);
+      std::swap(max_child->key_, node->key_);
       DeleteNode(node->left_, max_child->key_);
     } else if (node->left_ != nil_) {
       DeleteBlackWithOneChild(node, kLeft);
     } else if (node->right_ != nil_) {
       DeleteBlackWithOneChild(node, kRight);
     } else {
-      bool node_is_black = (node->color_ == kBlack);
       node_type *parent = node->parent_;
-      if (node == parent->left_)
+      bool node_is_black = (node->color_ == kBlack);
+      bool which_child_is_node = (node == parent->left_) ? kLeft : kRight;
+      if (which_child_is_node == kLeft)
         parent->left_ = nil_;
       else
         parent->right_ = nil_;
       delete node;
-      if (node_is_black) BalanceAfterDeletionBlackWithNoChlidren(parent);
+      if (node_is_black)
+        BalanceAfterDeletionBlackWithNoChlidren(parent, which_child_is_node);
     }
   }
 
-  void BalanceAfterDeletionBlackWithNoChlidren(node_type *parent) {}
+  void BalanceAfterDeletionBlackWithNoChlidren(node_type *parent,
+                                               bool which_child_was_deleted) {
+    node_type *other_child;
+    node_type *first_grandchild;
+    node_type *second_grandchild;
+    node_type *grandgrandchild;
+    bool direction_to_turn;
+    if (which_child_was_deleted == kRight) {
+      other_child = parent->right_;
+      first_grandchild = other_child->left_;
+      second_grandchild = other_child->right_;
+      grandgrandchild = second_grandchild->left_;
+      direction_to_turn = kRight;
+    } else {
+      other_child = parent->left_;
+      first_grandchild = other_child->right_;
+      second_grandchild = other_child->left_;
+      grandgrandchild = second_grandchild->right_;
+      direction_to_turn = kLeft;
+    }
+    if (parent->color_ == kRed) {  // other_child->color_ == kBlack
+      parent->color_ = kBlack;
+      other_child->color_ = kRed;
+      if (first_grandchild->color_ == kRed) {
+        first_grandchild->color_ = kBlack;
+        TurnTreeBranches(parent, direction_to_turn);
+      }
+    } else {  // parent->color_ == kBlack
+      if (other_child->color_ == kRed) {
+        if (second_grandchild != nil_ &&
+            second_grandchild->left_->color_ == kBlack &&
+            second_grandchild->right_->color_ == kBlack) {
+          other_child->color_ = kBlack;
+          second_grandchild->color_ = kRed;
+          TurnTreeBranches(parent, direction_to_turn);
+        } else if (second_grandchild != nil_ && grandgrandchild->color_ == kRed) {
+          second_grandchild->color_ = kBlack;
+          TurnTreeBranches(other_child, !direction_to_turn);
+          TurnTreeBranches(parent, direction_to_turn);
+        }
+      } else {  // parent->color_ == kBlack, other_child->color_ == kBlack
+        if (second_grandchild->color_ == kRed) {
+          second_grandchild->color_ = kBlack;
+          TurnTreeBranches(other_child, !direction_to_turn);
+          TurnTreeBranches(parent, direction_to_turn);
+        } else if (second_grandchild->color_ == kBlack &&
+                   first_grandchild->color_ == kBlack) {
+          other_child->color_ = kRed;
+          BalanceAfterDeletionBlackWithNoChlidren(parent->parent_,
+                                                  which_child_was_deleted);
+        }
+      }
+    }
+  }
 
-  void DeleteBlackWithOneChild(node_type *node, bool is_which_child) {
-    node_type *child = (is_which_child == kLeft) ? node->left_ : node->right_;
+  void DeleteBlackWithOneChild(node_type *node, bool which_child_is_node) {
+    node_type *child =
+        (which_child_is_node == kLeft) ? node->left_ : node->right_;
     std::swap(child->key_, node->key_);
     delete child;
     node->left_ = nil_;
@@ -155,25 +212,27 @@ class RBTree {
       node_type *grandparent = node->parent_->parent_;
       node_type *node_uncle;
       bool direction_for_turn;
-      bool node_makes_a_line;
+      bool node_makes_zigzag;
       if (node->parent_ == node->parent_->parent_->left_) {
         node_uncle = node->parent_->parent_->right_;
         direction_for_turn = kLeft;
-        node_makes_a_line = (node == node->parent_->right_);
+        node_makes_zigzag = (node == node->parent_->right_);
       } else {
         node_uncle = node->parent_->parent_->left_;
         direction_for_turn = kRight;
-        node_makes_a_line = (node == node->parent_->left_);
+        node_makes_zigzag = (node == node->parent_->left_);
       }
       if (node_uncle->color_ == kRed) {
         node->parent_->color_ = kBlack;
         node_uncle->color_ = kBlack;
         grandparent->color_ = kRed;
         node = grandparent;
-      } else if (node_makes_a_line) {  // uncle is black
+      } else if (node_makes_zigzag) {  // uncle is black, node makes zigzag with
+                                       // his parent and grandparent
         node = node->parent_;
         TurnTreeBranches(node, direction_for_turn);
-      } else {
+      } else {  // uncle is black, node makes a line with his parent and
+                // grandparent
         node->parent_->color_ = kBlack;
         grandparent->color_ = kRed;
         TurnTreeBranches(grandparent, !direction_for_turn);
@@ -186,7 +245,6 @@ class RBTree {
     node_type *child_node;
     if (which_side == kLeft) {
       child_node = node->right_;
-      node->right_ = node->left_;
       node->right_ = child_node->left_;
       child_node->left_->parent_ = node;
       child_node->left_ = node;
@@ -209,8 +267,9 @@ class RBTree {
   }
 
  private:
-  // nil_->left_ points to max value, nil->right_ pints to min value
-  // nil_->parent_ can't be used anywhere because of TurnTreeBranches
+  // nil_->left_ points to max value, nil->right_ points to min value because of
+  // iterator logic;
+  // nil_->parent_ can't be used anywhere because of  TurnTreeBranches
   node_type *nil_;
   node_type *root_;
   size_t size_;

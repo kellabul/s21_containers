@@ -58,16 +58,12 @@ TEST(RBTree, basic) {
 TEST(RBTree, max_min) {
   s21::RBTree<int> one;
   for (int i = -20; i <= 20; ++i) one.Insert(i * 2);
-
   EXPECT_EQ(one.MaxKey(), 40);
   EXPECT_EQ(one.MinKey(), -40);
-
   one.Insert(-100);
   one.Insert(100);
-
   EXPECT_EQ(one.MaxKey(), 100);
   EXPECT_EQ(one.MinKey(), -100);
-  one.Print();
 }
 
 TEST(RBTree, print) {
@@ -109,17 +105,9 @@ TEST(RBTree, delete_node) {
   one.Insert(5);
   one.Insert(3);
   one.Insert(19);
-
-  // one.Insert(11);
-  // one.Insert(2);
-  // one.Insert(14);
-  // one.Insert(1);
-  // one.Insert(7);
-  // one.Insert(15);
-  // one.Insert(5);
-  // one.Insert(8);
-  // one.Insert(4);
-  // one.Print();
+  one.Print();
+  one.Delete(4);
+   one.Print();
 }
 
 int main(int argc, char **argv) {
