@@ -152,56 +152,39 @@ class RBTree {
 
   void BalanceTree(node_type *node) {
     while (node->parent_->color_ == kRed) {
+      node_type *grandparent = node->parent_->parent_;
+      node_type *node_uncle;
+      bool direction_for_turn;
+      bool node_makes_a_line;
       if (node->parent_ == node->parent_->parent_->left_) {
-        node = BalanceToLeft(node);
+        node_uncle = node->parent_->parent_->right_;
+        direction_for_turn = kLeft;
+        node_makes_a_line = (node == node->parent_->right_);
       } else {
-        node = BalanceToRight(node);
+        node_uncle = node->parent_->parent_->left_;
+        direction_for_turn = kRight;
+        node_makes_a_line = (node == node->parent_->left_);
+      }
+      if (node_uncle->color_ == kRed) {
+        node->parent_->color_ = kBlack;
+        node_uncle->color_ = kBlack;
+        grandparent->color_ = kRed;
+        node = grandparent;
+      } else if (node_makes_a_line) {  // uncle is black
+        node = node->parent_;
+        TurnTreeBranches(node, direction_for_turn);
+      } else {
+        node->parent_->color_ = kBlack;
+        grandparent->color_ = kRed;
+        TurnTreeBranches(grandparent, !direction_for_turn);
       }
     }
     root_->color_ = kBlack;
   }
 
-  node_type *BalanceToLeft(node_type *node) {
-    node_type *node_uncle = node->parent_->parent_->right_;
-    node_type *grandparent = node->parent_->parent_;
-    if (node_uncle->color_ == kRed) {
-      node->parent_->color_ = kBlack;
-      node_uncle->color_ = kBlack;
-      grandparent->color_ = kRed;
-      node = grandparent;
-    } else if (node == node->parent_->right_) {  // uncle is black
-      node = node->parent_;
-      TurnTreeBranches(node, kLeft);
-    } else {  // uncle is black, node is left child
-      node->parent_->color_ = kBlack;
-      grandparent->color_ = kRed;
-      TurnTreeBranches(grandparent, kRight);
-    }
-    return node;
-  }
-
-  node_type *BalanceToRight(node_type *node) {
-    node_type *node_uncle = node->parent_->parent_->left_;
-    node_type *grandparent = node->parent_->parent_;
-    if (node_uncle->color_ == kRed) {
-      node->parent_->color_ = kBlack;
-      node_uncle->color_ = kBlack;
-      grandparent->color_ = kRed;
-      node = grandparent;
-    } else if (node == node->parent_->left_) {  // uncle is black
-      node = node->parent_;
-      TurnTreeBranches(node, kRight);
-    } else {  // uncle is black, node is left child
-      node->parent_->color_ = kBlack;
-      grandparent->color_ = kRed;
-      TurnTreeBranches(grandparent, kLeft);
-    }
-    return node;
-  }
-
-  void TurnTreeBranches(node_type *node, bool which_turn) {
+  void TurnTreeBranches(node_type *node, bool which_side) {
     node_type *child_node;
-    if (which_turn == kLeft) {
+    if (which_side == kLeft) {
       child_node = node->right_;
       node->right_ = node->left_;
       node->right_ = child_node->left_;
