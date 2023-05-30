@@ -89,25 +89,11 @@ TEST(RBTree, print) {
 
 TEST(RBTree, delete_node) {
   s21::RBTree<int> one;
-  one.Insert(20);
-  one.Insert(10);
-  one.Insert(25);
-  one.Insert(23);
-  one.Insert(30);
-  one.Insert(4);
-  one.Insert(16);
-  one.Insert(14);
-  one.Insert(17);
-  one.Insert(19);
-  one.Insert(2);
-  one.Insert(12);
-  one.Insert(15);
-  one.Insert(5);
-  one.Insert(3);
-  one.Insert(19);
+  for (int i = 0; i <= 10; ++i) one.Insert(i);
   one.Print();
-  one.Delete(4);
-   one.Print();
+  one.Delete(0);
+  one.Print();
+  one.PrintValues();
 }
 
 int main(int argc, char **argv) {
