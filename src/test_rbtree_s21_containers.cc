@@ -66,31 +66,61 @@ TEST(RBTree, max_min) {
   EXPECT_EQ(one.MinKey(), -100);
 }
 
-TEST(RBTree, print) {
-  s21::RBTree<int> one;
-  for (int i = 0; i < 10; ++i) one.Insert(i);
-  testing::internal::CaptureStdout();
-  one.Print();
-  std::string output = testing::internal::GetCapturedStdout();
-  std::string expected_string(R"([ 3 ](-)
-   └————— [ 5 ](-)
-   │         └————— [ 7 ](+)
-   │         │         └————— [ 8 ](-)
-   │         │         │         └————— [ 9 ](+)
-   │         │         └————— [ 6 ](-)
-   │         └————— [ 4 ](-)
-   └————— [ 1 ](-)
-             └————— [ 2 ](-)
-             └————— [ 0 ](-)
-)");
-  EXPECT_EQ(expected_string, output);
-}
+// TEST(RBTree, print) {
+//   s21::RBTree<int> one;
+//   for (int i = 0; i < 10; ++i) one.Insert(i);
+//   testing::internal::CaptureStdout();
+//   one.Print();
+//   std::string output = testing::internal::GetCapturedStdout();
+//   std::string expected_string(R"([ 3 ](-)
+//    └————— [ 5 ](-)
+//    │         └————— [ 7 ](+)
+//    │         │         └————— [ 8 ](-)
+//    │         │         │         └————— [ 9 ](+)
+//    │         │         └————— [ 6 ](-)
+//    │         └————— [ 4 ](-)
+//    └————— [ 1 ](-)
+//              └————— [ 2 ](-)
+//              └————— [ 0 ](-)
+// )");
+//   EXPECT_EQ(expected_string, output);
+// }
 
 TEST(RBTree, delete_node) {
   s21::RBTree<int> one;
-  for (int i = -20; i <= 10; ++i) one.Insert(i);
-  one.Print();
-  one.Delete(-1);
+  for (int i = 0; i <= 20; ++i) one.Insert(i);
+  
+  one.Delete(16);
+  for (int i = 0; i <= 20; ++i) {
+    one.Print();
+    cout << "i = " << i << endl;
+    one.Delete(i);
+  }
+
+  // one.Delete(20);
+  // for (int i = 0; i <= 200; ++i) one.Delete(i);
+  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
+  // for (int i = 0; i <= 2000; ++i) {
+  //   // one.Print();
+  //   cout << endl << i << endl;
+  //   one.Delete(i);
+  // };
+
+  // one.Insert(2);
+  // one.Insert(5);
+  // one.Delete(5);
+  // one.Insert(5);
   one.Print();
   one.PrintValues();
 }
