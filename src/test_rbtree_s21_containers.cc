@@ -88,40 +88,56 @@ TEST(RBTree, max_min) {
 
 TEST(RBTree, delete_node) {
   s21::RBTree<int> one;
-  for (int i = 0; i <= 20; ++i) one.Insert(i);
+  // for (int i = 0; i <= 10; ++i) one.Insert(i);
   
-  one.Delete(16);
-  for (int i = 0; i <= 20; ++i) {
-    one.Print();
-    cout << "i = " << i << endl;
-    one.Delete(i);
-  }
+  // one.Delete(6);
+  // for (int i = 0; i <= 10; ++i) {
+  //   //one.Print();
+  //   cout << "i = " << i << endl;2000
+  //  one.Delete(i);
+  //  }
 
   // one.Delete(20);
   // for (int i = 0; i <= 200; ++i) one.Delete(i);
-  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Insert(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) one.Delete(rand() % 2000);
-  // for (int i = 0; i <= 2000; ++i) {
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 4000000; ++i) one.Delete(rand() % 200000);
+  cout << endl;
+one.PrintValues();
+    cout << " sadads" << endl;
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
+  // for (int i = 0; i <= 200000; ++i) {
   //   // one.Print();
   //   cout << endl << i << endl;
   //   one.Delete(i);
   // };
+  cout << " max " << one.MaxKey() << " " << one.MinKey() << endl;
 
   // one.Insert(2);
   // one.Insert(5);
   // one.Delete(5);
   // one.Insert(5);
-  one.Print();
+ // one.Print();
   one.PrintValues();
 }
 
