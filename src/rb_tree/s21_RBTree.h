@@ -90,12 +90,9 @@ class RBTree {
       DeleteBlackWithOneChild(node, kRight);
     } else if (node == root_) {
       root_ = nil_;
-      nil_->left_ = nil_;
-      nil_->right_ = nil_;
       delete node;
     } else {
       node_type *parent = node->parent_;
-      bool node_is_black = (node->color_ == kBlack);
       bool which_child_is_node;
       if (node == parent->left_) {
         parent->left_ = nil_;
@@ -105,85 +102,57 @@ class RBTree {
         which_child_is_node = kRight;
       }
       CheckMinMaxDeletion(parent, node);
+      if (node->color_ == kBlack)
+        BalanceAfterDeletion(parent, which_child_is_node);
       delete node;
-      if (node_is_black) BalanceAfterDeletion(parent, which_child_is_node);
     }
   }
 
   void BalanceAfterDeletion(node_type *parent, bool which_child_was_deleted) {
-    node_type *other_child;
-    node_type *first_grandchild;
-    node_type *second_grandchild;
-    node_type *grandgrandchild;
+    node_type *sibling;
+    node_type *first_nephew;
+    node_type *second_nephew;
     bool direction_to_turn;
     if (which_child_was_deleted == kRight) {
-      other_child = parent->left_;
-      first_grandchild = other_child->left_;
-      second_grandchild = other_child->right_;
-      grandgrandchild = second_grandchild->left_;
+      sibling = parent->left_;
+      first_nephew = sibling->left_;
+      second_nephew = sibling->right_;
       direction_to_turn = kRight;
     } else {
-      other_child = parent->right_;
-      first_grandchild = other_child->right_;
-      second_grandchild = other_child->left_;
-      grandgrandchild = second_grandchild->right_;
+      sibling = parent->right_;
+      first_nephew = sibling->right_;
+      second_nephew = sibling->left_;
       direction_to_turn = kLeft;
     }
-    if (parent->color_ == kRed) {  // other_child->color_ == kBlack
-      std::cout << 1 << std::endl;
-      parent->color_ = kBlack;
-      other_child->color_ = kRed;
-      if (first_grandchild->color_ == kRed) {
-        std::cout << 2 << std::endl;
-        first_grandchild->color_ = kBlack;
-        TurnTreeBranches(parent, direction_to_turn);
-      }
-    } else {  // parent->color_ == kBlack
-      if (other_child->color_ == kRed) {
-        if (second_grandchild != nil_ &&
-            second_grandchild->left_->color_ == kBlack &&
-            second_grandchild->right_->color_ == kBlack) {
-          std::cout << 3 << std::endl;
-          other_child->color_ = kBlack;
-          second_grandchild->color_ = kRed;
-          TurnTreeBranches(parent, direction_to_turn);
-        } else if (second_grandchild != nil_ &&
-                   grandgrandchild->color_ == kRed) {
-          std::cout << 4 << std::endl;
-          second_grandchild->color_ = kBlack;
-          TurnTreeBranches(other_child, !direction_to_turn);
-          TurnTreeBranches(parent, direction_to_turn);
-        }
-      } else {  // parent->color_ == kBlack, other_child->color_ == kBlack
-        if (second_grandchild->color_ == kRed) {
-          std::cout << 5 << std::endl;
-          second_grandchild->color_ = kBlack;
-          TurnTreeBranches(other_child, !direction_to_turn);
-          TurnTreeBranches(parent, direction_to_turn);
-        } else if (first_grandchild->color_ ==
-                   kRed) {  // this part wasn't in istructions
-          std::cout << 6 << std::endl;
-          first_grandchild->color_ = kBlack;
-          TurnTreeBranches(parent, direction_to_turn);
+    if (sibling->color_ == kBlack) {
+      if (first_nephew->color_ == kRed) {
+        sibling->color_ = parent->color_;
+        first_nephew->color_ = kBlack;
+        parent->color_ = kBlack;
+        TurnTree(parent, direction_to_turn);
+      } else if (first_nephew->color_ == kBlack &&
+                 second_nephew->color_ == kRed) {
+        sibling->color_ = kRed;
+        second_nephew->color_ = kBlack;
+        TurnTree(sibling, !direction_to_turn);
+        BalanceAfterDeletion(parent, which_child_was_deleted);
+      } else {  // first_nephew->color_ == kBlack && second_nephew->color_ ==
+                // kBlack
+        sibling->color_ = kRed;
+        if (parent->color_ == kRed || parent == root_) {
+          parent->color_ = kBlack;
         } else {
-          std::cout << 7 << std::endl;
-          other_child->color_ = kRed;
-          if (parent == parent->parent_->left_) {
-            which_child_was_deleted = kLeft;
-          } else {
-            which_child_was_deleted = kRight;
-          }
+          which_child_was_deleted =
+              (parent->parent_->left_ == parent) ? kLeft : kRight;
           BalanceAfterDeletion(parent->parent_, which_child_was_deleted);
         }
       }
+    } else {  // sibling.color_ == kRed
+      parent->color_ = kRed;
+      sibling->color_ = kBlack;
+      TurnTree(parent, direction_to_turn);
+      BalanceAfterDeletion(parent, which_child_was_deleted);
     }
-  }
-
-  void CheckMinMaxDeletion(node_type *node) {
-    if (node == nil_->right_)
-      nil_->right_ = MinChild(root_);
-    else if (node == nil_->left_)
-      nil_->left_ = MaxChild(root_);
   }
 
   void DeleteBlackWithOneChild(node_type *node, bool which_child_has_node) {
@@ -287,18 +256,18 @@ class RBTree {
       } else if (node_makes_zigzag) {  // uncle is black, node makes zigzag with
                                        // his parent and grandparent
         node = node->parent_;
-        TurnTreeBranches(node, direction_for_turn);
+        TurnTree(node, direction_for_turn);
       } else {  // uncle is black, node makes a line with his parent and
                 // grandparent
         node->parent_->color_ = kBlack;
         grandparent->color_ = kRed;
-        TurnTreeBranches(grandparent, !direction_for_turn);
+        TurnTree(grandparent, !direction_for_turn);
       }
     }
     root_->color_ = kBlack;
   }
 
-  void TurnTreeBranches(node_type *node, bool which_side) {
+  void TurnTree(node_type *node, bool which_side) {
     node_type *child_node;
     if (which_side == kLeft) {
       child_node = node->right_;
@@ -326,7 +295,7 @@ class RBTree {
  private:
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
-  // nil_->parent_ can't be used anywhere because of  TurnTreeBranches
+  // nil_->parent_ can't be used anywhere because of  TurnTree
   node_type *nil_;
   node_type *root_;
   size_t size_;
