@@ -6,9 +6,12 @@
 namespace s21 {
 template <typename Key>
 class RBTree {
+  class RBTreeIterator;
+
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
+  using iterator = RBTreeIterator;
 
   const bool kRed = true;
   const bool kBlack = false;
@@ -27,6 +30,8 @@ class RBTree {
     Clear();
     delete nil_;
   }
+
+  iterator Begin() { return iterator(nil_->right_); }
 
   void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
@@ -291,6 +296,29 @@ class RBTree {
     }
     node->parent_ = child_node;
   }
+
+ private:
+  class RBTreeIterator {
+   public:
+    RBTreeIterator(){};
+    explicit RBTreeIterator(node_type *node) : node_(node) {}
+
+    key_type operator*() const noexcept { return node_->value_; }
+
+    iterator &operator++() noexcept {
+      if (node_->right_ != nil_ || node_ == nil_->left_) {
+        node_ = node_->right_;
+      } else {
+        while (node_ != node_->parent_->right_) {
+          node_ = node_->parent_;
+        }
+      }
+      return *this;
+    }
+
+   private:
+    node_type *node_;
+  };
 
  private:
   // nil_->left_ points to max value, nil->right_ points to min value because of
