@@ -117,6 +117,17 @@ TEST(RBTree, delete_node) {
  one.Print();
 }
 
+TEST(RBTree, iterator) {
+  s21::RBTree<int> one;
+  for (int i = 0; i <= 20; ++i) one.Insert(i);
+  auto iter = one.End(); 
+  for (int i = 0; i <= 50; ++i) {
+    cout << *iter << " ";
+    --iter;
+  }
+}
+
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
