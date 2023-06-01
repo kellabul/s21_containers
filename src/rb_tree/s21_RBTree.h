@@ -1,18 +1,16 @@
 #ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 #define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 
-// #include "s21_RBTree_iterator.h"
+#include "s21_RBTree_iterator.h"
 #include "s21_RBTree_node.h"
 
 namespace s21 {
 template <typename Key>
 class RBTree {
-  class RBTreeIterator;
-
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using iterator = RBTreeIterator;
+  using iterator = RBTreeIterator<Key>;
 
   const bool kRed = true;
   const bool kBlack = false;
@@ -32,13 +30,9 @@ class RBTree {
     delete nil_;
   }
 
-  iterator Begin() { return iterator(this); }
+  iterator Begin() { return iterator(this, nil_->right_); }
 
-  iterator End() {
-    iterator iter(this);
-    iter.SetEnd();
-    return iter;
-  }
+  iterator End() { return iterator(this, nil_); }
 
   void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
@@ -304,78 +298,6 @@ class RBTree {
     }
     node->parent_ = child_node;
   }
-
- private:
-  class RBTreeIterator {
-   public:
-    //  template <typename Tey>
-    //   class RBTree;
-    // using key_type = Key;
-    // using node_type = RBTreeNode<key_type>;
-    // using iterator = RBTreeIterator;
-    using tree_type = RBTree<key_type>;
-
-   public:
-    RBTreeIterator(){};
-    explicit RBTreeIterator(tree_type *tree)
-        : nil_(tree->GetNil()), node_(nil_->right_) {}
-
-    key_type operator*() const noexcept { return node_->key_; }
-
-    bool operator==(const iterator &other) const noexcept {
-      return node_ == other.node_;
-    }
-
-    bool operator!=(const iterator &other) const noexcept {
-      return node_ != other.node_;
-    }
-
-    void SetEnd() { node_ = nil_; }
-
-    iterator &operator++() noexcept {
-      if (node_->right_ != nil_) {
-        node_ = node_->right_;
-        while (node_->left_ != nil_) {
-          node_ = node_->left_;
-        }
-        // nil_->left_ always points to max element
-      } else if (node_ == nil_->left_) {
-        node_ = nil_;
-      } else {
-        node_type *tmp = node_->parent_;
-        while (tmp != nil_ && node_ == tmp->right_) {
-          node_ = tmp;
-          tmp = tmp->parent_;
-        }
-        node_ = tmp;
-      }
-      return *this;
-    }
-
-    iterator &operator--() noexcept {
-      if (node_->left_ != nil_) {
-        node_ = node_->left_;
-        while (node_->right_ != nil_) {
-          node_ = node_->right_;
-        }
-        // nil_->right_ always points to max element
-      } else if (node_ == nil_->right_) {
-        node_ = nil_;
-      } else {
-        node_type *tmp = node_->parent_;
-        while (tmp != nil_ && node_ == tmp->left_) {
-          node_ = tmp;
-          tmp = tmp->parent_;
-        }
-        node_ = tmp;
-      }
-      return *this;
-    }
-
-   private:
-    node_type *const nil_;
-    node_type *node_;
-  };
 
  private:
   // nil_->left_ points to max value, nil->right_ points to min value because of
