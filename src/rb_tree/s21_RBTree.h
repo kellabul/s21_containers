@@ -1,6 +1,7 @@
 #ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 #define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 
+// #include "s21_RBTree_iterator.h"
 #include "s21_RBTree_node.h"
 
 namespace s21 {
@@ -31,7 +32,13 @@ class RBTree {
     delete nil_;
   }
 
-  iterator Begin() { return iterator(nil_->right_); }
+  iterator Begin() { return iterator(this); }
+
+  iterator End() {
+    iterator iter(this);
+    iter.SetEnd();
+    return iter;
+  }
 
   void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
@@ -81,6 +88,8 @@ class RBTree {
     std::cout << node->key_ << " ";
     PrintValuesRec(node->right_);
   }
+
+  node_type *GetNil() const { return nil_; }
 
  private:
   void DeleteNode(node_type *node) {
@@ -135,8 +144,7 @@ class RBTree {
         first_nephew->color_ = kBlack;
         parent->color_ = kBlack;
         TurnTree(parent, direction_to_turn);
-      } else if (first_nephew->color_ == kBlack &&
-                 second_nephew->color_ == kRed) {
+      } else if (second_nephew->color_ == kRed) {
         sibling->color_ = kRed;
         second_nephew->color_ = kBlack;
         TurnTree(sibling, !direction_to_turn);
@@ -300,23 +308,72 @@ class RBTree {
  private:
   class RBTreeIterator {
    public:
-    RBTreeIterator(){};
-    explicit RBTreeIterator(node_type *node) : node_(node) {}
+    //  template <typename Tey>
+    //   class RBTree;
+    // using key_type = Key;
+    // using node_type = RBTreeNode<key_type>;
+    // using iterator = RBTreeIterator;
+    using tree_type = RBTree<key_type>;
 
-    key_type operator*() const noexcept { return node_->value_; }
+   public:
+    RBTreeIterator(){};
+    explicit RBTreeIterator(tree_type *tree)
+        : nil_(tree->GetNil()), node_(nil_->right_) {}
+
+    key_type operator*() const noexcept { return node_->key_; }
+
+    bool operator==(const iterator &other) const noexcept {
+      return node_ == other.node_;
+    }
+
+    bool operator!=(const iterator &other) const noexcept {
+      return node_ != other.node_;
+    }
+
+    void SetEnd() { node_ = nil_; }
 
     iterator &operator++() noexcept {
-      if (node_->right_ != nil_ || node_ == nil_->left_) {
+      if (node_->right_ != nil_) {
         node_ = node_->right_;
-      } else {
-        while (node_ != node_->parent_->right_) {
-          node_ = node_->parent_;
+        while (node_->left_ != nil_) {
+          node_ = node_->left_;
         }
+        // nil_->left_ always points to max element
+      } else if (node_ == nil_->left_) {
+        node_ = nil_;
+      } else {
+        node_type *tmp = node_->parent_;
+        while (tmp != nil_ && node_ == tmp->right_) {
+          node_ = tmp;
+          tmp = tmp->parent_;
+        }
+        node_ = tmp;
+      }
+      return *this;
+    }
+
+    iterator &operator--() noexcept {
+      if (node_->left_ != nil_) {
+        node_ = node_->left_;
+        while (node_->right_ != nil_) {
+          node_ = node_->right_;
+        }
+        // nil_->right_ always points to max element
+      } else if (node_ == nil_->right_) {
+        node_ = nil_;
+      } else {
+        node_type *tmp = node_->parent_;
+        while (tmp != nil_ && node_ == tmp->left_) {
+          node_ = tmp;
+          tmp = tmp->parent_;
+        }
+        node_ = tmp;
       }
       return *this;
     }
 
    private:
+    node_type *const nil_;
     node_type *node_;
   };
 
@@ -324,7 +381,7 @@ class RBTree {
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
   // nil_->parent_ can't be used anywhere because of  TurnTree
-  node_type *nil_;
+  node_type *const nil_;
   node_type *root_;
   size_t size_;
 };
