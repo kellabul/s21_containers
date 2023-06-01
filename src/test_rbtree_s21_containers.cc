@@ -64,69 +64,99 @@ TEST(RBTree, max_min) {
   one.Insert(100);
   EXPECT_EQ(one.MaxKey(), 100);
   EXPECT_EQ(one.MinKey(), -100);
+
+  s21::RBTree<string> two;
+  two.Insert("apple");
+  two.Insert("bee");
+  two.Insert("cat");
+  two.Insert("dog");
+  two.Insert("egg");
+  two.Insert("fish");
+  two.Insert("grapes");
+  two.Insert("hat");
+  two.Insert("igloo");
+  two.Insert("jug");
+  two.Insert("kite");
+  two.Insert("lemon");
+  EXPECT_EQ(two.MinKey(), "apple");
+  EXPECT_EQ(two.MaxKey(), "lemon");
+  two.Delete("apple");
+  EXPECT_EQ(two.MinKey(), "bee");
+  EXPECT_EQ(two.MaxKey(), "lemon");
+  two.Delete("lemon");
+  EXPECT_EQ(two.MinKey(), "bee");
+  EXPECT_EQ(two.MaxKey(), "kite");
+  two.Delete("bee");
+  two.Delete("egg");
+  two.Delete("fish");
+  two.Delete("grapes");
+  two.Delete("hat");
+  two.Delete("igloo");
+  two.Delete("jug");
+  two.Delete("kite");
+  EXPECT_EQ(two.MinKey(), "cat");
+  EXPECT_EQ(two.MaxKey(), "dog");
+  two.Delete("dog");
+  EXPECT_EQ(two.MinKey(), "cat");
+  EXPECT_EQ(two.MaxKey(), "cat");
+
+
 }
 
-// TEST(RBTree, print) {
-//   s21::RBTree<int> one;
-//   for (int i = 0; i < 10; ++i) one.Insert(i);
-//   testing::internal::CaptureStdout();
-//   one.Print();
-//   std::string output = testing::internal::GetCapturedStdout();
-//   std::string expected_string(R"([ 3 ](-)
-//    └————— [ 5 ](-)
-//    │         └————— [ 7 ](+)
-//    │         │         └————— [ 8 ](-)
-//    │         │         │         └————— [ 9 ](+)
-//    │         │         └————— [ 6 ](-)
-//    │         └————— [ 4 ](-)
-//    └————— [ 1 ](-)
-//              └————— [ 2 ](-)
-//              └————— [ 0 ](-)
-// )");
-//   EXPECT_EQ(expected_string, output);
-// }
-
-TEST(RBTree, delete_node) {
+TEST(RBTree, print) {
   s21::RBTree<int> one;
-  for (int i = 0; i <= 20; ++i) one.Insert(i);
-  
-  // one.Delete(6);
-  // for (int i = 0; i <= 10; ++i) {
-  //   //one.Print();
-  //   cout << "i = " << i << endl;2000
-  //  one.Delete(i);
-  //  }
-
-  // one.Delete(20);
-  // for (int i = 0; i <= 200; ++i) one.Delete(i);
-  // for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
-  // for (int i = 0; i <= 4000000; ++i) one.Delete(rand() % 200000);
-  // for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
-  // for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
-  // for (int i = 0; i <= 200000; ++i) one.Insert(rand() % 200000);
-  // for (int i = 0; i <= 200000; ++i) one.Delete(rand() % 200000);
-  // for (int i = 0; i <= 200000; ++i) {
-  //   // one.Print();
-  //   cout << endl << i << endl;
-  //   one.Delete(i);
-  // };
-  // one.Insert(2);
-  // one.Insert(5);
-  // one.Delete(5);
-  // one.Insert(5);
- one.Print();
+  for (int i = 0; i < 10; ++i) one.Insert(i);
+  testing::internal::CaptureStdout();
+  one.Print();
+  std::string output = testing::internal::GetCapturedStdout();
+  std::string expected_string(R"([ 3 ](-)
+   └————— [ 5 ](-)
+   │         └————— [ 7 ](+)
+   │         │         └————— [ 8 ](-)
+   │         │         │         └————— [ 9 ](+)
+   │         │         └————— [ 6 ](-)
+   │         └————— [ 4 ](-)
+   └————— [ 1 ](-)
+             └————— [ 2 ](-)
+             └————— [ 0 ](-)
+)");
+  EXPECT_EQ(expected_string, output);
 }
 
 TEST(RBTree, iterator) {
   s21::RBTree<int> one;
-  for (int i = 0; i <= 20; ++i) one.Insert(i);
-  auto iter = one.End(); 
-  for (int i = 0; i <= 50; ++i) {
-    cout << *iter << " ";
-    --iter;
+  int count = 0;
+  for (; count < 20; ++count) one.Insert(count);
+  count = 0;
+  for (auto iter = one.Begin(); iter != one.End(); ++iter) {
+    EXPECT_EQ(count, *iter);
+    ++count;
   }
 }
 
+TEST(RBTree, delete_node) {
+  s21::RBTree<string> beta;
+  beta.Insert("apple");
+  beta.Insert("bee");
+  beta.Insert("cat");
+  beta.Insert("dog");
+  beta.Insert("egg");
+  beta.Insert("fish");
+  beta.Insert("grapes");
+  beta.Insert("hat");
+  beta.Insert("igloo");
+  beta.Insert("jug");
+  beta.Insert("kite");
+  beta.Insert("lemon");
+  auto iter = beta.Begin();
+  EXPECT_EQ("apple", *iter++);
+  EXPECT_EQ("bee", *iter++);
+  EXPECT_EQ("cat", *iter++);
+  beta.Delete("bee");
+  EXPECT_EQ("dog", *iter--);
+  EXPECT_EQ("cat", *iter--);
+  EXPECT_EQ("apple", *iter);
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
