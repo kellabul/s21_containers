@@ -11,6 +11,7 @@ class RBTree {
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
   using iterator = RBTreeIterator<Key>;
+  using cosnt_iterator = RBTreeConstIterator<Key>;
 
   const bool kRed = true;
   const bool kBlack = false;
@@ -51,13 +52,30 @@ class RBTree {
 
   void Print() { PrintTree(root_, ""); }
 
+  void PrintValues() {
+    PrintValuesRec(root_);
+    std::cout << std::endl;
+  }
+
+  node_type *GetNil() const { return nil_; }
+
+ private:
+  void PrintValuesRec(node_type *node) {
+    if (node == nil_) return;
+    PrintValuesRec(node->left_);
+    std::cout << node->key_ << " ";
+    PrintValuesRec(node->right_);
+  }
+
   void PrintTree(node_type *node, std::string space,
                  bool which_child_is_node = true) {
     if (node == nil_) {
       // std::cout << space << "[ nil_ ]" << std::endl;
       return;
     }
-    std::cout << space << "[ " << node->key_ << " ]"
+    std::cout << space
+              // << "[" << (which_child_is_node == kRight ? "<" : ">") << "]"
+              << "[ " << node->key_ << " ]"
               << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
     std::string arrow = "   └————— ";
     std::string blank =
@@ -71,21 +89,6 @@ class RBTree {
     // std::cout << node->key_ << " ";
   }
 
-  void PrintValues() {
-    PrintValuesRec(root_);
-    std::cout << std::endl;
-  }
-
-  void PrintValuesRec(node_type *node) {
-    if (node == nil_) return;
-    PrintValuesRec(node->left_);
-    std::cout << node->key_ << " ";
-    PrintValuesRec(node->right_);
-  }
-
-  node_type *GetNil() const { return nil_; }
-
- private:
   void DeleteNode(node_type *node) {
     if (node == nil_) return;
     if (node->left_ != nil_ && node->right_ != nil_) {
@@ -179,6 +182,7 @@ class RBTree {
       nil_->left_ = node;
   }
 
+  // never used
   node_type *MinChild(node_type *node) {
     while (node->left_ != nil_) node = node->left_;
     return node;

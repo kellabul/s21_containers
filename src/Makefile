@@ -4,7 +4,7 @@ GTEST_FLAGS = -lgtest -pthread
 NAME = s21_containers
 TEST_NAME = test_$(NAME)
 ASAN_FLAGS = -g -fsanitize=address,undefined,leak
-GCOV_FLAGS = --coverage
+GCOV_FLAGS = --coverage -fprofile-arcs
 LCOV_REPORT_FOLDER = $(NAME)_report
 
 COVERAGE_FILES = *.gcno
@@ -23,13 +23,13 @@ all: test
 
 clean:
 	rm -rf *.o *.a $(TEST_NAME) $(COVERAGE_RESULTS) $(COVERAGE_FILES) $(GCOV_FILES) \
-	$(LCOV_FILES) $(LCOV_REPORT_FOLDER)
+	$(LCOV_FILES) $(LCOV_REPORT_FOLDER) 
 
 test: compile_test
 	./$(TEST_NAME)
 
 compile_test: clean
-	$(CC) $(FLAGS) $(GTEST_SOURCE_FILES) $(SOURCE_FILES) -o $(TEST_NAME) $(GTEST_FLAGS) \
+	$(CC) $(FLAGS)  $(GTEST_SOURCE_FILES) $(SOURCE_FILES) -o $(TEST_NAME) $(GTEST_FLAGS) \
 	$(GCOV_FLAGS)
 
 gcov_report: gcov

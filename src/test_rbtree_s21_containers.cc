@@ -99,8 +99,6 @@ TEST(RBTree, max_min) {
   two.Delete("dog");
   EXPECT_EQ(two.MinKey(), "cat");
   EXPECT_EQ(two.MaxKey(), "cat");
-
-
 }
 
 TEST(RBTree, print) {
@@ -132,30 +130,70 @@ TEST(RBTree, iterator) {
     EXPECT_EQ(count, *iter);
     ++count;
   }
+  count = 19;
+  for (auto iter = --(one.End()); iter != one.End(); --iter) {
+    EXPECT_EQ(count, *iter);
+    --count;
+  }
+  s21::RBTree<int> two;
+  two.Insert(1);
+  two.Insert(2);
+  auto iter = two.Begin();
+  for (int i = 0; i < 10; ++i) {
+    cout << *--iter;
+  }
+  for (int i = 0; i < 10; ++i) {
+    cout << *++iter;
+  }
+  two.Delete(2);
+  for (int i = 0; i < 10; ++i) {
+    cout << *--iter;
+  }
+  for (int i = 0; i < 10; ++i) {
+    cout << *++iter;
+  }
+  two.Delete(1);
+  for (int i = 0; i < 10; ++i) {
+    cout << *--iter;
+  }
+  for (int i = 0; i < 10; ++i) {
+    cout << *++iter;
+  }
 }
 
+
+
 TEST(RBTree, delete_node) {
-  s21::RBTree<string> beta;
-  beta.Insert("apple");
-  beta.Insert("bee");
-  beta.Insert("cat");
-  beta.Insert("dog");
-  beta.Insert("egg");
-  beta.Insert("fish");
-  beta.Insert("grapes");
-  beta.Insert("hat");
-  beta.Insert("igloo");
-  beta.Insert("jug");
-  beta.Insert("kite");
-  beta.Insert("lemon");
-  auto iter = beta.Begin();
+  s21::RBTree<string> one;
+  one.Insert("apple");
+  one.Insert("bee");
+  one.Insert("cat");
+  one.Insert("dog");
+  one.Insert("egg");
+  one.Insert("fish");
+  one.Insert("grapes");
+  one.Insert("hat");
+  one.Insert("igloo");
+  one.Insert("jug");
+  one.Insert("kite");
+  one.Insert("lemon");
+  auto iter = one.Begin();
   EXPECT_EQ("apple", *iter++);
   EXPECT_EQ("bee", *iter++);
   EXPECT_EQ("cat", *iter++);
-  beta.Delete("bee");
+  one.Delete("bee");
   EXPECT_EQ("dog", *iter--);
   EXPECT_EQ("cat", *iter--);
-  EXPECT_EQ("apple", *iter);
+  EXPECT_EQ("apple", *iter--);
+  iter--;
+  EXPECT_EQ("lemon", *iter--);
+  one.Print();
+}
+
+TEST(RBTree, big_tree) {
+  s21::RBTree<int> one;
+  for (int i = 0; i < 200000; ++i) one.Insert(rand() % 200000);
+  for (int i = 0; i < 200000; ++i) one.Delete(rand() % 200000);
 }
 
 int main(int argc, char **argv) {
