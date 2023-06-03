@@ -153,6 +153,7 @@ TEST(RBTree, iterator) {
     cout << *++iter;
   }
   two.Delete(1);
+  iter = two.Begin();
   for (int i = 0; i < 10; ++i) {
     cout << *--iter;
   }
@@ -160,8 +161,6 @@ TEST(RBTree, iterator) {
     cout << *++iter;
   }
 }
-
-
 
 TEST(RBTree, delete_node) {
   s21::RBTree<string> one;
