@@ -19,13 +19,34 @@ class RBTreeIterator {
  public:
   RBTreeIterator() = delete;
 
-  
   explicit RBTreeIterator(rbtree *tree, node_type *node)
       : nil_(tree->GetNil()), node_(node) {}
 
   template <typename U>
-  explicit RBTreeIterator(const RBTreeIterator<U> &iter)
-      : nil_(iter.nil_), node_(iter.node_) {}
+  explicit RBTreeIterator(const RBTreeIterator<U> &other)
+      : nil_(other.nil_), node_(other.node_) {}
+
+  template <typename U>
+  explicit RBTreeIterator(const RBTreeIterator<U> &&other)
+      : nil_(other.nil_), node_(other.node_) {}
+
+  iterator &operator=(const iterator &other) {
+    if (this == &other) return *this;
+    if (nil_ != other.nil_)
+      throw std::logic_error("can't assign iterator from different objects");
+    node_ = other.node_;
+    return *this;
+  }
+
+  iterator &operator=(const iterator &&other) {
+    if (this == &other) return *this;
+    if (nil_ != other.nil_)
+      throw std::logic_error("can't assign iterator from different objects");
+    node_ = std::move(other.node_);
+    return *this;
+  }
+
+  ~RBTreeIterator(){};
 
   key_type operator*() const noexcept { return node_->key_; }
 
@@ -103,20 +124,17 @@ class RBTreeIterator {
   node_type *node_;
 };
 
-
-
 template <typename Key>
 class RBTreeConstIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using iterator = RBTreeConstIterator<key_type>;
+  using const_iterator = RBTreeConstIterator<key_type>;
   using rbtree = RBTree<key_type>;
 
  public:
   RBTreeConstIterator() = delete;
 
-  
   explicit RBTreeConstIterator(rbtree *tree, node_type *node)
       : nil_(tree->GetNil()), node_(node) {}
 
@@ -126,33 +144,33 @@ class RBTreeConstIterator {
 
   key_type operator*() const noexcept { return node_->key_; }
 
-  bool operator==(const iterator &other) const noexcept {
+  bool operator==(const const_iterator &other) const noexcept {
     return node_ == other.node_;
   }
 
-  bool operator!=(const iterator &other) const noexcept {
+  bool operator!=(const const_iterator &other) const noexcept {
     return node_ != other.node_;
   }
 
   void SetBegin() { node_ = nil_->right_; }
   void SetEnd() { node_ = nil_; }
 
-  iterator &operator++() noexcept {
+  const_iterator &operator++() noexcept {
     RBTreeIncrement();
     return *this;
   }
-  iterator &operator--() noexcept {
+  const_iterator &operator--() noexcept {
     RBTreeDecrement();
     return *this;
   }
 
-  iterator operator++(int) noexcept {
-    iterator tmp{*this};
+  const_iterator operator++(int) noexcept {
+    const_iterator tmp{*this};
     RBTreeIncrement();
     return tmp;
   }
-  iterator operator--(int) noexcept {
-    iterator tmp{*this};
+  const_iterator operator--(int) noexcept {
+    const_iterator tmp{*this};
     RBTreeDecrement();
     return tmp;
   }
