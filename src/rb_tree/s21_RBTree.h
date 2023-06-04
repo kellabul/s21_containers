@@ -200,17 +200,6 @@ class RBTree {
     delete node;
   }
 
-  // node_type *FindNode(node_type *node, const key_type &key) {
-  //   if (node == nil_) return nil_;
-  //   if (key > node->key_) {
-  //     return FindNode(node->right_, key);
-  //   } else if (key < node->key_) {
-  //     return FindNode(node->left_, key);
-  //   } else {
-  //     return node;
-  //   }
-  // }
-
   node_type *FindNode(node_type *node, const key_type &key) {
     while (node != nil_ && node->key_ != key) {
       if (node->key_ > key)
@@ -248,15 +237,15 @@ class RBTree {
     while (node->parent_->color_ == kRed) {
       node_type *grandparent = node->parent_->parent_;
       node_type *node_uncle;
-      bool direction_for_turn;
+      bool direction_to_turn;
       bool node_makes_zigzag;
       if (node->parent_ == node->parent_->parent_->left_) {
         node_uncle = node->parent_->parent_->right_;
-        direction_for_turn = kLeft;
+        direction_to_turn = kLeft;
         node_makes_zigzag = (node == node->parent_->right_);
       } else {
         node_uncle = node->parent_->parent_->left_;
-        direction_for_turn = kRight;
+        direction_to_turn = kRight;
         node_makes_zigzag = (node == node->parent_->left_);
       }
       if (node_uncle->color_ == kRed) {
@@ -267,12 +256,12 @@ class RBTree {
       } else if (node_makes_zigzag) {  // uncle is black, node makes zigzag with
                                        // his parent and grandparent
         node = node->parent_;
-        TurnTree(node, direction_for_turn);
+        TurnTree(node, direction_to_turn);
       } else {  // uncle is black, node makes a line with his parent and
                 // grandparent
         node->parent_->color_ = kBlack;
         grandparent->color_ = kRed;
-        TurnTree(grandparent, !direction_for_turn);
+        TurnTree(grandparent, !direction_to_turn);
       }
     }
     root_->color_ = kBlack;
