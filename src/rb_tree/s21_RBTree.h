@@ -35,7 +35,8 @@ class RBTree {
     ImportElements(other.root_, other.nil_);
   }
 
-  void ImportElements(node_type *const &other_node, node_type *const &other_nil) {
+  void ImportElements(node_type *const &other_node,
+                      node_type *const &other_nil) {
     if (other_node == other_nil) return;
     Insert(other_node->key_);
     ImportElements(other_node->left_, other_nil);
@@ -55,11 +56,12 @@ class RBTree {
   ~RBTree() {
     Clear();
     delete nil_;
+    nil_ = nullptr;
   }
 
-  iterator Begin() { return iterator(this, nil_->right_); }
+  iterator Begin() { return iterator(nil_, nil_->right_); }
 
-  iterator End() { return iterator(this, nil_); }
+  iterator End() { return iterator(nil_, nil_); }
 
   void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
@@ -324,7 +326,7 @@ class RBTree {
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
   // nil_->parent_ can't be used anywhere because of  TurnTree
-  node_type *const nil_;
+  node_type *nil_;
   node_type *root_;
   size_t size_;
 };

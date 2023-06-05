@@ -16,8 +16,8 @@ class RBTree<Key>::RBTreeIterator {
  public:
   RBTreeIterator() = delete;
 
-  explicit RBTreeIterator(rbtree *tree, node_type *node)
-      : nil_(tree->GetNil()), node_(node) {}
+  explicit RBTreeIterator(node_type *nil, node_type *node)
+      : nil_(nil), node_(node) {}
 
   // template <typename U>
   // RBTreeIterator(const RBTreeIterator<U> &other)
@@ -81,6 +81,7 @@ class RBTree<Key>::RBTreeIterator {
     return tmp;
   }
 
+private:
   void RBTreeIncrement() {
     if (node_->right_ != nil_) {
       node_ = node_->right_;
@@ -119,7 +120,7 @@ class RBTree<Key>::RBTreeIterator {
     }
   }
 
- private:
+private:
   node_type *const nil_;
   node_type *node_;
 };
@@ -192,6 +193,8 @@ class RBTree<Key>::RBTreeConstIterator {
     RBTreeDecrement();
     return tmp;
   }
+  
+private:
 
   void RBTreeIncrement() {
     if (node_->right_ != nil_) {

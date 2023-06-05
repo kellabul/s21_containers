@@ -12,7 +12,7 @@ COVERAGE_RESULTS= *.gcda
 GCOV_FILES = *.gcov
 LCOV_FILES = *.info
 
-SOURCE_FILES = rb_tree/*
+SOURCE_FILES =
 GTEST_SOURCE_FILES = test_rbtree_s21_containers.cc
 
 .PHONY: all, clean, test
