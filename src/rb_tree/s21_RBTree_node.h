@@ -4,21 +4,9 @@
 namespace s21 {
 template <typename Key>
 struct RBTreeNode {
- public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
 
- public:
-  RBTreeNode(key_type key = {}, node_type* parent = nullptr,
-             node_type* left = nullptr, node_type* right = nullptr,
-             bool isRed = true)
-      : parent_(parent),
-        left_(left),
-        right_(right),
-        key_(key),
-        color_(isRed) {}
-
- public:
   node_type* parent_;
   node_type* left_;
   node_type* right_;

@@ -20,7 +20,7 @@ class RBTree {
 
  public:
   RBTree()
-      : nil_{new node_type{key_type{}, nullptr, nullptr, nullptr, kBlack}},
+      : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
         root_(nil_) {
     nil_->right_ = nil_;
     nil_->left_ = nil_;
@@ -101,6 +101,8 @@ class RBTree {
       DeleteBlackWithOneChild(node, kRight);
     } else if (node == root_) {
       root_ = nil_;
+      root_->left_ = nil_;
+      root_->right_ = nil_;
       delete node;
     } else {
       node_type *parent = node->parent_;
@@ -212,7 +214,7 @@ class RBTree {
 
   void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
     if (node == nil_) {
-      node = new node_type(key, parent, nil_, nil_);
+      node = new node_type{parent, nil_, nil_, key, kRed};
       CheckMinMaxInsertion(node);
       BalanceTree(node);
     } else if (key < node->key_) {

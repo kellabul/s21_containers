@@ -146,6 +146,7 @@ TEST(RBTree, iterator) {
     cout << *++iter;
   }
   two.Delete(2);
+  iter = two.Begin();
   for (int i = 0; i < 10; ++i) {
     cout << *--iter;
   }
@@ -186,7 +187,6 @@ TEST(RBTree, delete_node) {
   EXPECT_EQ("apple", *iter--);
   iter--;
   EXPECT_EQ("lemon", *iter--);
-  one.Print();
 }
 
 TEST(RBTree, big_tree) {
