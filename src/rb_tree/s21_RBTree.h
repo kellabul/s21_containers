@@ -1,17 +1,22 @@
 #ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 #define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 
-#include "s21_RBTree_iterator.h"
+#include <iostream>
+#include <string>
+
 #include "s21_RBTree_node.h"
 
 namespace s21 {
 template <typename Key>
 class RBTree {
+  class RBTreeIterator;
+  class RBTreeConstIterator;
+
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using iterator = RBTreeIterator<Key>;
-  using cosnt_iterator = RBTreeConstIterator<Key>;
+  using iterator = RBTreeIterator;
+  using cosnt_iterator = RBTreeConstIterator;
 
   const bool kRed = true;
   const bool kBlack = false;
@@ -25,6 +30,27 @@ class RBTree {
     nil_->right_ = nil_;
     nil_->left_ = nil_;
   }
+
+  RBTree(const RBTree &other) : RBTree() {
+    ImportElements(other.root_, other.nil_);
+  }
+
+  void ImportElements(node_type *const &other_node, node_type *const &other_nil) {
+    if (other_node == other_nil) return;
+    Insert(other_node->key_);
+    ImportElements(other_node->left_, other_nil);
+    ImportElements(other_node->right_, other_nil);
+  }
+
+  // RBTree(const RBTree &other) {}
+
+  // RBTree &operator=(RBTree &other)
+  //     : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
+  //        root_(nil_) {
+  //   if (this == &other) return *this;
+  //   nil_->right_ = nil_;
+  //   nil_->left_ = nil_;
+  // }
 
   ~RBTree() {
     Clear();
@@ -42,7 +68,7 @@ class RBTree {
   // what if Find(key) == nil_?
   key_type GetValue(const key_type key) { return Find(key)->key_; }
 
-  void Clear() { ClearTree(root_); }
+  void Clear() { ClearTree(nil_); }
 
   key_type MaxKey() { return nil_->left_->key_; }
 
@@ -57,7 +83,7 @@ class RBTree {
     std::cout << std::endl;
   }
 
-  node_type *GetNil() const { return nil_; }
+  node_type *GetNil() const { return root_; }
 
  private:
   void PrintValuesRec(node_type *node) {

@@ -2,18 +2,15 @@
 #define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_ITERATOR_H_
 
 #include "s21_RBTree.h"
-#include "s21_RBTree_node.h"
 
 namespace s21 {
-template <typename T>
-class RBTree;
 
 template <typename Key>
-class RBTreeIterator {
+class RBTree<Key>::RBTreeIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using iterator = RBTreeIterator<key_type>;
+  using iterator = RBTreeIterator;
   using rbtree = RBTree<key_type>;
 
  public:
@@ -128,11 +125,11 @@ class RBTreeIterator {
 };
 
 template <typename Key>
-class RBTreeConstIterator {
+class RBTree<Key>::RBTreeConstIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using const_iterator = RBTreeConstIterator<key_type>;
+  using const_iterator = RBTreeConstIterator;
   using rbtree = RBTree<key_type>;
 
  public:

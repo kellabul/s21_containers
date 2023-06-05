@@ -9,6 +9,8 @@
 namespace s21 {
 template <typename T>
 class list {
+
+  
  public:
   using value_type = T;
   using node_type = ListNode<T>;
