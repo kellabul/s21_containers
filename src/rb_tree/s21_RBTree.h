@@ -16,7 +16,7 @@ class RBTree {
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
   using iterator = RBTreeIterator;
-  using cosnt_iterator = RBTreeConstIterator;
+  using const_iterator = RBTreeConstIterator;
 
   const bool kRed = true;
   const bool kBlack = false;
@@ -59,9 +59,19 @@ class RBTree {
     nil_ = nullptr;
   }
 
+  RBTree(std::initializer_list<key_type> const &items) : RBTree() {
+    for (auto &element : items) {
+      Insert(element);
+    }
+  }
+
   iterator Begin() { return iterator(nil_, nil_->right_); }
 
   iterator End() { return iterator(nil_, nil_); }
+
+  const_iterator Begin() const { return const_iterator(nil_, nil_->right_); }
+
+  const_iterator End() const { return const_iterator(nil_, nil_); }
 
   void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
@@ -70,7 +80,7 @@ class RBTree {
   // what if Find(key) == nil_?
   key_type GetValue(const key_type key) { return Find(key)->key_; }
 
-  void Clear() { ClearTree(nil_); }
+  void Clear() { ClearTree(root_); }
 
   key_type MaxKey() { return nil_->left_->key_; }
 

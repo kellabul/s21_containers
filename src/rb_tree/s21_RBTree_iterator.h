@@ -19,10 +19,6 @@ class RBTree<Key>::RBTreeIterator {
   explicit RBTreeIterator(node_type *nil, node_type *node)
       : nil_(nil), node_(node) {}
 
-  // template <typename U>
-  // RBTreeIterator(const RBTreeIterator<U> &other)
-  //     : nil_(other.nil_), node_(other.node_) {}
-
   RBTreeIterator(const iterator &other)
       : nil_(other.nil_), node_(other.node_) {}
 
@@ -136,8 +132,8 @@ class RBTree<Key>::RBTreeConstIterator {
  public:
   RBTreeConstIterator() = delete;
 
-  explicit RBTreeConstIterator(rbtree *tree, node_type *node)
-      : nil_(tree->GetNil()), node_(node) {}
+  explicit RBTreeConstIterator(node_type *nil, node_type *node)
+      : nil_(nil), node_(node) {}
 
   RBTreeConstIterator(const const_iterator &iter)
       : nil_(iter.nil_), node_(iter.node_) {}
@@ -235,7 +231,7 @@ private:
   }
 
  private:
-  node_type *const nil_;
+  node_type const *const nil_;
   node_type const *node_;
 };
 }  // namespace s21
