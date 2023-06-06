@@ -26,32 +26,20 @@ class RBTree {
  public:
   RBTree()
       : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
-        root_(nil_) {
-    nil_->right_ = nil_;
-    nil_->left_ = nil_;
+        root_() {
+    AssignRootToNil();
   }
 
   RBTree(const RBTree &other) : RBTree() {
     ImportElements(other.root_, other.nil_);
   }
 
-  void ImportElements(node_type *const &other_node,
-                      node_type *const &other_nil) {
-    if (other_node == other_nil) return;
-    Insert(other_node->key_);
-    ImportElements(other_node->left_, other_nil);
-    ImportElements(other_node->right_, other_nil);
+  RBTree &operator=(RBTree &other) {
+    if (this == &other) return *this;
+    Clear();
+    ImportElements(other.root_, other.nil_);
+    return *this;
   }
-
-  // RBTree(const RBTree &other) {}
-
-  // RBTree &operator=(RBTree &other)
-  //     : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
-  //        root_(nil_) {
-  //   if (this == &other) return *this;
-  //   nil_->right_ = nil_;
-  //   nil_->left_ = nil_;
-  // }
 
   ~RBTree() {
     Clear();
@@ -80,7 +68,10 @@ class RBTree {
   // what if Find(key) == nil_?
   key_type GetValue(const key_type key) { return Find(key)->key_; }
 
-  void Clear() { ClearTree(root_); }
+  void Clear() {
+    ClearTree(root_);
+    AssignRootToNil();
+  }
 
   key_type MaxKey() { return nil_->left_->key_; }
 
@@ -98,6 +89,20 @@ class RBTree {
   node_type *GetNil() const { return root_; }
 
  private:
+  void AssignRootToNil() {
+    root_ = nil_;
+    nil_->left_ = nil_;
+    nil_->right_ = nil_;
+  }
+
+  void ImportElements(node_type *const &other_node,
+                      node_type *const &other_nil) {
+    if (other_node == other_nil) return;
+    Insert(other_node->key_);
+    ImportElements(other_node->left_, other_nil);
+    ImportElements(other_node->right_, other_nil);
+  }
+
   void PrintValuesRec(node_type *node) {
     if (node == nil_) return;
     PrintValuesRec(node->left_);
@@ -138,9 +143,7 @@ class RBTree {
     } else if (node->right_ != nil_) {
       DeleteBlackWithOneChild(node, kRight);
     } else if (node == root_) {
-      root_ = nil_;
-      root_->left_ = nil_;
-      root_->right_ = nil_;
+      AssignRootToNil();
       delete node;
     } else {
       node_type *parent = node->parent_;

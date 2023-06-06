@@ -9,8 +9,6 @@
 namespace s21 {
 template <typename T>
 class list {
-
-  
  public:
   using value_type = T;
   using node_type = ListNode<T>;
@@ -46,12 +44,20 @@ class list {
 
   ~list() { clear(); }
 
+  list &operator=(list &l) {
+    if (this == &l) return *this;
+    clear();
+    for (const value_type &element : l) {
+      push_back(element);
+    }
+    return *this;
+  }
+
   // assignment operator overload for moving object
   list &operator=(list &&l) {
-    if (this != &l) {
-      swap(l);
-      l.clear();
-    }
+    if (this == &l) return *this;
+    swap(l);
+    l.clear();
     return *this;
   }
 
@@ -268,9 +274,10 @@ class list {
   }
 
   // ================================================================================
-  // ================ more effective way to sort, without iterators =================
+  // ================ more effective way to sort, without iterators
+  // =================
   // ================================================================================
-  
+
  public:
   void sort_fast() {
     if (size_ > 1) {

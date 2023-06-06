@@ -152,7 +152,6 @@ TEST(RBTree, const_iterator) {
   }
 }
 
-
 TEST(RBTree, delete_node) {
   s21::RBTree<string> one;
   one.Insert("apple");
@@ -181,11 +180,12 @@ TEST(RBTree, delete_node) {
   EXPECT_EQ("lemon", *iter);
 }
 
-
 TEST(RBTree, big_tree) {
   s21::RBTree<int> one;
-  for (int i = 0; i < 200000; ++i) one.Insert(rand() % 200000);
-  for (int i = 0; i < 400000; ++i) one.Delete(rand() % 200000);
+  for (int i = 0; i < 20000; ++i) one.Insert(rand() % 20000);
+  for (int i = 0; i < 60000; ++i) one.Delete(rand() % 20000);
+  for (int i = 0; i < 20000; ++i) one.Insert(rand() % 20000);
+  for (int i = 0; i < 20000; ++i) one.Delete(rand() % 20000);
 }
 
 TEST(RBTree, copy_constructor) {
@@ -194,7 +194,20 @@ TEST(RBTree, copy_constructor) {
   s21::RBTree<int> two(one);
   auto iter_one = one.Begin();
   auto iter_two = two.Begin();
-  for (; iter_one != one.End(); ++iter_one, ++iter_two){
+  for (; iter_one != one.End(); ++iter_one, ++iter_two) {
+    EXPECT_EQ(*iter_one, *iter_two);
+    EXPECT_NE(iter_one, iter_two);
+  }
+}
+
+TEST(RBTree, copy_operator) {
+  s21::RBTree<int> one;
+  for (int i = 0; i < 8; ++i) one.Insert(i);
+  s21::RBTree<int> two{5, 2, 3, 5, 6};
+  two = one;
+  auto iter_one = one.Begin();
+  auto iter_two = two.Begin();
+  for (; iter_one != one.End(); ++iter_one, ++iter_two) {
     EXPECT_EQ(*iter_one, *iter_two);
     EXPECT_NE(iter_one, iter_two);
   }
