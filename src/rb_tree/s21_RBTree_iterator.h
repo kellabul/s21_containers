@@ -4,19 +4,19 @@
 #include "s21_RBTree.h"
 
 namespace s21 {
-
 template <typename Key>
 class RBTree<Key>::RBTreeIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
+  using node_pointer = RBTreeNode<key_type>*;
   using iterator = RBTreeIterator;
   using rbtree = RBTree<key_type>;
 
  public:
   RBTreeIterator() = delete;
 
-  explicit RBTreeIterator(node_type *nil, node_type *node)
+  explicit RBTreeIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
 
   RBTreeIterator(const iterator &other)
@@ -88,7 +88,7 @@ private:
     } else if (node_ == nil_->left_) {
       node_ = nil_;
     } else {
-      node_type *tmp = node_->parent_;
+      node_pointer tmp = node_->parent_;
       while (node_ == tmp->right_) {
         node_ = tmp;
         tmp = tmp->parent_;
@@ -107,7 +107,7 @@ private:
     } else if (node_ == nil_->right_) {
       node_ = nil_;
     } else {
-      node_type *tmp = node_->parent_;
+      node_pointer tmp = node_->parent_;
       while (node_ == tmp->left_) {
         node_ = tmp;
         tmp = tmp->parent_;
@@ -117,8 +117,8 @@ private:
   }
 
 private:
-  node_type *const nil_;
-  node_type *node_;
+  node_pointer const nil_;
+  node_pointer node_;
 };
 
 template <typename Key>
@@ -126,13 +126,14 @@ class RBTree<Key>::RBTreeConstIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
+  using node_pointer = RBTreeNode<key_type>*;
   using const_iterator = RBTreeConstIterator;
   using rbtree = RBTree<key_type>;
 
  public:
   RBTreeConstIterator() = delete;
 
-  explicit RBTreeConstIterator(node_type *nil, node_type *node)
+  explicit RBTreeConstIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
 
   RBTreeConstIterator(const const_iterator &iter)
@@ -202,7 +203,7 @@ private:
     } else if (node_ == nil_->left_) {
       node_ = nil_;
     } else {
-      node_type *tmp = node_->parent_;
+      node_pointer tmp = node_->parent_;
       while (node_ == tmp->right_) {
         node_ = tmp;
         tmp = tmp->parent_;
@@ -221,7 +222,7 @@ private:
     } else if (node_ == nil_->right_) {
       node_ = nil_;
     } else {
-      node_type *tmp = node_->parent_;
+      node_pointer tmp = node_->parent_;
       while (node_ == tmp->left_) {
         node_ = tmp;
         tmp = tmp->parent_;

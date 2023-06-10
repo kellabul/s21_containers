@@ -15,6 +15,7 @@ class RBTree {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
+  using node_pointer = RBTreeNode<key_type>*;
   using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
 
@@ -63,7 +64,7 @@ class RBTree {
 
   void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
-  node_type *Find(const key_type &key) { return FindNode(root_, key); }
+  node_pointer Find(const key_type &key) { return FindNode(root_, key); }
 
   // what if Find(key) == nil_?
   key_type GetValue(const key_type key) { return Find(key)->key_; }
@@ -86,7 +87,7 @@ class RBTree {
     std::cout << std::endl;
   }
 
-  node_type *GetNil() const { return root_; }
+  node_pointer GetNil() const { return root_; }
 
  private:
   void AssignRootToNil() {
@@ -95,22 +96,22 @@ class RBTree {
     nil_->right_ = nil_;
   }
 
-  void ImportElements(node_type *const &other_node,
-                      node_type *const &other_nil) {
+  void ImportElements(node_pointer const &other_node,
+                      node_pointer const &other_nil) {
     if (other_node == other_nil) return;
     Insert(other_node->key_);
     ImportElements(other_node->left_, other_nil);
     ImportElements(other_node->right_, other_nil);
   }
 
-  void PrintValuesRec(node_type *node) {
+  void PrintValuesRec(node_pointer node) {
     if (node == nil_) return;
     PrintValuesRec(node->left_);
     std::cout << node->key_ << " ";
     PrintValuesRec(node->right_);
   }
 
-  void PrintTree(node_type *node, std::string space,
+  void PrintTree(node_pointer node, std::string space,
                  bool which_child_is_node = true) {
     if (node == nil_) {
       // std::cout << space << "[ nil_ ]" << std::endl;
@@ -132,10 +133,10 @@ class RBTree {
     // std::cout << node->key_ << " ";
   }
 
-  void DeleteNode(node_type *node) {
+  void DeleteNode(node_pointer node) {
     if (node == nil_) return;
     if (node->left_ != nil_ && node->right_ != nil_) {
-      node_type *max_child = MaxChild(node->left_);
+      node_pointer max_child = MaxChild(node->left_);
       std::swap(max_child->key_, node->key_);
       DeleteNode(max_child);
     } else if (node->left_ != nil_) {
@@ -146,7 +147,7 @@ class RBTree {
       AssignRootToNil();
       delete node;
     } else {
-      node_type *parent = node->parent_;
+      node_pointer parent = node->parent_;
       bool which_child_is_node;
       if (node == parent->left_) {
         parent->left_ = nil_;
@@ -162,10 +163,10 @@ class RBTree {
     }
   }
 
-  void BalanceAfterDeletion(node_type *parent, bool which_child_was_deleted) {
-    node_type *sibling;
-    node_type *first_nephew;
-    node_type *second_nephew;
+  void BalanceAfterDeletion(node_pointer parent, bool which_child_was_deleted) {
+    node_pointer sibling;
+    node_pointer first_nephew;
+    node_pointer second_nephew;
     bool direction_to_turn;
     if (which_child_was_deleted == kRight) {
       sibling = parent->left_;
@@ -208,8 +209,8 @@ class RBTree {
     }
   }
 
-  void DeleteBlackWithOneChild(node_type *node, bool which_child_has_node) {
-    node_type *child =
+  void DeleteBlackWithOneChild(node_pointer node, bool which_child_has_node) {
+    node_pointer child =
         (which_child_has_node == kLeft) ? node->left_ : node->right_;
     std::swap(child->key_, node->key_);
     node->left_ = nil_;
@@ -218,7 +219,7 @@ class RBTree {
     delete child;
   }
 
-  void CheckMinMaxDeletion(node_type *node, node_type *child) {
+  void CheckMinMaxDeletion(node_pointer node, node_pointer child) {
     if (nil_->right_ == child)
       nil_->right_ = node;
     else if (nil_->left_ == child)
@@ -226,24 +227,24 @@ class RBTree {
   }
 
   // never used
-  node_type *MinChild(node_type *node) {
+  node_pointer MinChild(node_pointer node) {
     while (node->left_ != nil_) node = node->left_;
     return node;
   }
 
-  node_type *MaxChild(node_type *node) {
+  node_pointer MaxChild(node_pointer node) {
     while (node->right_ != nil_) node = node->right_;
     return node;
   }
 
-  void ClearTree(node_type *node) {
+  void ClearTree(node_pointer node) {
     if (node == nil_) return;
     ClearTree(node->left_);
     ClearTree(node->right_);
     delete node;
   }
 
-  node_type *FindNode(node_type *node, const key_type &key) {
+  node_pointer FindNode(node_pointer node, const key_type &key) {
     while (node != nil_ && node->key_ != key) {
       if (node->key_ > key)
         node = node->left_;
@@ -253,7 +254,7 @@ class RBTree {
     return node;
   }
 
-  void InsertNode(node_type *&node, const key_type &key, node_type *parent) {
+  void InsertNode(node_pointer &node, const key_type &key, node_pointer parent) {
     if (node == nil_) {
       node = new node_type{parent, nil_, nil_, key, kRed};
       CheckMinMaxInsertion(node);
@@ -265,7 +266,7 @@ class RBTree {
     }
   }
 
-  void CheckMinMaxInsertion(node_type *node) {
+  void CheckMinMaxInsertion(node_pointer node) {
     if (node == root_) {
       nil_->left_ = node;
       nil_->right_ = node;
@@ -276,10 +277,10 @@ class RBTree {
     }
   }
 
-  void BalanceTree(node_type *node) {
+  void BalanceTree(node_pointer node) {
     while (node->parent_->color_ == kRed) {
-      node_type *grandparent = node->parent_->parent_;
-      node_type *node_uncle;
+      node_pointer grandparent = node->parent_->parent_;
+      node_pointer node_uncle;
       bool direction_to_turn;
       bool node_makes_zigzag;
       if (node->parent_ == node->parent_->parent_->left_) {
@@ -310,8 +311,8 @@ class RBTree {
     root_->color_ = kBlack;
   }
 
-  void TurnTree(node_type *node, bool which_side) {
-    node_type *child_node;
+  void TurnTree(node_pointer node, bool which_side) {
+    node_pointer child_node;
     if (which_side == kLeft) {
       child_node = node->right_;
       node->right_ = child_node->left_;
@@ -339,8 +340,8 @@ class RBTree {
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
   // nil_->parent_ can't be used anywhere because of  TurnTree
-  node_type *nil_;
-  node_type *root_;
+  node_pointer nil_;
+  node_pointer root_;
   size_t size_;
 };
 }  // namespace s21
