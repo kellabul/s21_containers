@@ -5,11 +5,11 @@ namespace s21 {
 template <typename Key>
 struct RBTreeNode {
   using key_type = Key;
-  using node_type = RBTreeNode<key_type>;
+  using node_pointer = RBTreeNode<key_type>*;
 
-  node_type* parent_;
-  node_type* left_;
-  node_type* right_;
+  node_pointer parent_;
+  node_pointer left_;
+  node_pointer right_;
   key_type key_;
   bool color_;
 };
