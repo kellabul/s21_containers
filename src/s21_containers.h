@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "list/s21_list.h"
-#include "map/s21_map.h"
 #include "rb_tree/s21_RBTree_iterator.h"
 
 #endif  // CPP2_S21_CONTAINERS_S21_CONTAINERS_H_
