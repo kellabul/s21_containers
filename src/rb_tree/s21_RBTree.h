@@ -339,7 +339,7 @@ class RBTree {
  private:
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
-  // nil_->parent_ can't be used anywhere because of  TurnTree
+  // nil_->parent_ can't be used anywhere because of TurnTree
   node_pointer nil_;
   node_pointer root_;
   size_t size_;

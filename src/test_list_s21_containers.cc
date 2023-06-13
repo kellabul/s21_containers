@@ -339,6 +339,9 @@ TEST(list, sort_fast) {
   }
 }
 
+// закомментированные тесты позволяют сравнить скорость сортировки при
+// использовании методов sort и sort_fast
+
 
 // s21::list<int> sort_list;
 
@@ -363,7 +366,6 @@ TEST(list, sort_fast) {
 //   cout << endl;
 // }
 
-
 // TEST(list, sort_big) {
 //   s21::list<int> sort_list_iter(sort_list);
 //   sort_list_iter.sort();
@@ -380,8 +382,3 @@ TEST(list, sort_fast) {
 //   }
 //   cout << endl;
 // }
-
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
