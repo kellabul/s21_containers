@@ -3,9 +3,9 @@
 
 #include <limits>
 
+#include "../rb_tree/s21_RBTree.h"
 #include "s21_map_iterator.h"
 #include "s21_map_node.h"
-#include "../rb_tree/s21_RBTree.h"
 
 namespace s21 {
 template <typename Key, typename T>

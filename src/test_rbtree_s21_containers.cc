@@ -45,10 +45,10 @@ using std::string;
 
 TEST(RBTree, basic) {
   s21::RBTree<string> beta;
-  beta.Insert("one");
-  beta.Insert("two");
-  beta.Insert("three");
-  beta.Insert("four");
+  beta.insert("one");
+  beta.insert("two");
+  beta.insert("three");
+  beta.insert("four");
   EXPECT_EQ(beta.GetValue("one"), "one");
   EXPECT_EQ(beta.GetValue("two"), "two");
   EXPECT_EQ(beta.GetValue("three"), "three");
@@ -57,27 +57,27 @@ TEST(RBTree, basic) {
 
 TEST(RBTree, max_min) {
   s21::RBTree<int> one;
-  for (int i = -20; i <= 20; ++i) one.Insert(i * 2);
+  for (int i = -20; i <= 20; ++i) one.insert(i * 2);
   EXPECT_EQ(one.MaxKey(), 40);
   EXPECT_EQ(one.MinKey(), -40);
-  one.Insert(-100);
-  one.Insert(100);
+  one.insert(-100);
+  one.insert(100);
   EXPECT_EQ(one.MaxKey(), 100);
   EXPECT_EQ(one.MinKey(), -100);
 
   s21::RBTree<string> two;
-  two.Insert("apple");
-  two.Insert("bee");
-  two.Insert("cat");
-  two.Insert("dog");
-  two.Insert("egg");
-  two.Insert("fish");
-  two.Insert("grapes");
-  two.Insert("hat");
-  two.Insert("igloo");
-  two.Insert("jug");
-  two.Insert("kite");
-  two.Insert("lemon");
+  two.insert("apple");
+  two.insert("bee");
+  two.insert("cat");
+  two.insert("dog");
+  two.insert("egg");
+  two.insert("fish");
+  two.insert("grapes");
+  two.insert("hat");
+  two.insert("igloo");
+  two.insert("jug");
+  two.insert("kite");
+  two.insert("lemon");
   EXPECT_EQ(two.MinKey(), "apple");
   EXPECT_EQ(two.MaxKey(), "lemon");
   two.Delete("apple");
@@ -103,7 +103,7 @@ TEST(RBTree, max_min) {
 
 TEST(RBTree, print) {
   s21::RBTree<int> one;
-  for (int i = 0; i < 10; ++i) one.Insert(i);
+  for (int i = 0; i < 10; ++i) one.insert(i);
   testing::internal::CaptureStdout();
   one.Print();
   std::string output = testing::internal::GetCapturedStdout();
@@ -124,15 +124,15 @@ TEST(RBTree, print) {
 TEST(RBTree, iterator) {
   s21::RBTree<int> one;
   int count = 0;
-  for (; count < 20; ++count) one.Insert(count);
+  for (; count < 20; ++count) one.insert(count);
   count = 0;
-  auto iter = one.Begin();
-  for (auto iter = one.Begin(); iter != one.End(); ++iter) {
+  auto iter = one.begin();
+  for (auto iter = one.begin(); iter != one.end(); ++iter) {
     EXPECT_EQ(count, *iter);
     ++count;
   }
   count = 19;
-  for (auto iter = --(one.End()); iter != one.End(); --iter) {
+  for (auto iter = --(one.end()); iter != one.end(); --iter) {
     EXPECT_EQ(count, *iter);
     --count;
   }
@@ -141,12 +141,12 @@ TEST(RBTree, iterator) {
 TEST(RBTree, const_iterator) {
   s21::RBTree<int> const one{1, 2, 3, 4, 5, 6, 7, 8, 9};
   int count = 1;
-  for (auto iter = one.Begin(); iter != one.End(); ++iter) {
+  for (auto iter = one.begin(); iter != one.end(); ++iter) {
     EXPECT_EQ(count, *iter);
     ++count;
   }
   count = 9;
-  for (auto iter = --(one.End()); iter != one.End(); --iter) {
+  for (auto iter = --(one.end()); iter != one.end(); --iter) {
     EXPECT_EQ(count, *iter);
     --count;
   }
@@ -154,21 +154,21 @@ TEST(RBTree, const_iterator) {
 
 TEST(RBTree, delete_node) {
   s21::RBTree<string> one;
-  one.Insert("apple");
+  one.insert("apple");
   one.Delete("apple");
-  one.Insert("apple");
-  one.Insert("bee");
-  one.Insert("cat");
-  one.Insert("dog");
-  one.Insert("egg");
-  one.Insert("fish");
-  one.Insert("grapes");
-  one.Insert("hat");
-  one.Insert("igloo");
-  one.Insert("jug");
-  one.Insert("kite");
-  one.Insert("lemon");
-  auto iter = one.Begin();
+  one.insert("apple");
+  one.insert("bee");
+  one.insert("cat");
+  one.insert("dog");
+  one.insert("egg");
+  one.insert("fish");
+  one.insert("grapes");
+  one.insert("hat");
+  one.insert("igloo");
+  one.insert("jug");
+  one.insert("kite");
+  one.insert("lemon");
+  auto iter = one.begin();
   EXPECT_EQ("apple", *iter++);
   EXPECT_EQ("bee", *iter++);
   EXPECT_EQ("cat", *iter++);
@@ -182,19 +182,19 @@ TEST(RBTree, delete_node) {
 
 TEST(RBTree, big_tree) {
   s21::RBTree<int> one;
-  for (int i = 0; i < 20000; ++i) one.Insert(rand() % 20000);
+  for (int i = 0; i < 20000; ++i) one.insert(rand() % 20000);
   for (int i = 0; i < 60000; ++i) one.Delete(rand() % 20000);
-  for (int i = 0; i < 20000; ++i) one.Insert(rand() % 20000);
+  for (int i = 0; i < 20000; ++i) one.insert(rand() % 20000);
   for (int i = 0; i < 20000; ++i) one.Delete(rand() % 20000);
 }
 
 TEST(RBTree, copy_constructor) {
   s21::RBTree<int> one;
-  for (int i = 0; i < 8; ++i) one.Insert(i);
+  for (int i = 0; i < 8; ++i) one.insert(i);
   s21::RBTree<int> two(one);
-  auto iter_one = one.Begin();
-  auto iter_two = two.Begin();
-  for (; iter_one != one.End(); ++iter_one, ++iter_two) {
+  auto iter_one = one.begin();
+  auto iter_two = two.begin();
+  for (; iter_one != one.end(); ++iter_one, ++iter_two) {
     EXPECT_EQ(*iter_one, *iter_two);
     EXPECT_NE(iter_one, iter_two);
   }
@@ -202,15 +202,26 @@ TEST(RBTree, copy_constructor) {
 
 TEST(RBTree, copy_operator) {
   s21::RBTree<int> one;
-  for (int i = 0; i < 8; ++i) one.Insert(i);
+  for (int i = 0; i < 8; ++i) one.insert(i);
   s21::RBTree<int> two{5, 2, 3, 5, 6};
   two = one;
-  auto iter_one = one.Begin();
-  auto iter_two = two.Begin();
-  for (; iter_one != one.End(); ++iter_one, ++iter_two) {
+  auto iter_one = one.begin();
+  auto iter_two = two.begin();
+  for (; iter_one != one.end(); ++iter_one, ++iter_two) {
     EXPECT_EQ(*iter_one, *iter_two);
     EXPECT_NE(iter_one, iter_two);
   }
+}
+
+TEST(RBTree, size_empty) {
+  s21::RBTree<int> one;
+  EXPECT_EQ(true, one.empty());
+  EXPECT_EQ(0, one.size());
+  for (int i = 0; i < 8; ++i) one.insert(i);
+  EXPECT_EQ(false, one.empty());
+  EXPECT_EQ(8, one.size());
+  one.clear();
+  EXPECT_EQ(true, one.empty());
 }
 
 int main(int argc, char **argv) {

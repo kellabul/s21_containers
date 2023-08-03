@@ -13,7 +13,7 @@ GCOV_FILES = *.gcov
 LCOV_FILES = *.info
 
 SOURCE_FILES =
-GTEST_SOURCE_FILES = test_rbtree_s21_containers.cc
+GTEST_SOURCE_FILES = test_list_s21_containers.cc test_rbtree_s21_containers.cc
 
 .PHONY: all, clean, test
 .PHONY: compile_test, gcov_report, gcov, asan, compile_test_with_asan

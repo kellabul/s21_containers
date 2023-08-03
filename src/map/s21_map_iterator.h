@@ -15,7 +15,6 @@ class MapIterator {
   using size_type = unsigned long long;
 
  public:
-
  private:
   node_type *node_pointer_;
 };
@@ -31,8 +30,6 @@ class MapConstIterator {
   using size_type = unsigned long long;
 
  public:
-
-
  private:
   const node_type *node_pointer_;
 };

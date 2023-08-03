@@ -18,11 +18,12 @@ class ListIterator {
   explicit ListIterator(node_type *node) : node_pointer_(node) {}
   reference operator*() { return node_pointer_->value_; }
 
-  bool operator!=(const iterator &iterator) const {
-    return node_pointer_ != iterator.node_pointer_;
-  }
   bool operator==(const iterator &iterator) const {
     return node_pointer_ == iterator.node_pointer_;
+  }
+
+  bool operator!=(const iterator &iterator) const {
+    return !(*this == iterator);
   }
 
   iterator &operator++() {
@@ -45,7 +46,6 @@ class ListIterator {
     while (n--) node_pointer_ = node_pointer_->next_;
     return *this;
   }
-
 
   iterator &operator--() {
     node_pointer_ = node_pointer_->prev_;

@@ -15,7 +15,7 @@ class RBTree {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using node_pointer = RBTreeNode<key_type>*;
+  using node_pointer = RBTreeNode<key_type> *;
   using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
 
@@ -27,7 +27,8 @@ class RBTree {
  public:
   RBTree()
       : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
-        root_() {
+        root_(),
+        size_(0U) {
     AssignRootToNil();
   }
 
@@ -37,41 +38,42 @@ class RBTree {
 
   RBTree &operator=(RBTree &other) {
     if (this == &other) return *this;
-    Clear();
+    clear();
     ImportElements(other.root_, other.nil_);
     return *this;
   }
 
   ~RBTree() {
-    Clear();
+    clear();
     delete nil_;
     nil_ = nullptr;
   }
 
   RBTree(std::initializer_list<key_type> const &items) : RBTree() {
     for (auto &element : items) {
-      Insert(element);
+      insert(element);
     }
   }
 
-  iterator Begin() { return iterator(nil_, nil_->right_); }
+  iterator begin() { return iterator(nil_, nil_->right_); }
 
-  iterator End() { return iterator(nil_, nil_); }
+  iterator end() { return iterator(nil_, nil_); }
 
-  const_iterator Begin() const { return const_iterator(nil_, nil_->right_); }
+  const_iterator begin() const { return const_iterator(nil_, nil_->right_); }
 
-  const_iterator End() const { return const_iterator(nil_, nil_); }
+  const_iterator end() const { return const_iterator(nil_, nil_); }
 
-  void Insert(const key_type &key) { InsertNode(root_, key, nil_); }
+  void insert(const key_type &key) { InsertNode(root_, key, nil_); }
 
   node_pointer Find(const key_type &key) { return FindNode(root_, key); }
 
   // what if Find(key) == nil_?
   key_type GetValue(const key_type key) { return Find(key)->key_; }
 
-  void Clear() {
+  void clear() {
     ClearTree(root_);
     AssignRootToNil();
+    size_ = 0U;
   }
 
   key_type MaxKey() { return nil_->left_->key_; }
@@ -89,6 +91,10 @@ class RBTree {
 
   node_pointer GetNil() const { return root_; }
 
+  size_t size() { return size_; }
+
+  bool empty() { return size_ == 0; }
+
  private:
   void AssignRootToNil() {
     root_ = nil_;
@@ -99,7 +105,7 @@ class RBTree {
   void ImportElements(node_pointer const &other_node,
                       node_pointer const &other_nil) {
     if (other_node == other_nil) return;
-    Insert(other_node->key_);
+    insert(other_node->key_);
     ImportElements(other_node->left_, other_nil);
     ImportElements(other_node->right_, other_nil);
   }
@@ -160,6 +166,7 @@ class RBTree {
       if (node->color_ == kBlack)
         BalanceAfterDeletion(parent, which_child_is_node);
       delete node;
+      size_--;
     }
   }
 
@@ -254,11 +261,13 @@ class RBTree {
     return node;
   }
 
-  void InsertNode(node_pointer &node, const key_type &key, node_pointer parent) {
+  void InsertNode(node_pointer &node, const key_type &key,
+                  node_pointer parent) {
     if (node == nil_) {
       node = new node_type{parent, nil_, nil_, key, kRed};
       CheckMinMaxInsertion(node);
       BalanceTree(node);
+      size_++;
     } else if (key < node->key_) {
       InsertNode(node->left_, key, node);
     } else if (key > node->key_) {

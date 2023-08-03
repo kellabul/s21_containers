@@ -9,7 +9,7 @@ class RBTree<Key>::RBTreeIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using node_pointer = RBTreeNode<key_type>*;
+  using node_pointer = RBTreeNode<key_type> *;
   using iterator = RBTreeIterator;
   using rbtree = RBTree<key_type>;
 
@@ -21,7 +21,6 @@ class RBTree<Key>::RBTreeIterator {
 
   RBTreeIterator(const iterator &other)
       : nil_(other.nil_), node_(other.node_) {}
-
 
   RBTreeIterator(const iterator &&other)
       : nil_(other.nil_), node_(other.node_) {}
@@ -51,7 +50,7 @@ class RBTree<Key>::RBTreeIterator {
   }
 
   bool operator!=(const iterator &other) const noexcept {
-    return node_ != other.node_;
+    return !(*this == other);
   }
 
   void SetBegin() { node_ = nil_->right_; }
@@ -61,6 +60,7 @@ class RBTree<Key>::RBTreeIterator {
     RBTreeIncrement();
     return *this;
   }
+
   iterator &operator--() noexcept {
     RBTreeDecrement();
     return *this;
@@ -77,7 +77,7 @@ class RBTree<Key>::RBTreeIterator {
     return tmp;
   }
 
-private:
+ private:
   void RBTreeIncrement() {
     if (node_->right_ != nil_) {
       node_ = node_->right_;
@@ -116,7 +116,7 @@ private:
     }
   }
 
-private:
+ private:
   node_pointer const nil_;
   node_pointer node_;
 };
@@ -126,7 +126,7 @@ class RBTree<Key>::RBTreeConstIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
-  using node_pointer = RBTreeNode<key_type>*;
+  using node_pointer = RBTreeNode<key_type> *;
   using const_iterator = RBTreeConstIterator;
   using rbtree = RBTree<key_type>;
 
@@ -190,9 +190,8 @@ class RBTree<Key>::RBTreeConstIterator {
     RBTreeDecrement();
     return tmp;
   }
-  
-private:
 
+ private:
   void RBTreeIncrement() {
     if (node_->right_ != nil_) {
       node_ = node_->right_;
