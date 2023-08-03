@@ -133,12 +133,11 @@ class list {
   // 	swaps the contents
   // I don't seek for easy ways.
   void swap(list &other) {
-    if (this != &other) {
-      SwapTails(tail_, other.tail_);
-      SwapTails(other.tail_, tail_);
-      std::swap(end_node_, other.end_node_);
-      std::swap(size_, other.size_);
-    }
+    if (this == &other) return;
+    SwapTails(tail_, other.tail_);
+    SwapTails(other.tail_, tail_);
+    std::swap(end_node_, other.end_node_);
+    std::swap(size_, other.size_);
   }
 
   // 	reverses the order of the elements

@@ -354,7 +354,7 @@ Set (множество) - это ассоциативный контейнер 
 | `std::pair<iterator, bool> insert(const value_type& value)`                 | inserts node and returns iterator to where the element is in the container and bool denoting whether the insertion took place                                        |
 | `void erase(iterator pos)`                  | erases element at pos                                                                        |
 | `void swap(set& other)`                   | swaps the contents                                                                     |
-| `void merge(set& other);`                  | splices nodes from another container                                                   |
+| `void merge(set& other);`                 | splices nodes from another container                                                   |
 
 *Set Lookup*
 

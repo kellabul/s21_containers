@@ -224,6 +224,21 @@ TEST(RBTree, size_empty) {
   EXPECT_EQ(true, one.empty());
 }
 
+TEST(RBTree, swap) {
+  s21::RBTree<int> one;
+  s21::RBTree<int> two;
+  for (int i = 0; i < 8; ++i) one.insert(i);
+  EXPECT_EQ(false, one.empty());
+  EXPECT_EQ(8, one.size());
+  EXPECT_EQ(true, two.empty());
+  EXPECT_EQ(0, two.size());
+  one.swap(two);
+  EXPECT_EQ(false, two.empty());
+  EXPECT_EQ(8, two.size());
+  EXPECT_EQ(true, one.empty());
+  EXPECT_EQ(0, one.size());
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
