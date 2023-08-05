@@ -10,6 +10,7 @@ namespace s21 {
 template <typename Key>
 class RBTree {
   class RBTreeIterator;
+
   class RBTreeConstIterator;
 
  public:
@@ -36,9 +37,7 @@ class RBTree {
     ImportElements(other.root_, other.nil_);
   }
 
-  RBTree(const RBTree &&other) : RBTree() {
-    ImportElements(other.root_, other.nil_);
-  }
+  RBTree(const RBTree &&other) : RBTree() { swap(other); }
 
   RBTree &operator=(RBTree &other) {
     if (this == &other) return *this;
@@ -99,13 +98,15 @@ class RBTree {
 
   bool empty() { return size_ == 0; }
 
-  void erase(iterator pos){}
+  void erase(iterator pos) {}
+
   void swap(RBTree &other) {
     if (this == &other) return;
     std::swap(root_, other.root_);
     std::swap(nil_, other.nil_);
     std::swap(size_, other.size_);
   }
+
   void merge(RBTree &other) {}
 
  private:
@@ -211,7 +212,7 @@ class RBTree {
         TurnTree(sibling, !direction_to_turn);
         BalanceAfterDeletion(parent, which_child_was_deleted);
       } else {  // first_nephew->color_ == kBlack && second_nephew->color_ ==
-                // kBlack
+        // kBlack
         sibling->color_ = kRed;
         if (parent->color_ == kRed || parent == root_) {
           parent->color_ = kBlack;
@@ -319,12 +320,14 @@ class RBTree {
         node_uncle->color_ = kBlack;
         grandparent->color_ = kRed;
         node = grandparent;
-      } else if (node_makes_zigzag) {  // uncle is black, node makes zigzag with
-                                       // his parent and grandparent
+      } else if (node_makes_zigzag) {  
+        // uncle is black, node makes zigzag with
+        // his parent and grandparent
         node = node->parent_;
         TurnTree(node, direction_to_turn);
-      } else {  // uncle is black, node makes a line with his parent and
-                // grandparent
+      } else {  
+        // uncle is black, node makes a line with his parent and
+        // grandparent
         node->parent_->color_ = kBlack;
         grandparent->color_ = kRed;
         TurnTree(grandparent, !direction_to_turn);
