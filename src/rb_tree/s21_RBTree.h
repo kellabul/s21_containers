@@ -10,7 +10,6 @@ namespace s21 {
 template <typename Key>
 class RBTree {
   class RBTreeIterator;
-
   class RBTreeConstIterator;
 
  public:

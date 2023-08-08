@@ -19,30 +19,6 @@ class RBTree<Key>::RBTreeIterator {
   explicit RBTreeIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
 
-  RBTreeIterator(const iterator &other)
-      : nil_(other.nil_), node_(other.node_) {}
-
-  RBTreeIterator(const iterator &&other)
-      : nil_(other.nil_), node_(other.node_) {}
-
-  iterator &operator=(const iterator &other) {
-    if (this == &other) return *this;
-    if (nil_ != other.nil_)
-      throw std::logic_error("can't assign iterator from different objects");
-    node_ = other.node_;
-    return *this;
-  }
-
-  iterator &operator=(const iterator &&other) {
-    if (this == &other) return *this;
-    if (nil_ != other.nil_)
-      throw std::logic_error("can't assign iterator from different objects");
-    node_ = std::move(other.node_);
-    return *this;
-  }
-
-  ~RBTreeIterator(){};
-
   key_type operator*() const noexcept { return node_->key_; }
 
   bool operator==(const iterator &other) const noexcept {
@@ -135,28 +111,6 @@ class RBTree<Key>::RBTreeConstIterator {
 
   explicit RBTreeConstIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
-
-  RBTreeConstIterator(const const_iterator &iter)
-      : nil_(iter.nil_), node_(iter.node_) {}
-
-  RBTreeConstIterator(const const_iterator &&iter)
-      : nil_(iter.nil_), node_(iter.node_) {}
-
-  const_iterator &operator=(const const_iterator &other) {
-    if (this == &other) return *this;
-    if (nil_ != other.nil_)
-      throw std::logic_error("can't assign iterator from different objects");
-    node_ = other.node_;
-    return *this;
-  }
-
-  const_iterator &operator=(const const_iterator &&other) {
-    if (this == &other) return *this;
-    if (nil_ != other.nil_)
-      throw std::logic_error("can't assign iterator from different objects");
-    node_ = std::move(other.node_);
-    return *this;
-  }
 
   key_type operator*() const noexcept { return node_->key_; }
 

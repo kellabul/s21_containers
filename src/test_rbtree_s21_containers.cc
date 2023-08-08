@@ -126,7 +126,6 @@ TEST(RBTree, iterator) {
   int count = 0;
   for (; count < 20; ++count) one.insert(count);
   count = 0;
-  auto iter = one.begin();
   for (auto iter = one.begin(); iter != one.end(); ++iter) {
     EXPECT_EQ(count, *iter);
     ++count;
