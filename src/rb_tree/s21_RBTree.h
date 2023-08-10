@@ -27,8 +27,8 @@ class RBTree {
  public:
   RBTree()
       : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
-        root_(),
-        size_(0U) {
+        root_{},
+        size_{0U} {
     AssignRootToNil();
   }
 
@@ -36,12 +36,22 @@ class RBTree {
     ImportElements(other.root_, other.nil_);
   }
 
-  RBTree(const RBTree &&other) : RBTree() { swap(other); }
+  RBTree(RBTree &&other)
+      : nil_(other.nil_), root_(other.root), size_(other.size_) {
+    other.nil_ = nullptr;
+    other.root_ = nullptr;
+    other.size_ = 0U;
+  }
 
-  RBTree &operator=(RBTree &other) {
+  RBTree &operator=(const RBTree &other) {
     if (this == &other) return *this;
-    clear();
-    ImportElements(other.root_, other.nil_);
+    RBTree tmp(other);
+    swap(tmp);
+    return *this;
+  }
+
+  RBTree &operator=(RBTree &&other) {
+    swap(other);
     return *this;
   }
 
@@ -319,12 +329,12 @@ class RBTree {
         node_uncle->color_ = kBlack;
         grandparent->color_ = kRed;
         node = grandparent;
-      } else if (node_makes_zigzag) {  
+      } else if (node_makes_zigzag) {
         // uncle is black, node makes zigzag with
         // his parent and grandparent
         node = node->parent_;
         TurnTree(node, direction_to_turn);
-      } else {  
+      } else {
         // uncle is black, node makes a line with his parent and
         // grandparent
         node->parent_->color_ = kBlack;
