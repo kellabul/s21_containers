@@ -14,6 +14,7 @@ class RBTree<Key>::RBTreeIterator {
   using rbtree = RBTree<key_type>;
 
  public:
+
   RBTreeIterator() = delete;
 
   explicit RBTreeIterator(node_pointer nil, node_pointer node)
@@ -93,7 +94,7 @@ class RBTree<Key>::RBTreeIterator {
   }
 
  private:
-  node_pointer const nil_;
+  node_pointer nil_;
   node_pointer node_;
 };
 

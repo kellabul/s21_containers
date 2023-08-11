@@ -37,9 +37,9 @@ class RBTree {
   }
 
   RBTree(RBTree &&other)
-      : nil_(other.nil_), root_(other.root), size_(other.size_) {
-    other.nil_ = nullptr;
+      : nil_(other.nil_), root_(other.root_), size_(other.size_) {
     other.root_ = nullptr;
+    other.nil_ = nullptr;
     other.size_ = 0U;
   }
 
@@ -56,8 +56,10 @@ class RBTree {
   }
 
   ~RBTree() {
-    clear();
+    ClearTree(root_);
+    size_ = 0U;
     delete nil_;
+    root_ = nullptr;
     nil_ = nullptr;
   }
 

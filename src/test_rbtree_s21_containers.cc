@@ -238,6 +238,26 @@ TEST(RBTree, swap) {
   EXPECT_EQ(0, one.size());
 }
 
+TEST(RBTree, copy_and_move_constructors) {
+  s21::RBTree<int> one;
+  for (int i = 0; i < 8; ++i) one.insert(i);
+  s21::RBTree<int> two(one);
+  auto iter = two.begin();
+  for (auto const &elem : one) {
+    EXPECT_EQ(elem, *iter);
+    iter++;
+  }
+  EXPECT_EQ(two.size(), one.size());
+  iter = two.begin();
+  s21::RBTree<int> three(std::move(one));
+  for (auto const &elem : three) {
+    EXPECT_EQ(elem, *iter);
+    iter++;
+  }
+  EXPECT_EQ(two.size(), three.size());
+  EXPECT_EQ(0, one.size());
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
