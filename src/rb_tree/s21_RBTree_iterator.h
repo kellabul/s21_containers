@@ -54,6 +54,10 @@ class RBTree<Key>::RBTreeIterator {
     return tmp;
   }
 
+  node_pointer get_node() const{
+    return node_;
+  }
+
  private:
   void RBTreeIncrement() {
     if (node_->right_ != nil_) {
@@ -144,6 +148,10 @@ class RBTree<Key>::RBTreeConstIterator {
     const_iterator tmp{*this};
     RBTreeDecrement();
     return tmp;
+  }
+
+  node_pointer get_node() const{
+    return node_;
   }
 
  private:

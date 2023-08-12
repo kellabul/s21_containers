@@ -109,8 +109,6 @@ class RBTree {
 
   bool empty() { return size_ == 0; }
 
-  void erase(iterator pos) {}
-
   void swap(RBTree &other) {
     if (this == &other) return;
     std::swap(root_, other.root_);
@@ -118,7 +116,13 @@ class RBTree {
     std::swap(size_, other.size_);
   }
 
-  void merge(RBTree &other) {}
+  void merge(RBTree &other) { ImportElements(other.root_, other.nil_); }
+
+  void erase(iterator pos) { DeleteNode(pos.get_node); }
+
+  size_t max_size() const noexcept {
+    return std::numeric_limits<size_t>::max()/2 /  sizeof(node_type);
+  };
 
  private:
   void AssignRootToNil() {

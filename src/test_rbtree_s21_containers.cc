@@ -36,6 +36,7 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <iostream>
 #include <list>
 #include <string>
+#include <set>
 
 #include "s21_containers.h"
 
@@ -257,6 +258,12 @@ TEST(RBTree, copy_and_move_constructors) {
   EXPECT_EQ(two.size(), three.size());
   EXPECT_EQ(0, one.size());
 }
+
+TEST(RBTree, max_size) {
+  s21::RBTree<int> one;
+  std::set<int> two;
+  EXPECT_EQ(one.max_size(), two.max_size());
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
