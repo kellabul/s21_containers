@@ -268,9 +268,20 @@ TEST(RBTree, copy_and_move_constructors) {
 // }
 
 TEST(RBTree, initializer_list) {
-  s21::RBTree<int> one {1, 2, 3, 4, 5};
-  
+  const s21::RBTree<std::string> alpha {"one", "two", "three", "four"};
+  auto iter = alpha.find("one");
+  EXPECT_EQ(*iter, "one");
+  iter = alpha.find("three");
+  EXPECT_EQ(*iter, "three");
+  iter = alpha.find("five");
+  EXPECT_EQ(iter, alpha.end());
 }
+
+// TEST(RBTree, contains) {
+//   s21::RBTree<std::string> one {"one", "two", "three", "four"};
+//   EXPECT_EQ(one.contains("two"), true);
+//   EXPECT_EQ(one.contains("five"), false);
+// }
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

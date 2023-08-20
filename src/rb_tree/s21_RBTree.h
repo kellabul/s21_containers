@@ -23,11 +23,10 @@ class RBTree {
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
 
-
- const static bool kRed = true;
- const static bool kBlack = false;
- const static bool kLeft = true;
- const static bool kRight = false;
+  const static bool kRed = true;
+  const static bool kBlack = false;
+  const static bool kLeft = true;
+  const static bool kRight = false;
 
  public:
   RBTree()
@@ -48,11 +47,11 @@ class RBTree {
     other.size_ = 0U;
   }
 
-    RBTree(std::initializer_list<key_type> const &items) : RBTree() {
-      for (const auto &element : items) {
-        insert(element);
-      }
+  RBTree(std::initializer_list<key_type> const &items) : RBTree() {
+    for (const auto &element : items) {
+      insert(element);
     }
+  }
 
   RBTree &operator=(const RBTree &other) {
     if (this == &other) return *this;
@@ -82,8 +81,8 @@ class RBTree {
 
   const_iterator end() const { return const_iterator(nil_, nil_); }
 
-  iterator find(const key_type &key) {
-    node_pointer  node = root_;
+  iterator find(const_reference key) const {
+    node_pointer node = root_;
     while (node != nil_ && node->key_ != key) {
       if (node->key_ > key)
         node = node->left_;
@@ -94,7 +93,9 @@ class RBTree {
     return iterator(nil_, node);
   }
 
-  void insert(const key_type &key) { InsertNode(root_, key, nil_); }
+  bool contains(const_reference key) const { return find(key) != end(); }
+
+  void insert(const_reference key) { InsertNode(root_, key, nil_); }
 
   void clear() {
     ClearTree(root_);
@@ -128,10 +129,12 @@ class RBTree {
 
   void merge(RBTree &other) { ImportElements(other.root_, other.nil_); }
 
-  void erase(iterator pos) { DeleteNode(pos.get_node()); }
+  void erase(iterator pos) { DeleteNode(pos.get_node_pointer()); }
 
   size_t max_size() const noexcept {
-    return (std::numeric_limits<size_t>::max() - sizeof(node_type)) / 2 / sizeof(node_type);
+    return (std::numeric_limits<size_t>::max() - sizeof(node_type) -
+            sizeof(bool) * 4) /
+           2 / sizeof(node_type);
   };
 
  private:
@@ -290,8 +293,7 @@ class RBTree {
     delete node;
   }
 
-
-  void InsertNode(node_pointer &node, const key_type &key,
+  void InsertNode(node_pointer &node, const_reference key,
                   node_pointer parent) {
     if (node == nil_) {
       node = new node_type{parent, nil_, nil_, key, kRed};

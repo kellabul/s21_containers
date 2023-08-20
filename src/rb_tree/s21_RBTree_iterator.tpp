@@ -11,6 +11,7 @@ class RBTree<Key, Compare>::RBTreeIterator {
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
   using iterator = RBTreeIterator;
+  using const_iterator = RBTreeConstIterator;
   using rbtree = RBTree<Key, Compare>;
 
  public:
@@ -26,6 +27,14 @@ class RBTree<Key, Compare>::RBTreeIterator {
   }
 
   bool operator!=(const iterator &other) const noexcept {
+    return !(*this == other);
+  }
+
+  bool operator==(const const_iterator &other) const noexcept {
+    return node_ == other.get_node_pointer();
+  }
+
+  bool operator!=(const const_iterator &other) const noexcept {
     return !(*this == other);
   }
 
@@ -50,7 +59,7 @@ class RBTree<Key, Compare>::RBTreeIterator {
     return tmp;
   }
 
-  node_pointer get_node() const { return node_; }
+ node_pointer get_node_pointer() const { return node_; }
 
  private:
   void RBTreeIncrement() {
@@ -102,13 +111,15 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
+  using const_node_pointer = const RBTreeNode<key_type> *;
+  using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
   using rbtree = RBTree<Key, Compare>;
 
  public:
   RBTreeConstIterator() = delete;
 
-  explicit RBTreeConstIterator(node_pointer nil, node_pointer node)
+  explicit RBTreeConstIterator(const_node_pointer nil, const_node_pointer node)
       : nil_(nil), node_(node) {}
 
   key_type operator*() const noexcept { return node_->key_; }
@@ -119,6 +130,14 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
 
   bool operator!=(const const_iterator &other) const noexcept {
     return node_ != other.node_;
+  }
+
+  bool operator==(const iterator &other) const noexcept {
+    return node_ == other.get_node_pointer();
+  }
+
+  bool operator!=(const iterator &other) const noexcept {
+    return !(*this == other);
   }
 
   void SetBegin() { node_ = nil_->right_; }
@@ -144,7 +163,7 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
     return tmp;
   }
 
-  node_pointer get_node() const { return node_; }
+  const_node_pointer get_node_pointer() const { return node_; }
 
  private:
   void RBTreeIncrement() {
@@ -186,8 +205,8 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
   }
 
  private:
-  node_type const *const nil_;
-  node_type const *node_;
+  const_node_pointer nil_;
+  const_node_pointer node_;
 };
 }  // namespace s21
 
