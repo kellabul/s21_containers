@@ -7,22 +7,27 @@
 #include "s21_RBTree_node.h"
 
 namespace s21 {
-template <typename Key>
+
+template <typename Key, typename Compare = std::less<Key> >
 class RBTree {
   class RBTreeIterator;
   class RBTreeConstIterator;
 
  public:
   using key_type = Key;
-  using node_type = RBTreeNode<key_type>;
-  using node_pointer = RBTreeNode<key_type> *;
+  using value_type = Key;
+  using reference = value_type &;
+  using const_reference = const value_type &;
   using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
+  using node_type = RBTreeNode<key_type>;
+  using node_pointer = RBTreeNode<key_type> *;
 
-  const bool kRed = true;
-  const bool kBlack = false;
-  const bool kLeft = true;
-  const bool kRight = false;
+
+ const static bool kRed = true;
+ const static bool kBlack = false;
+ const static bool kLeft = true;
+ const static bool kRight = false;
 
  public:
   RBTree()
@@ -42,6 +47,12 @@ class RBTree {
     other.nil_ = nullptr;
     other.size_ = 0U;
   }
+
+    RBTree(std::initializer_list<key_type> const &items) : RBTree() {
+      for (const auto &element : items) {
+        insert(element);
+      }
+    }
 
   RBTree &operator=(const RBTree &other) {
     if (this == &other) return *this;
@@ -63,12 +74,6 @@ class RBTree {
     nil_ = nullptr;
   }
 
-  RBTree(std::initializer_list<key_type> const &items) : RBTree() {
-    for (auto &element : items) {
-      insert(element);
-    }
-  }
-
   iterator begin() { return iterator(nil_, nil_->right_); }
 
   iterator end() { return iterator(nil_, nil_); }
@@ -77,12 +82,19 @@ class RBTree {
 
   const_iterator end() const { return const_iterator(nil_, nil_); }
 
+  iterator find(const key_type &key) {
+    node_pointer  node = root_;
+    while (node != nil_ && node->key_ != key) {
+      if (node->key_ > key)
+        node = node->left_;
+      else
+        node = node->right_;
+    }
+    if (node->key_ != key) node = nil_;
+    return iterator(nil_, node);
+  }
+
   void insert(const key_type &key) { InsertNode(root_, key, nil_); }
-
-  node_pointer Find(const key_type &key) { return FindNode(root_, key); }
-
-  // what if Find(key) == nil_?
-  key_type GetValue(const key_type key) { return Find(key)->key_; }
 
   void clear() {
     ClearTree(root_);
@@ -93,8 +105,6 @@ class RBTree {
   key_type MaxKey() { return nil_->left_->key_; }
 
   key_type MinKey() { return nil_->right_->key_; }
-
-  void Delete(key_type key) { DeleteNode(Find(key)); }
 
   void Print() { PrintTree(root_, ""); }
 
@@ -118,10 +128,10 @@ class RBTree {
 
   void merge(RBTree &other) { ImportElements(other.root_, other.nil_); }
 
-  void erase(iterator pos) { DeleteNode(pos.get_node); }
+  void erase(iterator pos) { DeleteNode(pos.get_node()); }
 
   size_t max_size() const noexcept {
-    return std::numeric_limits<size_t>::max()/2 /  sizeof(node_type);
+    return (std::numeric_limits<size_t>::max() - sizeof(node_type)) / 2 / sizeof(node_type);
   };
 
  private:
@@ -280,15 +290,6 @@ class RBTree {
     delete node;
   }
 
-  node_pointer FindNode(node_pointer node, const key_type &key) {
-    while (node != nil_ && node->key_ != key) {
-      if (node->key_ > key)
-        node = node->left_;
-      else
-        node = node->right_;
-    }
-    return node;
-  }
 
   void InsertNode(node_pointer &node, const key_type &key,
                   node_pointer parent) {
@@ -297,7 +298,7 @@ class RBTree {
       CheckMinMaxInsertion(node);
       BalanceTree(node);
       size_++;
-    } else if (key < node->key_) {
+    } else if (compare_(key, node->key_)) {
       InsertNode(node->left_, key, node);
     } else if (key > node->key_) {
       InsertNode(node->right_, key, node);
@@ -380,10 +381,13 @@ class RBTree {
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
   // nil_->parent_ can't be used anywhere because of  TurnTree
+  Compare compare_;
   node_pointer nil_;
   node_pointer root_;
   size_t size_;
 };
 }  // namespace s21
+
+#include "s21_RBTree_iterator.tpp"
 
 #endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_

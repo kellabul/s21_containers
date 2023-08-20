@@ -4,17 +4,16 @@
 #include "s21_RBTree.h"
 
 namespace s21 {
-template <typename Key>
-class RBTree<Key>::RBTreeIterator {
+template <typename Key, typename Compare>
+class RBTree<Key, Compare>::RBTreeIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
   using iterator = RBTreeIterator;
-  using rbtree = RBTree<key_type>;
+  using rbtree = RBTree<Key, Compare>;
 
  public:
-
   RBTreeIterator() = delete;
 
   explicit RBTreeIterator(node_pointer nil, node_pointer node)
@@ -29,9 +28,6 @@ class RBTree<Key>::RBTreeIterator {
   bool operator!=(const iterator &other) const noexcept {
     return !(*this == other);
   }
-
-  void SetBegin() { node_ = nil_->right_; }
-  void SetEnd() { node_ = nil_; }
 
   iterator &operator++() noexcept {
     RBTreeIncrement();
@@ -54,9 +50,7 @@ class RBTree<Key>::RBTreeIterator {
     return tmp;
   }
 
-  node_pointer get_node() const{
-    return node_;
-  }
+  node_pointer get_node() const { return node_; }
 
  private:
   void RBTreeIncrement() {
@@ -102,14 +96,14 @@ class RBTree<Key>::RBTreeIterator {
   node_pointer node_;
 };
 
-template <typename Key>
-class RBTree<Key>::RBTreeConstIterator {
+template <typename Key, typename Compare>
+class RBTree<Key, Compare>::RBTreeConstIterator {
  public:
   using key_type = Key;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
   using const_iterator = RBTreeConstIterator;
-  using rbtree = RBTree<key_type>;
+  using rbtree = RBTree<Key, Compare>;
 
  public:
   RBTreeConstIterator() = delete;
@@ -150,9 +144,7 @@ class RBTree<Key>::RBTreeConstIterator {
     return tmp;
   }
 
-  node_pointer get_node() const{
-    return node_;
-  }
+  node_pointer get_node() const { return node_; }
 
  private:
   void RBTreeIncrement() {

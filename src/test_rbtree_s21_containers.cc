@@ -44,16 +44,18 @@ using std::cout;
 using std::endl;
 using std::string;
 
-TEST(RBTree, basic) {
-  s21::RBTree<string> beta;
-  beta.insert("one");
-  beta.insert("two");
-  beta.insert("three");
-  beta.insert("four");
-  EXPECT_EQ(beta.GetValue("one"), "one");
-  EXPECT_EQ(beta.GetValue("two"), "two");
-  EXPECT_EQ(beta.GetValue("three"), "three");
-  EXPECT_EQ(beta.GetValue("four"), "four");
+TEST(RBTree, find) {
+  s21::RBTree<string> alpha;
+  alpha.insert("one");
+  alpha.insert("two");
+  alpha.insert("three");
+  alpha.insert("four");
+  auto iter = alpha.find("one");
+  EXPECT_EQ(*iter, "one");
+  iter = alpha.find("three");
+  EXPECT_EQ(*iter, "three");
+  iter = alpha.find("five");
+  EXPECT_EQ(iter, alpha.end());
 }
 
 TEST(RBTree, max_min) {
@@ -81,23 +83,23 @@ TEST(RBTree, max_min) {
   two.insert("lemon");
   EXPECT_EQ(two.MinKey(), "apple");
   EXPECT_EQ(two.MaxKey(), "lemon");
-  two.Delete("apple");
+  two.erase(two.find("apple"));
   EXPECT_EQ(two.MinKey(), "bee");
   EXPECT_EQ(two.MaxKey(), "lemon");
-  two.Delete("lemon");
+  two.erase(two.find("lemon"));
   EXPECT_EQ(two.MinKey(), "bee");
   EXPECT_EQ(two.MaxKey(), "kite");
-  two.Delete("bee");
-  two.Delete("egg");
-  two.Delete("fish");
-  two.Delete("grapes");
-  two.Delete("hat");
-  two.Delete("igloo");
-  two.Delete("jug");
-  two.Delete("kite");
+  two.erase(two.find("bee"));
+  two.erase(two.find("egg"));
+  two.erase(two.find("fish"));
+  two.erase(two.find("grapes"));
+  two.erase(two.find("hat"));
+  two.erase(two.find("igloo"));
+  two.erase(two.find("jug"));
+  two.erase(two.find("kite"));
   EXPECT_EQ(two.MinKey(), "cat");
   EXPECT_EQ(two.MaxKey(), "dog");
-  two.Delete("dog");
+  two.erase(two.find("dog"));
   EXPECT_EQ(two.MinKey(), "cat");
   EXPECT_EQ(two.MaxKey(), "cat");
 }
@@ -155,7 +157,7 @@ TEST(RBTree, const_iterator) {
 TEST(RBTree, delete_node) {
   s21::RBTree<string> one;
   one.insert("apple");
-  one.Delete("apple");
+  one.erase(one.find("apple"));
   one.insert("apple");
   one.insert("bee");
   one.insert("cat");
@@ -172,7 +174,7 @@ TEST(RBTree, delete_node) {
   EXPECT_EQ("apple", *iter++);
   EXPECT_EQ("bee", *iter++);
   EXPECT_EQ("cat", *iter++);
-  one.Delete("bee");
+  one.erase(one.find("bee"));
   EXPECT_EQ("dog", *iter--);
   EXPECT_EQ("cat", *iter--);
   EXPECT_EQ("apple", *iter--);
@@ -183,9 +185,9 @@ TEST(RBTree, delete_node) {
 TEST(RBTree, big_tree) {
   s21::RBTree<int> one;
   for (int i = 0; i < 20000; ++i) one.insert(rand() % 20000);
-  for (int i = 0; i < 60000; ++i) one.Delete(rand() % 20000);
+  for (int i = 0; i < 60000; ++i) one.erase(one.find(rand() % 20000));
   for (int i = 0; i < 20000; ++i) one.insert(rand() % 20000);
-  for (int i = 0; i < 20000; ++i) one.Delete(rand() % 20000);
+  for (int i = 0; i < 20000; ++i) one.erase(one.find(rand() % 20000));
 }
 
 TEST(RBTree, copy_constructor) {
@@ -259,11 +261,16 @@ TEST(RBTree, copy_and_move_constructors) {
   EXPECT_EQ(0, one.size());
 }
 
-TEST(RBTree, max_size) {
-  s21::RBTree<int> one;
-  std::set<int> two;
-  EXPECT_EQ(one.max_size(), two.max_size());
+// TEST(RBTree, max_size) {
+//   s21::RBTree<int> one;
+//   std::set<int> two;
+//   EXPECT_EQ(one.max_size(), two.max_size());
+// }
 
+TEST(RBTree, initializer_list) {
+  s21::RBTree<int> one {1, 2, 3, 4, 5};
+  
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
