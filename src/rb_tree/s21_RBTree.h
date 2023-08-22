@@ -13,6 +13,7 @@ class RBTree {
   class RBTreeIterator;
   class RBTreeConstIterator;
 
+
  public:
   using key_type = Key;
   using value_type = Key;
@@ -47,7 +48,7 @@ class RBTree {
     other.size_ = 0U;
   }
 
-  RBTree(std::initializer_list<key_type> const &items) : RBTree() {
+  explicit RBTree(std::initializer_list<key_type> const &items) : RBTree() {
     for (const auto &element : items) {
       insert(element);
     }
@@ -84,7 +85,7 @@ class RBTree {
   iterator find(const_reference key) const {
     node_pointer node = root_;
     while (node != nil_ && node->key_ != key) {
-      if (node->key_ > key)
+      if (compare_(key, node->key_))
         node = node->left_;
       else
         node = node->right_;
@@ -127,7 +128,7 @@ class RBTree {
     std::swap(size_, other.size_);
   }
 
-  void merge(RBTree &other) { ImportElements(other.root_, other.nil_); }
+  void merge(const RBTree &other) { ImportElements(other.root_, other.nil_); }
 
   void erase(iterator pos) { DeleteNode(pos.get_node_pointer()); }
 
@@ -268,7 +269,7 @@ class RBTree {
     delete child;
   }
 
-  void CheckMinMaxDeletion(node_pointer node, node_pointer child) {
+  void CheckMinMaxDeletion(node_pointer node, const node_pointer child) {
     if (nil_->right_ == child)
       nil_->right_ = node;
     else if (nil_->left_ == child)
@@ -302,7 +303,7 @@ class RBTree {
       size_++;
     } else if (compare_(key, node->key_)) {
       InsertNode(node->left_, key, node);
-    } else if (key > node->key_) {
+    } else {
       InsertNode(node->right_, key, node);
     }
   }
@@ -311,9 +312,9 @@ class RBTree {
     if (node == root_) {
       nil_->left_ = node;
       nil_->right_ = node;
-    } else if (node->key_ > nil_->left_->key_) {
+    } else if (compare_(nil_->left_->key_, node->key_)) {
       nil_->left_ = node;
-    } else if (node->key_ < nil_->right_->key_) {
+    } else if (compare_(node->key_, nil_->right_->key_)) {
       nil_->right_ = node;
     }
   }
@@ -383,7 +384,7 @@ class RBTree {
   // nil_->left_ points to max value, nil->right_ points to min value because of
   // iterator logic;
   // nil_->parent_ can't be used anywhere because of  TurnTree
-  Compare compare_;
+  Compare compare_{};
   node_pointer nil_;
   node_pointer root_;
   size_t size_;

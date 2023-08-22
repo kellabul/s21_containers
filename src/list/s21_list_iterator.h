@@ -31,9 +31,20 @@ class ListIterator {
     return *this;
   }
 
-  iterator &operator++(int) {
+  iterator &operator--() {
+    node_pointer_ = node_pointer_->prev_;
+    return *this;
+  }
+
+  iterator operator++(int) {
     iterator buffer(node_pointer_);
     node_pointer_ = node_pointer_->next_;
+    return buffer;
+  }
+
+  iterator operator--(int) {
+    iterator buffer(node_pointer_);
+    node_pointer_ = node_pointer_->prev_;
     return buffer;
   }
 
@@ -47,20 +58,9 @@ class ListIterator {
     return *this;
   }
 
-  iterator &operator--() {
-    node_pointer_ = node_pointer_->prev_;
-    return *this;
-  }
-
   iterator operator-(int n) {
     while (n--) node_pointer_ = node_pointer_->prev_;
     return *this;
-  }
-
-  iterator operator--(int) {
-    iterator buffer(node_pointer_);
-    node_pointer_ = node_pointer_->prev_;
-    return buffer;
   }
 
   void DeleteNode() {
@@ -125,7 +125,8 @@ class ListConstIterator {
  public:
   ListConstIterator() : node_pointer_(nullptr){};
   explicit ListConstIterator(const node_type *node) : node_pointer_(node) {}
-  ListConstIterator(const iterator &iter)
+
+   ListConstIterator(const iterator &iter)
       : node_pointer_(iter.get_node_pointer()) {}
 
   const_reference operator*() { return node_pointer_->value_; }

@@ -1,10 +1,10 @@
 CC := g++
-FLAGS := -std=c++17 -Wall -Werror -Wextra
-GTEST_FLAGS := -lgtest -pthread
+FLAGS := -std=c++17 -pedantic -Wall -Werror -Wextra
+GTEST_FLAGS := -lgtest_main -lgtest -pthread
 NAME := s21_containers
 TEST_NAME := test_$(NAME)
 ASAN_FLAGS := -g -fsanitize=address,undefined,leak
-GCOV_FLAGS := --coverage -fprofile-arcs
+GCOV_FLAGS := --coverage
 LCOV_REPORT_FOLDER := $(NAME)_report
 
 COVERAGE_FILES := *.gcno
@@ -12,67 +12,85 @@ COVERAGE_RESULTS := *.gcda
 GCOV_FILES := *.gcov
 LCOV_FILES := *.info
 
-GTEST_SRC := test_list_s21_containers.cc test_rbtree_s21_containers.cc
+GTEST_LIST_SRC := test_list_s21_containers.cc
+GTEST_LIST_OBJ := $(GTEST_LIST_SRC:.cc=.o)
+GTEST_RBTREE_SRC := test_rbtree_s21_containers.cc
+GTEST_RBTREE_OBJ := $(GTEST_RBTREE_SRC:.cc=.o)
+GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_RBTREE_SRC)
 GTEST_OBJ := $(GTEST_SRC:.cc=.o)
-HEADERS := $(shell find . -name "*.h" -or -name "*.tpp")
+GCDA_FILES := $(GTEST_SRC:.cc=.gcda)
+HEADERS := $(shell find . -name "*.h" -o -name "*.tpp")
 SRC := $(HEADERS) $(GTEST_SRC)
 
-
-.PHONY: all, clean, test
-.PHONY: gcov_report, gcov, asan, compile_test_with_asan
-.PHONY: clang, doclang, cppcheck, valgrind, leaks
-
+.PHONY: all
 all: test
 
+.PHONY: clean
 clean:
 	rm -rf *.o *.a $(TEST_NAME) $(COVERAGE_RESULTS) $(COVERAGE_FILES) $(GCOV_FILES) \
 	$(LCOV_FILES) $(LCOV_REPORT_FOLDER) 
 
+.PHONY: test
 test: $(TEST_NAME)
 	./$(TEST_NAME)
 
-$(GTEST_OBJ): $(GTEST_SRC) $(HEADERS)
-	$(CC) $(FLAGS) -c $< -o $@
+$(GTEST_LIST_OBJ): $(GTEST_LIST_SRC) s21_containers.h $(shell find ./list -name "*.h" -o -name "*.tpp")
+	$(CC) $(FLAGS)  -c $< -o $@ $(GCOV_FLAGS)
 
-$(TEST_NAME): $(GTEST_OBJ)
-	$(CC) $(GTEST_OBJ) $(GTEST_FLAGS) $(GCOV_FLAGS) -o $(TEST_NAME) 
+$(GTEST_RBTREE_OBJ): $(GTEST_RBTREE_SRC) s21_containers.h $(shell find ./rb_tree -name "*.h" -o -name "*.tpp")
+	$(CC) $(FLAGS)  -c $< -o $@ $(GCOV_FLAGS)
 
-gcov_report: gcov
-	lcov -t "$(NAME)" -o gcov_report.info -c -d . --rc lcov_branch_coverage=1 --no-external
-	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov_report.info --rc lcov_branch_coverage=1
-	open $(NAME)_report/index.html
+$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_RBTREE_OBJ)
+	$(CC) $(GTEST_OBJ) $(GTEST_FLAGS) -o $(TEST_NAME) -fprofile-arcs
 
+$(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_RBTREE_OBJ)
+	make test
+
+.PHONY: gcov_report
+gcov_report: $(GCDA_FILES)
+	lcov -t "$(NAME)" -o gcov.info -c -d .  --no-external
+	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info
+	open $(LCOV_REPORT_FOLDER)/index.html
+
+.PHONY: gcov
 gcov: $(TEST_NAME)
-	# @rm -f $(COVERAGE_RESULTS) $(GCOV_FILES)
-	./$(TEST_NAME)
 	gcov $(GTEST_SRC)
 
-asan: compile_test_with_asan
+.PHONY: asan
+asan: compile_with_asan
 	./$(TEST_NAME)
 
-compile_test_with_asan: clean
-	$(CC) $(FLAGS) $(GTEST_SRC) $(SOURCE_FILES) -o $(TEST_NAME) $(GTEST_FLAGS) \
-	$(GCOV_FLAGS) $(ASAN_FLAGS)
+.PHONY: compile_with_asan
+compile_with_asan: clean
+	$(CC) $(FLAGS) $(GTEST_SRC) -o $(TEST_NAME) $(GTEST_FLAGS) $(ASAN_FLAGS)
 
 .clang-format:
 	cp ../materials/linters/.clang-format .
 
+.PHONY: clang
 clang: .clang-format
 	clang-format -n $(SRC) --verbose
 
-	# --style=Google
-
+.PHONY: doclang
 doclang: .clang-format
 	clang-format -i $(SRC) --verbose
 
+.PHONY: cppcheck
 cppcheck:
-	cppcheck --enable=all --suppress=missingIncludeSystem $(SOURCE_FILES)
+	cppcheck --enable=all --suppress=missingIncludeSystem $(SRC)
 
+.PHONY: valgrind
 valgrind: $(TEST_NAME)
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose ./$(TEST_NAME)
 
+.PHONY: valgrind2
+valgrind2: $(TEST_NAME)
+	valgrind --tool=memcheck --leak-check=yes ./$(TEST_NAME)
+
+.PHONY: leaks
 leaks: $(TEST_NAME)
 	leaks -e . --atExit -- ./$(TEST_NAME) 
 
+.PHONY: install_lcov
 install_lcov:
 	brew install lcov

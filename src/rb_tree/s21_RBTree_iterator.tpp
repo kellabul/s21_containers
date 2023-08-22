@@ -59,7 +59,7 @@ class RBTree<Key, Compare>::RBTreeIterator {
     return tmp;
   }
 
- node_pointer get_node_pointer() const { return node_; }
+  node_pointer get_node_pointer() const { return node_; }
 
  private:
   void RBTreeIncrement() {
@@ -139,9 +139,6 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
   bool operator!=(const iterator &other) const noexcept {
     return !(*this == other);
   }
-
-  void SetBegin() { node_ = nil_->right_; }
-  void SetEnd() { node_ = nil_; }
 
   const_iterator &operator++() noexcept {
     RBTreeIncrement();

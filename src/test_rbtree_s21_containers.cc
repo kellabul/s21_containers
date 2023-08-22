@@ -35,8 +35,8 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <cmath>
 #include <iostream>
 #include <list>
-#include <string>
 #include <set>
+#include <string>
 
 #include "s21_containers.h"
 
@@ -268,7 +268,7 @@ TEST(RBTree, copy_and_move_constructors) {
 // }
 
 TEST(RBTree, initializer_list) {
-  const s21::RBTree<std::string> alpha {"one", "two", "three", "four"};
+  const s21::RBTree<std::string> alpha{"one", "two", "three", "four"};
   auto iter = alpha.find("one");
   EXPECT_EQ(*iter, "one");
   iter = alpha.find("three");
@@ -282,8 +282,3 @@ TEST(RBTree, initializer_list) {
 //   EXPECT_EQ(one.contains("two"), true);
 //   EXPECT_EQ(one.contains("five"), false);
 // }
-
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

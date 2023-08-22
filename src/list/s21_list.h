@@ -44,12 +44,10 @@ class list {
 
   ~list() { clear(); }
 
-  list &operator=(list &l) {
-    if (this == &l) return *this;
-    clear();
-    for (const value_type &element : l) {
-      push_back(element);
-    }
+  list &operator=(list &other) {
+    if (this == &other) return *this;
+    list<T> tmp(other);
+    swap(tmp);
     return *this;
   }
 
