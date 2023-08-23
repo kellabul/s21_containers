@@ -201,6 +201,10 @@ class list {
     insert_many(end(), args...);
   }
 
+  iterator insert(iterator iter) {
+    return iter;
+  }
+
   template <typename... Args>
   void insert_many_front(Args &&...args) {
     insert_many(begin(), args...);

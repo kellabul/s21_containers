@@ -360,6 +360,10 @@ TEST(list, insert_many) {
     EXPECT_EQ(i, *iter);
     ++iter;
   }
+
+  one.insert_many_back();
+  one.insert_many_front();
+  one.insert_many(one.begin());
 }
 
 // s21::list<int> sort_list;
