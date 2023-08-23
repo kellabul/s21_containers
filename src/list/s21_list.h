@@ -196,13 +196,12 @@ class list {
     return insert(iter, args...);
   }
 
+  // overloading for case, when sizeof..args == 0
+  iterator insert(iterator iter) { return iter; }
+
   template <typename... Args>
   void insert_many_back(Args &&...args) {
     insert_many(end(), args...);
-  }
-
-  iterator insert(iterator iter) {
-    return iter;
   }
 
   template <typename... Args>

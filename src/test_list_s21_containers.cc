@@ -340,9 +340,11 @@ TEST(list, sort_fast) {
 }
 
 TEST(list, insert_many) {
-  s21::list<int> one{1, 2, 3, 4};
-  auto iter = one.insert_many(one.end(), 5, 6, 7, 8);
-  EXPECT_EQ(8, *iter);
+  s21::list<int> one{1, 2, 7, 8};
+  auto iter = one.begin();
+  iter += 2;
+  iter = one.insert_many(iter, 3, 4, 5, 6);
+  EXPECT_EQ(6, *iter);
   iter = one.begin();
   for (size_t i = 1; i < one.size() + 1; ++i) {
     EXPECT_EQ(i, *iter);
