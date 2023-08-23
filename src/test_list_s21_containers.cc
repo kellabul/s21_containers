@@ -339,6 +339,29 @@ TEST(list, sort_fast) {
   }
 }
 
+TEST(list, insert_many) {
+  s21::list<int> one{1, 2, 3, 4};
+  auto iter = one.insert_many(one.end(), 5, 6, 7, 8);
+  EXPECT_EQ(8, *iter);
+  iter = one.begin();
+  for (size_t i = 1; i < one.size() + 1; ++i) {
+    EXPECT_EQ(i, *iter);
+    ++iter;
+  }
+
+  one.insert_many_front(-2, -1, 0);
+  for (size_t i = -2; i < 9; ++i) {
+    EXPECT_EQ(i, *iter);
+    ++iter;
+  }
+
+  one.insert_many_back(9, 10, 11);
+  for (size_t i = -2; i < 12; ++i) {
+    EXPECT_EQ(i, *iter);
+    ++iter;
+  }
+}
+
 // s21::list<int> sort_list;
 
 // TEST(list, fill_sort) {

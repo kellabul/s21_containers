@@ -183,6 +183,29 @@ class list {
     }
   }
 
+  template <typename... Args>
+  iterator insert_many(const_iterator pos, Args &&...args) {
+    auto iter(pos.operator s21::ListIterator<T>());
+    return insert(iter, args...);
+  }
+
+  template <typename... Args>
+  iterator insert(iterator iter, const_reference first, Args &&...args) {
+    iter = insert(iter, first);
+    iter++;
+    return insert(iter, args...);
+  }
+
+  template <typename... Args>
+  void insert_many_back(Args &&...args) {
+    insert_many(end(), args...);
+  }
+
+  template <typename... Args>
+  void insert_many_front(Args &&...args) {
+    insert_many(begin(), args...);
+  }
+
   // -------------------------------------------------------------------------
   // ---------------------------------helpers---------------------------------
   // -------------------------------------------------------------------------

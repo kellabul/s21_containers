@@ -1,6 +1,6 @@
 CC := g++
 FLAGS := -std=c++17 -pedantic -Wall -Werror -Wextra
-GTEST_FLAGS := -lgtest_main -lgtest -pthread
+GTEST_FLAGS := -lgtest_main -lgtest -pthread 
 NAME := s21_containers
 TEST_NAME := test_$(NAME)
 ASAN_FLAGS := -g -fsanitize=address,undefined,leak
@@ -48,8 +48,8 @@ $(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_RBTREE_OBJ)
 
 .PHONY: gcov_report
 gcov_report: $(GCDA_FILES)
-	lcov -t "$(NAME)" -o gcov.info -c -d .  --no-external
-	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info
+	lcov -t "$(NAME)" -o gcov.info -c -d . --rc lcov_branch_coverage=1 --no-external
+	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info --rc lcov_branch_coverage=1
 	open $(LCOV_REPORT_FOLDER)/index.html
 
 .PHONY: gcov
