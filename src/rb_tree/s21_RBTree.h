@@ -1,8 +1,8 @@
 #ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 #define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
 
+#include <cstring>
 #include <iostream>
-#include <string>
 
 #include "s21_RBTree_node.h"
 
@@ -13,7 +13,6 @@ class RBTree {
   class RBTreeIterator;
   class RBTreeConstIterator;
 
-
  public:
   using key_type = Key;
   using value_type = Key;
@@ -21,6 +20,7 @@ class RBTree {
   using const_reference = const value_type &;
   using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
+  using size_type = size_t;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
 
@@ -37,6 +37,12 @@ class RBTree {
     AssignRootToNil();
   }
 
+  explicit RBTree(std::initializer_list<key_type> const &items) : RBTree() {
+    for (const auto &element : items) {
+      insert(element);
+    }
+  }
+
   RBTree(const RBTree &other) : RBTree() {
     ImportElements(other.root_, other.nil_);
   }
@@ -48,10 +54,12 @@ class RBTree {
     other.size_ = 0U;
   }
 
-  explicit RBTree(std::initializer_list<key_type> const &items) : RBTree() {
-    for (const auto &element : items) {
-      insert(element);
-    }
+  ~RBTree() {
+    ClearTree(root_);
+    size_ = 0U;
+    delete nil_;
+    root_ = nullptr;
+    nil_ = nullptr;
   }
 
   RBTree &operator=(const RBTree &other) {
@@ -66,14 +74,6 @@ class RBTree {
     return *this;
   }
 
-  ~RBTree() {
-    ClearTree(root_);
-    size_ = 0U;
-    delete nil_;
-    root_ = nullptr;
-    nil_ = nullptr;
-  }
-
   iterator begin() { return iterator(nil_, nil_->right_); }
 
   iterator end() { return iterator(nil_, nil_); }
@@ -81,6 +81,44 @@ class RBTree {
   const_iterator begin() const { return const_iterator(nil_, nil_->right_); }
 
   const_iterator end() const { return const_iterator(nil_, nil_); }
+
+  bool empty() { return size_ == 0; }
+
+  size_type size() { return size_; }
+
+  // TODO check again
+  size_type max_size() const noexcept {
+    return (std::numeric_limits<size_type>::max() - sizeof(node_type) -
+            sizeof(bool) * 4) /
+           2 / sizeof(node_type);
+  };
+
+  void clear() {
+    ClearTree(root_);
+    AssignRootToNil();
+    size_ = 0U;
+  }
+
+  std::pair<iterator, bool> insert(const_reference key) {
+    node_pointer node = root_;
+    node_pointer parent = nil_;
+    while (node != nil_ && node->key_ != key) {
+      parent = node;
+      if (compare_(key, node->key_))
+        node = node->left_;
+      else
+        node = node->right_;
+    }
+    if (node == nil_) {
+      node = new node_type{parent, nil_, nil_, key, kRed};
+      CheckParent(node, parent);
+      CheckMinMaxInsertion(node);
+      BalanceTree(node);
+      size_++;
+      return std::make_pair(iterator(nil_, node), true);
+    }
+    return std::make_pair(iterator(nil_, node), false);
+  }
 
   iterator find(const_reference key) const {
     node_pointer node = root_;
@@ -90,37 +128,21 @@ class RBTree {
       else
         node = node->right_;
     }
-    if (node->key_ != key) node = nil_;
     return iterator(nil_, node);
   }
 
   bool contains(const_reference key) const { return find(key) != end(); }
 
-  void insert(const_reference key) { InsertNode(root_, key, nil_); }
-
-  void clear() {
-    ClearTree(root_);
-    AssignRootToNil();
-    size_ = 0U;
-  }
-
   key_type MaxKey() { return nil_->left_->key_; }
 
   key_type MinKey() { return nil_->right_->key_; }
 
-  void Print() { PrintTree(root_, ""); }
+  void print() { PrintTree(root_, ""); }
 
-  void PrintValues() {
+  void print_values() {
     PrintValuesRec(root_);
     std::cout << std::endl;
   }
-
-  node_pointer GetNil() const { return root_; }
-
-  size_t size() { return size_; }
-
-  bool empty() { return size_ == 0; }
-
   void swap(RBTree &other) {
     if (this == &other) return;
     std::swap(root_, other.root_);
@@ -131,12 +153,6 @@ class RBTree {
   void merge(const RBTree &other) { ImportElements(other.root_, other.nil_); }
 
   void erase(iterator pos) { DeleteNode(pos.get_node_pointer()); }
-
-  size_t max_size() const noexcept {
-    return (std::numeric_limits<size_t>::max() - sizeof(node_type) -
-            sizeof(bool) * 4) /
-           2 / sizeof(node_type);
-  };
 
  private:
   void AssignRootToNil() {
@@ -173,7 +189,7 @@ class RBTree {
     std::string arrow = "   └————— ";
     std::string blank =
         (which_child_is_node == kRight) ? "   │      " : "          ";
-    size_t start_pos = space.find(arrow);
+    size_type start_pos = space.find(arrow);
     if (start_pos != std::string::npos)
       space.replace(start_pos, arrow.size(), blank);
     space += arrow;
@@ -294,17 +310,13 @@ class RBTree {
     delete node;
   }
 
-  void InsertNode(node_pointer &node, const_reference key,
-                  node_pointer parent) {
-    if (node == nil_) {
-      node = new node_type{parent, nil_, nil_, key, kRed};
-      CheckMinMaxInsertion(node);
-      BalanceTree(node);
-      size_++;
-    } else if (compare_(key, node->key_)) {
-      InsertNode(node->left_, key, node);
+  void CheckParent(const node_pointer node, node_pointer parent) {
+    if (parent == nil_) {
+      root_ = node;
+    } else if (compare_(parent->key_, node->key_)) {
+      parent->right_ = node;
     } else {
-      InsertNode(node->right_, key, node);
+      parent->left_ = node;
     }
   }
 
@@ -387,7 +399,7 @@ class RBTree {
   Compare compare_{};
   node_pointer nil_;
   node_pointer root_;
-  size_t size_;
+  size_type size_;
 };
 }  // namespace s21
 

@@ -44,19 +44,20 @@ using std::cout;
 using std::endl;
 using std::string;
 
-TEST(RBTree, find) {
-  s21::RBTree<string> alpha;
-  alpha.insert("one");
-  alpha.insert("two");
-  alpha.insert("three");
-  alpha.insert("four");
-  auto iter = alpha.find("one");
-  EXPECT_EQ(*iter, "one");
-  iter = alpha.find("three");
-  EXPECT_EQ(*iter, "three");
-  iter = alpha.find("five");
-  EXPECT_EQ(iter, alpha.end());
+
+ TEST(RBTree, find) {
+   s21::RBTree<string> alpha;
+   auto p = alpha.insert("one");
+   alpha.insert("two");
+   alpha.insert("three");
+   p = alpha.insert("four");
+   EXPECT_EQ(*p.first, "four");
+   EXPECT_EQ(p.second, true);
+   auto p2 = alpha.insert("three");
+   EXPECT_EQ(*p2.first, "three");
+   EXPECT_EQ(p2.second, false);
 }
+
 
 TEST(RBTree, max_min) {
   s21::RBTree<int> one;
@@ -108,7 +109,7 @@ TEST(RBTree, print) {
   s21::RBTree<int> one;
   for (int i = 0; i < 10; ++i) one.insert(i);
   testing::internal::CaptureStdout();
-  one.Print();
+  one.print();
   std::string output = testing::internal::GetCapturedStdout();
   std::string expected_string(R"([ 3 ](-)
    └————— [ 5 ](-)
@@ -261,12 +262,6 @@ TEST(RBTree, copy_and_move_constructors) {
   EXPECT_EQ(0, one.size());
 }
 
-// TEST(RBTree, max_size) {
-//   s21::RBTree<int> one;
-//   std::set<int> two;
-//   EXPECT_EQ(one.max_size(), two.max_size());
-// }
-
 TEST(RBTree, initializer_list) {
   const s21::RBTree<std::string> alpha{"one", "two", "three", "four"};
   auto iter = alpha.find("one");
@@ -277,8 +272,14 @@ TEST(RBTree, initializer_list) {
   EXPECT_EQ(iter, alpha.end());
 }
 
-// TEST(RBTree, contains) {
-//   s21::RBTree<std::string> one {"one", "two", "three", "four"};
-//   EXPECT_EQ(one.contains("two"), true);
-//   EXPECT_EQ(one.contains("five"), false);
+ TEST(RBTree, contains) {
+   s21::RBTree<std::string> one {"one", "two", "three", "four"};
+   EXPECT_EQ(one.contains("two"), true);
+   EXPECT_EQ(one.contains("five"), false);
+ }
+
+// TEST(RBTree, max_size) {
+//   s21::RBTree<int> one;
+//   std::set<int> two;
+//   EXPECT_EQ(one.max_size(), two.max_size());
 // }
