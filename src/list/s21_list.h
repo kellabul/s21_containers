@@ -3,20 +3,22 @@
 
 #include <limits>
 
-#include "s21_list_iterator.h"
 #include "s21_list_node.h"
 
 namespace s21 {
 template <typename T>
 class list {
+  class ListIterator;
+  class ListConstIterator;
+
  public:
   using value_type = T;
   using node_type = ListNode<T>;
   using reference = T &;
   using const_reference = const T &;
-  using iterator = ListIterator<T>;
-  using const_iterator = ListConstIterator<T>;
-  using size_type = unsigned long long;
+  using iterator = ListIterator;
+  using const_iterator = ListConstIterator;
+  using size_type = size_t;
 
  public:
   list() : end_node_(), tail_(&end_node_), size_(0U) { BindTailToItself(); }
@@ -156,7 +158,18 @@ class list {
   }
 
   // transfers elements from list other starting from pos
-  void splice(const_iterator pos, list &other) { SpliceNonConst(pos, other); }
+  void splice(const_iterator pos, list &other) {
+    iterator iter(pos);
+    if (!other.empty()) {
+      iterator previous_pos = iter;
+      --previous_pos;
+      previous_pos.BindNode(other.begin());
+      (--other.end()).BindNode(iter);
+      size_ += other.size_;
+      other.size_ = 0;
+      other.BindTailToItself();
+    }
+  }
 
   // 	removes consecutive duplicate elements
   void unique() {
@@ -185,14 +198,14 @@ class list {
 
   template <typename... Args>
   iterator insert_many(const_iterator pos, Args &&...args) {
-    auto iter(pos.operator s21::ListIterator<T>());
+    iterator iter(pos);
     return insert(iter, args...);
   }
 
   template <typename... Args>
   iterator insert(iterator iter, const_reference first, Args &&...args) {
     iter = insert(iter, first);
-    iter++;
+    ++iter;
     return insert(iter, args...);
   }
 
@@ -226,18 +239,6 @@ class list {
   inline void BindTailToItself() {
     tail_->next_ = tail_;
     tail_->prev_ = tail_;
-  }
-
-  void SpliceNonConst(iterator pos, list &other) {
-    if (!other.empty()) {
-      iterator previous_pos = pos;
-      --previous_pos;
-      previous_pos.BindNode(other.begin());
-      (--other.end()).BindNode(pos);
-      size_ += other.size_;
-      other.size_ = 0;
-      other.BindTailToItself();
-    }
   }
 
   iterator MergeSort(iterator begin) {
@@ -370,5 +371,7 @@ class list {
   size_type size_;
 };
 }  // namespace s21
+
+#include "s21_list_iterator.tpp"
 
 #endif  // CPP2_S21_CONTAINERS_S21_LIST_LIST_H_

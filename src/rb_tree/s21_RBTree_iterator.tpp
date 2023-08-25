@@ -1,7 +1,6 @@
 #ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_ITERATOR_H_
 #define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_ITERATOR_H_
 
-
 namespace s21 {
 template <typename Key, typename Compare>
 class RBTree<Key, Compare>::RBTreeIterator {

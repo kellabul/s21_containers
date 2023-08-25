@@ -114,7 +114,7 @@ class RBTree {
       CheckParent(node, parent);
       CheckMinMaxInsertion(node);
       BalanceTree(node);
-      size_++;
+      ++size_;
       return std::make_pair(iterator(nil_, node), true);
     }
     return std::make_pair(iterator(nil_, node), false);
@@ -225,7 +225,7 @@ class RBTree {
       if (node->color_ == kBlack)
         BalanceAfterDeletion(parent, which_child_is_node);
       delete node;
-      size_--;
+      --size_;
     }
   }
 

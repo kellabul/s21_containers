@@ -44,20 +44,18 @@ using std::cout;
 using std::endl;
 using std::string;
 
-
- TEST(RBTree, find) {
-   s21::RBTree<string> alpha;
-   auto p = alpha.insert("one");
-   alpha.insert("two");
-   alpha.insert("three");
-   p = alpha.insert("four");
-   EXPECT_EQ(*p.first, "four");
-   EXPECT_EQ(p.second, true);
-   auto p2 = alpha.insert("three");
-   EXPECT_EQ(*p2.first, "three");
-   EXPECT_EQ(p2.second, false);
+TEST(RBTree, find) {
+  s21::RBTree<string> alpha;
+  alpha.insert("one");
+  alpha.insert("two");
+  alpha.insert("three");
+  auto iter = alpha.insert("four");
+  EXPECT_EQ(*iter.first, "four");
+  EXPECT_EQ(iter.second, true);
+  iter = alpha.insert("three");
+  EXPECT_EQ(*iter.first, "three");
+  EXPECT_EQ(iter.second, false);
 }
-
 
 TEST(RBTree, max_min) {
   s21::RBTree<int> one;
@@ -272,11 +270,11 @@ TEST(RBTree, initializer_list) {
   EXPECT_EQ(iter, alpha.end());
 }
 
- TEST(RBTree, contains) {
-   s21::RBTree<std::string> one {"one", "two", "three", "four"};
-   EXPECT_EQ(one.contains("two"), true);
-   EXPECT_EQ(one.contains("five"), false);
- }
+TEST(RBTree, contains) {
+  s21::RBTree<std::string> one{"one", "two", "three", "four"};
+  EXPECT_EQ(one.contains("two"), true);
+  EXPECT_EQ(one.contains("five"), false);
+}
 
 // TEST(RBTree, max_size) {
 //   s21::RBTree<int> one;
