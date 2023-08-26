@@ -35,7 +35,7 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <cmath>
 #include <iostream>
 #include <list>
-#include <set>
+// #include <set>
 #include <string>
 
 #include "s21_containers.h"
@@ -44,8 +44,8 @@ using std::cout;
 using std::endl;
 using std::string;
 
-TEST(RBTree, find) {
-  s21::RBTree<string> alpha;
+TEST(set, find) {
+  s21::set<string> alpha;
   alpha.insert("one");
   alpha.insert("two");
   alpha.insert("three");
@@ -57,8 +57,8 @@ TEST(RBTree, find) {
   EXPECT_EQ(iter.second, false);
 }
 
-TEST(RBTree, max_min) {
-  s21::RBTree<int> one;
+TEST(set, max_min) {
+  s21::set<int> one;
   for (int i = -20; i <= 20; ++i) one.insert(i * 2);
   EXPECT_EQ(one.MaxKey(), 40);
   EXPECT_EQ(one.MinKey(), -40);
@@ -67,7 +67,7 @@ TEST(RBTree, max_min) {
   EXPECT_EQ(one.MaxKey(), 100);
   EXPECT_EQ(one.MinKey(), -100);
 
-  s21::RBTree<string> two;
+  s21::set<string> two;
   two.insert("apple");
   two.insert("bee");
   two.insert("cat");
@@ -103,8 +103,8 @@ TEST(RBTree, max_min) {
   EXPECT_EQ(two.MaxKey(), "cat");
 }
 
-TEST(RBTree, print) {
-  s21::RBTree<int> one;
+TEST(set, print) {
+  s21::set<int> one;
   for (int i = 0; i < 10; ++i) one.insert(i);
   testing::internal::CaptureStdout();
   one.print();
@@ -123,8 +123,8 @@ TEST(RBTree, print) {
   EXPECT_EQ(expected_string, output);
 }
 
-TEST(RBTree, iterator) {
-  s21::RBTree<int> one;
+TEST(set, iterator) {
+  s21::set<int> one;
   int count = 0;
   for (; count < 20; ++count) one.insert(count);
   count = 0;
@@ -139,8 +139,8 @@ TEST(RBTree, iterator) {
   }
 }
 
-TEST(RBTree, const_iterator) {
-  s21::RBTree<int> const one{1, 2, 3, 4, 5, 6, 7, 8, 9};
+TEST(set, const_iterator) {
+  s21::set<int> const one{1, 2, 3, 4, 5, 6, 7, 8, 9};
   int count = 1;
   for (auto iter = one.begin(); iter != one.end(); ++iter) {
     EXPECT_EQ(count, *iter);
@@ -153,8 +153,8 @@ TEST(RBTree, const_iterator) {
   }
 }
 
-TEST(RBTree, delete_node) {
-  s21::RBTree<string> one;
+TEST(set, delete_node) {
+  s21::set<string> one;
   one.insert("apple");
   one.erase(one.find("apple"));
   one.insert("apple");
@@ -181,18 +181,18 @@ TEST(RBTree, delete_node) {
   EXPECT_EQ("lemon", *iter);
 }
 
-TEST(RBTree, big_tree) {
-  s21::RBTree<int> one;
+TEST(set, big_tree) {
+  s21::set<int> one;
   for (int i = 0; i < 20000; ++i) one.insert(rand() % 20000);
   for (int i = 0; i < 60000; ++i) one.erase(one.find(rand() % 20000));
   for (int i = 0; i < 20000; ++i) one.insert(rand() % 20000);
   for (int i = 0; i < 20000; ++i) one.erase(one.find(rand() % 20000));
 }
 
-TEST(RBTree, copy_constructor) {
-  s21::RBTree<int> one;
+TEST(set, copy_constructor) {
+  s21::set<int> one;
   for (int i = 0; i < 8; ++i) one.insert(i);
-  s21::RBTree<int> two(one);
+  s21::set<int> two(one);
   auto iter_one = one.begin();
   auto iter_two = two.begin();
   for (; iter_one != one.end(); ++iter_one, ++iter_two) {
@@ -201,10 +201,10 @@ TEST(RBTree, copy_constructor) {
   }
 }
 
-TEST(RBTree, copy_operator) {
-  s21::RBTree<int> one;
+TEST(set, copy_operator) {
+  s21::set<int> one;
   for (int i = 0; i < 8; ++i) one.insert(i);
-  s21::RBTree<int> two{5, 2, 3, 5, 6};
+  s21::set<int> two{5, 2, 3, 5, 6};
   two = one;
   auto iter_one = one.begin();
   auto iter_two = two.begin();
@@ -214,8 +214,8 @@ TEST(RBTree, copy_operator) {
   }
 }
 
-TEST(RBTree, size_empty) {
-  s21::RBTree<int> one;
+TEST(set, size_empty) {
+  s21::set<int> one;
   EXPECT_EQ(true, one.empty());
   EXPECT_EQ(0, one.size());
   for (int i = 0; i < 8; ++i) one.insert(i);
@@ -225,9 +225,9 @@ TEST(RBTree, size_empty) {
   EXPECT_EQ(true, one.empty());
 }
 
-TEST(RBTree, swap) {
-  s21::RBTree<int> one;
-  s21::RBTree<int> two;
+TEST(set, swap) {
+  s21::set<int> one;
+  s21::set<int> two;
   for (int i = 0; i < 8; ++i) one.insert(i);
   EXPECT_EQ(false, one.empty());
   EXPECT_EQ(8, one.size());
@@ -240,10 +240,10 @@ TEST(RBTree, swap) {
   EXPECT_EQ(0, one.size());
 }
 
-TEST(RBTree, copy_and_move_constructors) {
-  s21::RBTree<int> one;
+TEST(set, copy_and_move_constructors) {
+  s21::set<int> one;
   for (int i = 0; i < 8; ++i) one.insert(i);
-  s21::RBTree<int> two(one);
+  s21::set<int> two(one);
   auto iter = two.begin();
   for (auto const &elem : one) {
     EXPECT_EQ(elem, *iter);
@@ -251,7 +251,7 @@ TEST(RBTree, copy_and_move_constructors) {
   }
   EXPECT_EQ(two.size(), one.size());
   iter = two.begin();
-  s21::RBTree<int> three(std::move(one));
+  s21::set<int> three(std::move(one));
   for (auto const &elem : three) {
     EXPECT_EQ(elem, *iter);
     iter++;
@@ -260,8 +260,8 @@ TEST(RBTree, copy_and_move_constructors) {
   EXPECT_EQ(0, one.size());
 }
 
-TEST(RBTree, initializer_list) {
-  const s21::RBTree<std::string> alpha{"one", "two", "three", "four"};
+TEST(set, initializer_list) {
+  const s21::set<std::string> alpha{"one", "two", "three", "four"};
   auto iter = alpha.find("one");
   EXPECT_EQ(*iter, "one");
   iter = alpha.find("three");
@@ -270,14 +270,42 @@ TEST(RBTree, initializer_list) {
   EXPECT_EQ(iter, alpha.end());
 }
 
-TEST(RBTree, contains) {
-  s21::RBTree<std::string> one{"one", "two", "three", "four"};
+TEST(set, contains) {
+  s21::set<std::string> one{"one", "two", "three", "four"};
   EXPECT_EQ(one.contains("two"), true);
   EXPECT_EQ(one.contains("five"), false);
+  s21::set<std::string> two{};
+  EXPECT_EQ(two.contains("five"), false);
 }
 
-// TEST(RBTree, max_size) {
-//   s21::RBTree<int> one;
+TEST(set, insert_many) {
+  s21::set<std::string> one;
+  auto v_pair = one.insert_many("aaa", "bbb", "ccc", "ddd");
+  auto iter = one.begin();
+  for (auto &elem : v_pair) {
+    EXPECT_EQ(elem.first, iter);
+    EXPECT_EQ(elem.second, true);
+    ++iter;
+  }
+  v_pair = one.insert_many("aaa", "eee", "bbb", "fff");
+
+  iter = one.find("aaa");
+  EXPECT_EQ(v_pair[0].first, iter);
+
+  iter = one.find("eee");
+  EXPECT_EQ(v_pair[1].first, iter);
+
+  iter = one.find("fff");
+  EXPECT_EQ(v_pair[3].first, iter);
+
+  EXPECT_EQ(v_pair[0].second, false);
+  EXPECT_EQ(v_pair[1].second, true);
+  EXPECT_EQ(v_pair[2].second, false);
+  EXPECT_EQ(v_pair[3].second, true);
+}
+
+// TEST(set, max_size) {
+//   s21::set<int> one;
 //   std::set<int> two;
 //   EXPECT_EQ(one.max_size(), two.max_size());
 // }

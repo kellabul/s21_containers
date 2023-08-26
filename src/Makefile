@@ -8,15 +8,15 @@ GCOV_FLAGS := --coverage
 LCOV_REPORT_FOLDER := $(NAME)_report
 
 COVERAGE_FILES := *.gcno
-COVERAGE_RESULTS := *.gcda
+COVERAGE_RESULTS := *.gcd
 GCOV_FILES := *.gcov
 LCOV_FILES := *.info
 
 GTEST_LIST_SRC := test_list_s21_containers.cc
 GTEST_LIST_OBJ := $(GTEST_LIST_SRC:.cc=.o)
-GTEST_RBTREE_SRC := test_rbtree_s21_containers.cc
-GTEST_RBTREE_OBJ := $(GTEST_RBTREE_SRC:.cc=.o)
-GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_RBTREE_SRC)
+GTEST_SET_SRC := test_set_s21_containers.cc
+GTEST_SET_OBJ := $(GTEST_SET_SRC:.cc=.o)
+GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_SET_SRC)
 GTEST_OBJ := $(GTEST_SRC:.cc=.o)
 GCDA_FILES := $(GTEST_SRC:.cc=.gcda)
 HEADERS := $(shell find . -name "*.h" -o -name "*.tpp")
@@ -37,13 +37,13 @@ test: $(TEST_NAME)
 $(GTEST_LIST_OBJ): $(GTEST_LIST_SRC) s21_containers.h $(shell find ./list -name "*.h" -o -name "*.tpp")
 	$(CC) $(FLAGS)  -c $< -o $@ $(GCOV_FLAGS)
 
-$(GTEST_RBTREE_OBJ): $(GTEST_RBTREE_SRC) s21_containers.h $(shell find ./rb_tree -name "*.h" -o -name "*.tpp")
+$(GTEST_SET_OBJ): $(GTEST_SET_SRC) s21_containers.h $(shell find ./rb_tree -name "*.h" -o -name "*.tpp")
 	$(CC) $(FLAGS)  -c $< -o $@ $(GCOV_FLAGS)
 
-$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_RBTREE_OBJ)
+$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ)
 	$(CC) $(GTEST_OBJ) $(GTEST_FLAGS) -o $(TEST_NAME) -fprofile-arcs
 
-$(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_RBTREE_OBJ)
+$(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ)
 	make test
 
 .PHONY: gcov_report

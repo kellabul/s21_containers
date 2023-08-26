@@ -19,8 +19,9 @@ class list<T>::ListIterator {
 
   explicit ListIterator(node_pointer node) : node_pointer_(node) {}
 
-  ListIterator(const ListConstIterator iter)
-      : node_pointer_(const_cast<node_pointer>(iter.get_node_pointer())) {}
+  operator ListConstIterator() const {
+    return ListConstIterator(const_cast<node_pointer>(node_pointer_));
+  }
 
   reference operator*() { return node_pointer_->value_; }
 
@@ -133,10 +134,11 @@ class list<T>::ListConstIterator {
  public:
   ListConstIterator() : node_pointer_(nullptr){};
 
-  explicit ListConstIterator(const_node_pointer node) : node_pointer_(node) {}
+  explicit ListConstIterator(const const_node_pointer node) : node_pointer_(node) {}
 
-  ListConstIterator(const ListIterator iter)
-      : node_pointer_(const_cast<node_pointer>(iter.get_node_pointer())) {}
+  operator ListIterator() const {
+    return ListIterator(const_cast<node_pointer>(node_pointer_));
+  }
 
   const_reference operator*() { return node_pointer_->value_; }
   bool operator!=(const const_iterator &iter) {

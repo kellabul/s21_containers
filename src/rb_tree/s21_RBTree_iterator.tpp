@@ -1,16 +1,20 @@
-#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_ITERATOR_H_
-#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_ITERATOR_H_
+#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_ITERATOR_H_
+#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_ITERATOR_H_
 
 namespace s21 {
 template <typename Key, typename Compare>
 class RBTree<Key, Compare>::RBTreeIterator {
  public:
   using key_type = Key;
-  using node_type = RBTreeNode<key_type>;
-  using node_pointer = RBTreeNode<key_type> *;
+  using value_type = Key;
+  using reference = value_type &;
+  using const_reference = const value_type &;
   using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
-  using rbtree = RBTree<Key, Compare>;
+  using size_type = size_t;
+  using node_type = RBTreeNode<key_type>;
+  using node_pointer = RBTreeNode<key_type> *;
+  using const_node_pointer = const RBTreeNode<key_type> *;
 
  public:
   RBTreeIterator() = delete;
@@ -18,7 +22,7 @@ class RBTree<Key, Compare>::RBTreeIterator {
   explicit RBTreeIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
 
-  key_type operator*() const noexcept { return node_->key_; }
+  const_reference operator*() const noexcept { return node_->key_; }
 
   bool operator==(const iterator &other) const noexcept {
     return node_ == other.node_;
@@ -107,12 +111,15 @@ template <typename Key, typename Compare>
 class RBTree<Key, Compare>::RBTreeConstIterator {
  public:
   using key_type = Key;
+  using value_type = Key;
+  using reference = value_type &;
+  using const_reference = const value_type &;
+  using iterator = RBTreeIterator;
+  using const_iterator = RBTreeConstIterator;
+  using size_type = size_t;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
   using const_node_pointer = const RBTreeNode<key_type> *;
-  using iterator = RBTreeIterator;
-  using const_iterator = RBTreeConstIterator;
-  using rbtree = RBTree<Key, Compare>;
 
  public:
   RBTreeConstIterator() = delete;
@@ -120,7 +127,7 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
   explicit RBTreeConstIterator(const_node_pointer nil, const_node_pointer node)
       : nil_(nil), node_(node) {}
 
-  key_type operator*() const noexcept { return node_->key_; }
+  const_reference operator*() const noexcept { return node_->key_; }
 
   bool operator==(const const_iterator &other) const noexcept {
     return node_ == other.node_;
@@ -205,4 +212,4 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
 };
 }  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_ITERATOR_H_
+#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_ITERATOR_H_

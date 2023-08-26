@@ -1,15 +1,17 @@
-#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
-#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
+#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_H_
+#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_H_
 
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 #include "s21_RBTree_node.h"
 
 namespace s21 {
 
-template <typename Key, typename Compare = std::less<Key> >
+template <typename Key, typename Compare = std::less<Key>>
 class RBTree {
+ public:
   class RBTreeIterator;
   class RBTreeConstIterator;
 
@@ -154,7 +156,28 @@ class RBTree {
 
   void erase(iterator pos) { DeleteNode(pos.get_node_pointer()); }
 
+  template <typename... Args>
+  std::vector<std::pair<iterator, bool>> insert_many(Args &&...args) {
+    // std::vector<std::pair<iterator, bool>> result;
+    std::vector result{insert(args)...};
+    return result;
+  }
+
  private:
+  // template <typename... Args>
+  // std::vector<std::pair<iterator, bool>> insert(
+  //     std::vector<std::pair<iterator, bool>> &result, const_reference first,
+  //     Args &&...args) {
+  //   result.push_back(insert(first));
+  //   return insert(result, args...);
+  // }
+
+  // std::vector<std::pair<iterator, bool>> insert(
+  //     std::vector<std::pair<iterator, bool>> &result, const_reference one) {
+  //   result.push_back(insert(one));
+  //   return result;
+  // }
+
   void AssignRootToNil() {
     root_ = nil_;
     nil_->left_ = nil_;
@@ -405,4 +428,4 @@ class RBTree {
 
 #include "s21_RBTree_iterator.tpp"
 
-#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTree_H_
+#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_H_
