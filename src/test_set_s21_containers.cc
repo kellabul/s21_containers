@@ -57,52 +57,6 @@ TEST(set, find) {
   EXPECT_EQ(iter.second, false);
 }
 
-TEST(set, max_min) {
-  s21::set<int> one;
-  for (int i = -20; i <= 20; ++i) one.insert(i * 2);
-  EXPECT_EQ(one.MaxKey(), 40);
-  EXPECT_EQ(one.MinKey(), -40);
-  one.insert(-100);
-  one.insert(100);
-  EXPECT_EQ(one.MaxKey(), 100);
-  EXPECT_EQ(one.MinKey(), -100);
-
-  s21::set<string> two;
-  two.insert("apple");
-  two.insert("bee");
-  two.insert("cat");
-  two.insert("dog");
-  two.insert("egg");
-  two.insert("fish");
-  two.insert("grapes");
-  two.insert("hat");
-  two.insert("igloo");
-  two.insert("jug");
-  two.insert("kite");
-  two.insert("lemon");
-  EXPECT_EQ(two.MinKey(), "apple");
-  EXPECT_EQ(two.MaxKey(), "lemon");
-  two.erase(two.find("apple"));
-  EXPECT_EQ(two.MinKey(), "bee");
-  EXPECT_EQ(two.MaxKey(), "lemon");
-  two.erase(two.find("lemon"));
-  EXPECT_EQ(two.MinKey(), "bee");
-  EXPECT_EQ(two.MaxKey(), "kite");
-  two.erase(two.find("bee"));
-  two.erase(two.find("egg"));
-  two.erase(two.find("fish"));
-  two.erase(two.find("grapes"));
-  two.erase(two.find("hat"));
-  two.erase(two.find("igloo"));
-  two.erase(two.find("jug"));
-  two.erase(two.find("kite"));
-  EXPECT_EQ(two.MinKey(), "cat");
-  EXPECT_EQ(two.MaxKey(), "dog");
-  two.erase(two.find("dog"));
-  EXPECT_EQ(two.MinKey(), "cat");
-  EXPECT_EQ(two.MaxKey(), "cat");
-}
-
 TEST(set, print) {
   s21::set<int> one;
   for (int i = 0; i < 10; ++i) one.insert(i);
@@ -271,7 +225,7 @@ TEST(set, initializer_list) {
 }
 
 TEST(set, contains) {
-  s21::set<std::string> one{"one", "two", "three", "four"};
+  s21::set<std::string> const one{"one", "two", "three", "four"};
   EXPECT_EQ(one.contains("two"), true);
   EXPECT_EQ(one.contains("five"), false);
   s21::set<std::string> two{};
@@ -279,7 +233,7 @@ TEST(set, contains) {
 }
 
 TEST(set, insert_many) {
-  s21::set<std::string> one;
+  s21::set<std::string>  one;
   auto v_pair = one.insert_many("aaa", "bbb", "ccc", "ddd");
   auto iter = one.begin();
   for (auto &elem : v_pair) {
@@ -303,9 +257,3 @@ TEST(set, insert_many) {
   EXPECT_EQ(v_pair[2].second, false);
   EXPECT_EQ(v_pair[3].second, true);
 }
-
-// TEST(set, max_size) {
-//   s21::set<int> one;
-//   std::set<int> two;
-//   EXPECT_EQ(one.max_size(), two.max_size());
-// }

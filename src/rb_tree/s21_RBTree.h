@@ -12,7 +12,6 @@ namespace s21 {
 template <typename Key, typename Compare = std::less<Key>>
 class RBTree {
  public:
-  class RBTreeIterator;
   class RBTreeConstIterator;
 
  public:
@@ -20,8 +19,8 @@ class RBTree {
   using value_type = Key;
   using reference = value_type &;
   using const_reference = const value_type &;
-  using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
+  using iterator = const_iterator;
   using size_type = size_t;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
@@ -76,20 +75,16 @@ class RBTree {
     return *this;
   }
 
-  iterator begin() { return iterator(nil_, nil_->right_); }
-
-  iterator end() { return iterator(nil_, nil_); }
-
   const_iterator begin() const { return const_iterator(nil_, nil_->right_); }
 
   const_iterator end() const { return const_iterator(nil_, nil_); }
 
-  bool empty() { return size_ == 0; }
+  bool empty() const { return size_ == 0; }
 
-  size_type size() { return size_; }
+  size_type size() const { return size_; }
 
   // TODO check again
-  size_type max_size() const noexcept {
+  size_type max_size() const {
     return (std::numeric_limits<size_type>::max() - sizeof(node_type) -
             sizeof(bool) * 4) /
            2 / sizeof(node_type);
@@ -135,10 +130,6 @@ class RBTree {
 
   bool contains(const_reference key) const { return find(key) != end(); }
 
-  key_type MaxKey() { return nil_->left_->key_; }
-
-  key_type MinKey() { return nil_->right_->key_; }
-
   void print() { PrintTree(root_, ""); }
 
   void print_values() {
@@ -154,7 +145,7 @@ class RBTree {
 
   void merge(const RBTree &other) { ImportElements(other.root_, other.nil_); }
 
-  void erase(iterator pos) { DeleteNode(pos.get_node_pointer()); }
+  void erase(iterator pos) { DeleteNode(const_cast<node_pointer>(pos.get_node_pointer())); }
 
   template <typename... Args>
   std::vector<std::pair<iterator, bool>> insert_many(Args &&...args) {
@@ -164,20 +155,7 @@ class RBTree {
   }
 
  private:
-  // template <typename... Args>
-  // std::vector<std::pair<iterator, bool>> insert(
-  //     std::vector<std::pair<iterator, bool>> &result, const_reference first,
-  //     Args &&...args) {
-  //   result.push_back(insert(first));
-  //   return insert(result, args...);
-  // }
-
-  // std::vector<std::pair<iterator, bool>> insert(
-  //     std::vector<std::pair<iterator, bool>> &result, const_reference one) {
-  //   result.push_back(insert(one));
-  //   return result;
-  // }
-
+ 
   void AssignRootToNil() {
     root_ = nil_;
     nil_->left_ = nil_;
@@ -313,12 +291,6 @@ class RBTree {
       nil_->right_ = node;
     else if (nil_->left_ == child)
       nil_->left_ = node;
-  }
-
-  // never used
-  node_pointer MinChild(node_pointer node) {
-    while (node->left_ != nil_) node = node->left_;
-    return node;
   }
 
   node_pointer MaxChild(node_pointer node) {

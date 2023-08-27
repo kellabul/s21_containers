@@ -12,8 +12,8 @@ class set : public RBTree<Key> {
   using value_type = Key;
   using reference = value_type &;
   using const_reference = const value_type &;
-  using iterator = typename RBTree<key_type>::RBTreeIterator;
   using const_iterator = typename RBTree<key_type>::RBTreeConstIterator;
+  using iterator = const_iterator;
   using size_type = size_t;
 };
 
