@@ -230,6 +230,9 @@ TEST(set, contains) {
   EXPECT_EQ(one.contains("five"), false);
   s21::set<std::string> two{};
   EXPECT_EQ(two.contains("five"), false);
+
+  s21::set<std::string> three{"one", "two", "three", "fouer"};
+  three.erase(three.find("one"));
 }
 
 TEST(set, insert_many) {

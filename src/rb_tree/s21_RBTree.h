@@ -212,6 +212,7 @@ class RBTree {
     } else if (node == root_) {
       AssignRootToNil();
       delete node;
+      --size_;
     } else {
       node_pointer parent = node->parent_;
       bool which_child_is_node;
@@ -284,6 +285,7 @@ class RBTree {
     node->right_ = nil_;
     CheckMinMaxDeletion(node, child);
     delete child;
+    --size_;
   }
 
   void CheckMinMaxDeletion(node_pointer node, const node_pointer child) {
