@@ -85,9 +85,7 @@ class RBTree {
 
   // TODO check again
   size_type max_size() const {
-    return (std::numeric_limits<size_type>::max() - sizeof(node_type) -
-            sizeof(bool) * 4) /
-           2 / sizeof(node_type);
+    return ((std::allocator<Key>{}).max_size() / 10);
   };
 
   void clear() {
@@ -143,9 +141,14 @@ class RBTree {
     std::swap(size_, other.size_);
   }
 
-  void merge(const RBTree &other) { ImportElements(other.root_, other.nil_); }
+  void merge(RBTree &other) {
+    ImportElements(other.root_, other.nil_);
+    other.clear();
+  }
 
-  void erase(iterator pos) { DeleteNode(const_cast<node_pointer>(pos.get_node_pointer())); }
+  void erase(iterator pos) {
+    DeleteNode(const_cast<node_pointer>(pos.get_node_pointer()));
+  }
 
   template <typename... Args>
   std::vector<std::pair<iterator, bool>> insert_many(Args &&...args) {
@@ -155,7 +158,6 @@ class RBTree {
   }
 
  private:
- 
   void AssignRootToNil() {
     root_ = nil_;
     nil_->left_ = nil_;
@@ -165,9 +167,10 @@ class RBTree {
   void ImportElements(node_pointer const &other_node,
                       node_pointer const &other_nil) {
     if (other_node == other_nil) return;
-    insert(other_node->key_);
+
     ImportElements(other_node->left_, other_nil);
     ImportElements(other_node->right_, other_nil);
+    insert(other_node->key_);
   }
 
   void PrintValuesRec(node_pointer node) {

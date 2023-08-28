@@ -236,7 +236,7 @@ TEST(set, contains) {
 }
 
 TEST(set, insert_many) {
-  s21::set<std::string>  one;
+  s21::set<std::string> one;
   auto v_pair = one.insert_many("aaa", "bbb", "ccc", "ddd");
   auto iter = one.begin();
   for (auto &elem : v_pair) {
@@ -259,4 +259,10 @@ TEST(set, insert_many) {
   EXPECT_EQ(v_pair[1].second, true);
   EXPECT_EQ(v_pair[2].second, false);
   EXPECT_EQ(v_pair[3].second, true);
+}
+
+TEST(set, max_size) {
+  s21::set<int> one;
+  std::set<int> two;
+  EXPECT_EQ(one.max_size(), two.max_size());
 }

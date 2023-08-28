@@ -134,7 +134,8 @@ class list<T>::ListConstIterator {
  public:
   ListConstIterator() : node_pointer_(nullptr){};
 
-  explicit ListConstIterator(const const_node_pointer node) : node_pointer_(node) {}
+  explicit ListConstIterator(const const_node_pointer node)
+      : node_pointer_(node) {}
 
   operator ListIterator() const {
     return ListIterator(const_cast<node_pointer>(node_pointer_));
