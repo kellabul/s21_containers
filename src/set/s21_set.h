@@ -8,6 +8,7 @@ template <typename Key, typename Compare = std::less<Key> >
 class set : public RBTree<Key> {
  public:
   using RBTree<Key>::RBTree;
+  using RBTree<Key>::find;
   using key_type = Key;
   using value_type = Key;
   using reference = value_type &;
@@ -15,6 +16,10 @@ class set : public RBTree<Key> {
   using const_iterator = typename RBTree<key_type>::RBTreeConstIterator;
   using iterator = const_iterator;
   using size_type = size_t;
+
+  std::pair<iterator, bool> insert(const_reference key) {
+    return RBTree<Key>::InsertUniq(key);
+  }
 };
 
 }  // namespace s21

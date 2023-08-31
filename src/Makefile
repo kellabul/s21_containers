@@ -8,7 +8,7 @@ GCOV_FLAGS := --coverage
 LCOV_REPORT_FOLDER := $(NAME)_report
 
 COVERAGE_FILES := *.gcno
-COVERAGE_RESULTS := *.gcd
+COVERAGE_RESULTS := *.gcda
 GCOV_FILES := *.gcov
 LCOV_FILES := *.info
 
@@ -16,7 +16,9 @@ GTEST_LIST_SRC := test_list_s21_containers.cc
 GTEST_LIST_OBJ := $(GTEST_LIST_SRC:.cc=.o)
 GTEST_SET_SRC := test_set_s21_containers.cc
 GTEST_SET_OBJ := $(GTEST_SET_SRC:.cc=.o)
-GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_SET_SRC)
+GTEST_MULTISET_SRC := test_multiset_s21_containers.cc
+GTEST_MULTISET_OBJ := $(GTEST_MULTISET_SRC:.cc=.o)
+GTEST_SRC := $(wildcard test_*.cc)
 GTEST_OBJ := $(GTEST_SRC:.cc=.o)
 GCDA_FILES := $(GTEST_SRC:.cc=.gcda)
 HEADERS := $(shell find . -name "*.h" -o -name "*.tpp")
@@ -35,12 +37,15 @@ test: $(TEST_NAME)
 	./$(TEST_NAME)
 
 $(GTEST_LIST_OBJ): $(GTEST_LIST_SRC) s21_containers.h $(shell find ./list -name "*.h" -o -name "*.tpp")
-	$(CC) $(FLAGS)  -c $< -o $@ $(GCOV_FLAGS)
+	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
 
-$(GTEST_SET_OBJ): $(GTEST_SET_SRC) s21_containers.h $(shell find ./rb_tree -name "*.h" -o -name "*.tpp")
-	$(CC) $(FLAGS)  -c $< -o $@ $(GCOV_FLAGS)
+$(GTEST_SET_OBJ): $(GTEST_SET_SRC) s21_containers.h $(shell find ./rb_tree ./set -name "*.h" -o -name "*.tpp")
+	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
 
-$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ)
+$(GTEST_MULTISET_OBJ): $(GTEST_MULTISET_SRC) s21_containers.h $(shell find ./rb_tree ./multiset -name "*.h" -o -name "*.tpp")
+	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
+
+$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ)
 	$(CC) $(GTEST_OBJ) $(GTEST_FLAGS) -o $(TEST_NAME) -fprofile-arcs
 
 $(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ)
@@ -54,7 +59,7 @@ gcov_report: $(GCDA_FILES)
 
 .PHONY: gcov
 gcov: $(TEST_NAME)
-	gcov $(GTEST_SRC)
+	gcov -k -r $(GTEST_SRC) 
 
 .PHONY: asan
 asan: compile_with_asan
