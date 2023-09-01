@@ -1,5 +1,5 @@
-#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_SET_H_
-#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_SET_H_
+#ifndef CPP2_S21_CONTAINERS_SET_S21_SET_H_
+#define CPP2_S21_CONTAINERS_SET_S21_SET_H_
 
 #include "../rb_tree/s21_RBTree.h"
 
@@ -24,4 +24,4 @@ class set : public RBTree<Key> {
 
 }  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_SET_H_
+#endif  // CPP2_S21_CONTAINERS_SET_S21_SET_H_

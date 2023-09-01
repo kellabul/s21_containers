@@ -1,5 +1,5 @@
-#ifndef CPP2_S21_CONTAINERS_S21_LIST_LIST_ITERATOR_H_
-#define CPP2_S21_CONTAINERS_S21_LIST_LIST_ITERATOR_H_
+#ifndef CPP2_S21_CONTAINERS_LIST_S21_LIST_ITERATOR_H_
+#define CPP2_S21_CONTAINERS_LIST_S21_LIST_ITERATOR_H_
 
 namespace s21 {
 template <typename T>
@@ -167,4 +167,4 @@ class list<T>::ListConstIterator {
 
 }  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
+#endif  // CPP2_S21_CONTAINERS_LIST_S21_LIST_H_

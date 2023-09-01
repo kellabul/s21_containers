@@ -1,5 +1,5 @@
-#ifndef CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
-#define CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
+#ifndef CPP2_S21_CONTAINERS_LIST_S21_LIST_H_
+#define CPP2_S21_CONTAINERS_LIST_S21_LIST_H_
 
 #include <limits>
 
@@ -374,4 +374,4 @@ class list {
 
 #include "s21_list_iterator.tpp"
 
-#endif  // CPP2_S21_CONTAINERS_S21_LIST_LIST_H_
+#endif  // CPP2_S21_CONTAINERS_LIST_S21_LIST_H_

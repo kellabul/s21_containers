@@ -1,5 +1,5 @@
-#ifndef CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_H_
-#define CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_H_
+#ifndef CPP2_S21_CONTAINERS_RBTREE_S21_RBTREE_H_
+#define CPP2_S21_CONTAINERS_RBTREE_S21_RBTREE_H_
 
 #include <cstring>
 #include <iostream>
@@ -492,4 +492,4 @@ class RBTree {
 
 #include "s21_RBTree_iterator.tpp"
 
-#endif  // CPP2_S21_CONTAINERS_S21_MAP_MAP_H_S21_RBTREE_H_
+#endif  // CPP2_S21_CONTAINERS_RBTREE_S21_RBTREE_H_
