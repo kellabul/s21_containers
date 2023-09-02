@@ -2,29 +2,26 @@
 #define CPP2_S21_CONTAINERS_MAP_H_S21_MAP_H_
 
 #include "../rb_tree/s21_RBTree.h"
+#include "s21_pair.h"
 
 namespace s21 {
-
-template <typename T>
-struct LessMap {
-  bool operator()(const T &x, const T &y) const { return x.first < y.first; }
-};
-
 template <typename Key, typename T,
-          typename Compare = LessMap<std::pair<const Key, T>>>
-class map : public RBTree<std::pair<const Key, T>, Compare> {
+          typename Compare = std::less<s21::pair<const Key, T>>>
+class map : public RBTree<s21::pair<const Key, T>, Compare> {
  public:
   using key_type = Key;
   using mapped_type = T;
-  using value_type = std::pair<const key_type, mapped_type>;
+  using value_type = s21::pair<const key_type, mapped_type>;
   using tree_type = RBTree<value_type, Compare>;
   using reference = value_type &;
   using const_reference = const value_type &;
   using const_iterator = typename tree_type::RBTreeConstIterator;
-  using iterator = const_iterator;
+  using iterator = typename tree_type::RBTreeIterator;
   using size_type = size_t;
   using node_type = RBTreeNode<value_type>;
   using node_pointer = RBTreeNode<value_type> *;
+  using tree_type::begin;
+  using tree_type::end;
   using tree_type::RBTree;
 
   explicit map(std::initializer_list<value_type> const &items)
@@ -34,37 +31,33 @@ class map : public RBTree<std::pair<const Key, T>, Compare> {
     }
   }
 
-  iterator insert(const_reference key) {
-    return tree_type::InsertMapPair(key).first;
-  }
-
- private:
-  std::pair<iterator, bool> InsertNode(const_reference key) override {
+  s21::pair<iterator, bool> insert(const_reference key) {
     return tree_type::InsertMapPair(key);
   }
+
+  s21::pair<iterator, bool> insert(const Key &key, const T &obj) {
+    return tree_type::InsertMapPair(value_type{key, obj});
+  }
+
+  mapped_type &operator[](const Key &key) {
+    auto mapped = insert(key, mapped_type{});
+    return (*mapped.first).second;
+  }
+
+  iterator begin() { return tree_type::NonConstBegin(); }
+
+  iterator end() { return tree_type::NonConstEnd(); }
 
   // access a specified element with bounds checking
   // mapped_type& at(const Key& key);
 
-  // std::pair<iterator, bool> insert(const Key& key, const T& obj) {
-  //   return insert(std::make_pair(key, obj));
-  // }
-
-  // mapped_type& operator[](const Key& key) {
-  //   auto mapped = insert(key, mapped_type{});
-  //   return mapped.first.second;
-  // }
-
   // std::pair<iterator, bool> insert_or_assign(const Key& key, const T& obj);
 
-  // std::pair<iterator, bool> InsertNode(const_reference key) override {
-  //   return RBTree<Key>::InsertMulti(key);
-  // }
 };
 
 // overloading for print()
 template <typename Key, typename T>
-std::ostream &operator<<(std::ostream &os, const std::pair<Key, T> &p) {
+std::ostream &operator<<(std::ostream &os, const s21::pair<Key, T> &p) {
   return os << "[" << p.first << "] = " << p.second << "";
 }
 

@@ -17,12 +17,12 @@ class RBTree<Key, Compare>::RBTreeIterator {
   using const_node_pointer = const RBTreeNode<key_type> *;
 
  public:
-  RBTreeIterator() = delete;
+  RBTreeIterator() : nil_(nullptr), node_(nullptr) {}
 
   explicit RBTreeIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
 
-  const_reference operator*() const noexcept { return node_->key_; }
+  reference operator*() { return node_->key_; }
 
   bool operator==(const iterator &other) const noexcept {
     return node_ == other.node_;
@@ -40,22 +40,22 @@ class RBTree<Key, Compare>::RBTreeIterator {
     return !(*this == other);
   }
 
-  iterator &operator++() noexcept {
+  iterator &operator++() const noexcept {
     RBTreeIncrement();
     return *this;
   }
 
-  iterator &operator--() noexcept {
+  iterator &operator--() const noexcept {
     RBTreeDecrement();
     return *this;
   }
 
-  iterator operator++(int) noexcept {
+  iterator operator++(int) const noexcept {
     iterator tmp{*this};
     RBTreeIncrement();
     return tmp;
   }
-  iterator operator--(int) noexcept {
+  iterator operator--(int) const noexcept {
     iterator tmp{*this};
     RBTreeDecrement();
     return tmp;
@@ -113,6 +113,7 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
   using value_type = Key;
   using reference = value_type &;
   using const_reference = const value_type &;
+  using iterator = RBTreeIterator;
   using const_iterator = RBTreeConstIterator;
   using size_type = size_t;
   using node_type = RBTreeNode<key_type>;
@@ -133,6 +134,14 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
 
   bool operator!=(const const_iterator &other) const noexcept {
     return node_ != other.node_;
+  }
+
+  bool operator==(const iterator &other) const noexcept {
+    return node_ == other.get_node_pointer();
+  }
+
+  bool operator!=(const iterator &other) const noexcept {
+    return !(*this == other);
   }
 
   const_iterator &operator++() noexcept {

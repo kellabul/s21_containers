@@ -1,26 +1,28 @@
 CC := g++
-FLAGS := -std=c++17 -pedantic -Wall -Werror -Wextra
+FLAGS := -std=c++17 -pedantic -Wall -Werror -Wextra -I .
 GTEST_FLAGS := -lgtest_main -lgtest -pthread 
 NAME := s21_containers
 TEST_NAME := test_$(NAME)
 ASAN_FLAGS := -g -fsanitize=address,undefined,leak
 GCOV_FLAGS := --coverage
 LCOV_REPORT_FOLDER := $(NAME)_report
+TEST_FOLDER := tests
 
-COVERAGE_FILES := *.gcno
-COVERAGE_RESULTS := *.gcda
-GCOV_FILES := *.gcov
-LCOV_FILES := *.info
+COVERAGE_FILES := tests/*.gcno
+COVERAGE_RESULTS := tests/*.gcda
+GCOV_FILES := tests/*.gcov
+LCOV_FILES := tests/*.info
+TEST_COVERAGE_FILES := $(COVERAGE_FILES) $(COVERAGE_RESULTS) $(GCOV_FILES) $(LCOV_FILES)
 
-GTEST_LIST_SRC := test_list_s21_containers.cc
+GTEST_LIST_SRC := $(TEST_FOLDER)/test_list_s21_containers.cc
 GTEST_LIST_OBJ := $(GTEST_LIST_SRC:.cc=.o)
-GTEST_SET_SRC := test_set_s21_containers.cc
+GTEST_SET_SRC := $(TEST_FOLDER)/test_set_s21_containers.cc
 GTEST_SET_OBJ := $(GTEST_SET_SRC:.cc=.o)
-GTEST_MULTISET_SRC := test_multiset_s21_containers.cc
+GTEST_MULTISET_SRC := $(TEST_FOLDER)/test_multiset_s21_containers.cc
 GTEST_MULTISET_OBJ := $(GTEST_MULTISET_SRC:.cc=.o)
-GTEST_MAP_SRC := test_map_s21_containers.cc
+GTEST_MAP_SRC := $(TEST_FOLDER)/test_map_s21_containers.cc
 GTEST_MAP_OBJ := $(GTEST_MAP_SRC:.cc=.o)
-GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_SET_SRC) $(GTEST_MULTISET_SRC) $(GTEST_MAP_SRC) #$(wildcard test_*.cc)
+GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_SET_SRC) $(GTEST_MULTISET_SRC) $(GTEST_MAP_SRC) #$(wildcard tests/test_*.cc)
 GTEST_OBJ := $(GTEST_SRC:.cc=.o)
 GCDA_FILES := $(GTEST_SRC:.cc=.gcda)
 HEADERS := $(shell find . -name "*.h" -o -name "*.tpp")
@@ -31,8 +33,7 @@ all: test
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.a $(TEST_NAME) $(COVERAGE_RESULTS) $(COVERAGE_FILES) $(GCOV_FILES) \
-	$(LCOV_FILES) $(LCOV_REPORT_FOLDER) 
+	rm -rf tests/*.o $(TEST_NAME) $(TEST_COVERAGE_FILES) $(LCOV_REPORT_FOLDER) 
 
 .PHONY: test
 test: $(TEST_NAME)

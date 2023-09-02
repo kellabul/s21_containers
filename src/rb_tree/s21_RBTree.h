@@ -25,7 +25,6 @@ class RBTree {
   using size_type = size_t;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
-  using insert_function = std::pair<iterator, bool> (*)(const_reference key);
 
   static constexpr bool kRed = true;
   static constexpr bool kBlack = false;
@@ -199,6 +198,10 @@ class RBTree {
 
   // ------ map ------
 
+  map_iterator NonConstBegin() { return map_iterator(nil_, nil_->right_); }
+
+  map_iterator NonConstEnd() { return map_iterator(nil_, nil_); }
+
   // ------ common ------
 
   // default - for set
@@ -207,15 +210,8 @@ class RBTree {
   };
 
   std::pair<iterator, bool> InsertUniq(const_reference key) {
-    node_pointer node = root_;
     node_pointer parent = nil_;
-    while (node != nil_ && node->key_ != key) {
-      parent = node;
-      if (compare_(key, node->key_))
-        node = node->left_;
-      else
-        node = node->right_;
-    }
+    node_pointer node = SearchForPlace(parent, key);
     if (node == nil_) {
       node = CreateNode(parent, key);
       return std::make_pair(iterator(nil_, node), true);
@@ -223,6 +219,15 @@ class RBTree {
     return std::make_pair(iterator(nil_, node), false);
   }
 
+  std::pair<map_iterator, bool> InsertMapPair(const_reference key) {
+    node_pointer parent = nil_;
+    node_pointer node = SearchForPlace(parent, key);
+    if (node == nil_) {
+      node = CreateNode(parent, key);
+      return std::make_pair(map_iterator(nil_, node), true);
+    }
+    return std::make_pair(map_iterator(nil_, node), false);
+  }
 
   std::pair<iterator, bool> InsertMulti(const_reference key) {
     node_pointer node = root_;
@@ -237,24 +242,6 @@ class RBTree {
     node = CreateNode(parent, key);
     return std::make_pair(iterator(nil_, node), true);
   }
-
-  std::pair<iterator, bool> InsertMapPair(const_reference key) {
-    node_pointer node = root_;
-    node_pointer parent = nil_;
-    while (node != nil_ && node->key_.first != key.first) {
-      parent = node;
-      if (compare_(key, node->key_))
-        node = node->left_;
-      else
-        node = node->right_;
-    }
-    if (node == nil_) {
-      node = CreateNode(parent, key);
-      return std::make_pair(iterator(nil_, node), true);
-    }
-    return std::make_pair(iterator(nil_, node), false);
-  }
-
 
   void PrintTree(node_pointer node, std::string space,
                  bool which_child_is_node = true) const {
@@ -275,6 +262,18 @@ class RBTree {
   }
 
  private:
+  node_pointer SearchForPlace(node_pointer &parent, const_reference key) {
+    node_pointer node = root_;
+    while (node != nil_ && node->key_ != key) {
+      parent = node;
+      if (compare_(key, node->key_))
+        node = node->left_;
+      else
+        node = node->right_;
+    }
+    return node;
+  }
+
   node_pointer CreateNode(node_pointer parent, const_reference key) {
     node_pointer node = new node_type{parent, nil_, nil_, key, kRed};
     CheckParent(node, parent);
