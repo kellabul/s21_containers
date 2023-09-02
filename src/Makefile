@@ -18,7 +18,9 @@ GTEST_SET_SRC := test_set_s21_containers.cc
 GTEST_SET_OBJ := $(GTEST_SET_SRC:.cc=.o)
 GTEST_MULTISET_SRC := test_multiset_s21_containers.cc
 GTEST_MULTISET_OBJ := $(GTEST_MULTISET_SRC:.cc=.o)
-GTEST_SRC := $(wildcard test_*.cc)
+GTEST_MAP_SRC := test_map_s21_containers.cc
+GTEST_MAP_OBJ := $(GTEST_MAP_SRC:.cc=.o)
+GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_SET_SRC) $(GTEST_MULTISET_SRC) $(GTEST_MAP_SRC) #$(wildcard test_*.cc)
 GTEST_OBJ := $(GTEST_SRC:.cc=.o)
 GCDA_FILES := $(GTEST_SRC:.cc=.gcda)
 HEADERS := $(shell find . -name "*.h" -o -name "*.tpp")
@@ -45,10 +47,13 @@ $(GTEST_SET_OBJ): $(GTEST_SET_SRC) s21_containers.h $(shell find ./rb_tree ./set
 $(GTEST_MULTISET_OBJ): $(GTEST_MULTISET_SRC) s21_containers.h $(shell find ./rb_tree ./multiset -name "*.h" -o -name "*.tpp")
 	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
 
-$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ)
+$(GTEST_MAP_OBJ): $(GTEST_MAP_SRC) s21_containers.h $(shell find ./rb_tree ./map -name "*.h" -o -name "*.tpp")
+	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
+
+$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ) $(GTEST_MAP_OBJ)
 	$(CC) $(GTEST_OBJ) $(GTEST_FLAGS) -o $(TEST_NAME) -fprofile-arcs
 
-$(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ)
+$(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ) $(GTEST_MAP_OBJ)
 	make test
 
 .PHONY: gcov_report

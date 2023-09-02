@@ -8,10 +8,10 @@
 #include "s21_RBTree_node.h"
 
 namespace s21 {
-
 template <typename Key, typename Compare = std::less<Key>>
 class RBTree {
  public:
+  class RBTreeIterator;
   class RBTreeConstIterator;
 
  public:
@@ -21,6 +21,7 @@ class RBTree {
   using const_reference = const value_type &;
   using const_iterator = RBTreeConstIterator;
   using iterator = const_iterator;
+  using map_iterator = RBTreeIterator;
   using size_type = size_t;
   using node_type = RBTreeNode<key_type>;
   using node_pointer = RBTreeNode<key_type> *;
@@ -33,15 +34,15 @@ class RBTree {
 
  public:
   RBTree()
-      : nil_{new node_type{nullptr, nullptr, nullptr, key_type{}, kBlack}},
+      : nil_{new node_type{nullptr, nullptr, nullptr, value_type{}, kBlack}},
         root_{},
         size_{0U} {
     AssignRootToNil();
   }
 
-  RBTree(std::initializer_list<key_type> const &items) : RBTree() {
+  RBTree(std::initializer_list<value_type> const &items) : RBTree() {
     for (const auto &element : items) {
-      InsertNode(element);
+      InsertUniq(element);
     }
   }
 
@@ -87,7 +88,7 @@ class RBTree {
   // TODO check again
   size_type max_size() const {
     return ((std::allocator<Key>{}).max_size() / 10);
-  };
+  }
 
   void clear() {
     ClearTree(root_);
@@ -95,14 +96,19 @@ class RBTree {
     size_ = 0U;
   }
 
+  std::pair<iterator, bool> insert(const_reference key) {
+    return InsertUniq(key);
+  }
+
   bool contains(const_reference key) const { return find(key) != end(); }
 
-  void print() { PrintTree(root_, ""); }
+  void print() const { PrintTree(root_, ""); }
 
-  void print_values() {
+  void print_values() const {
     PrintValuesRec(root_);
     std::cout << std::endl;
   }
+
   void swap(RBTree &other) {
     if (this == &other) return;
     std::swap(root_, other.root_);
@@ -191,20 +197,14 @@ class RBTree {
     return std::make_pair(lower_bound(key), upper_bound(key));
   }
 
+  // ------ map ------
+
   // ------ common ------
-  std::pair<iterator, bool> InsertMulti(const_reference key) {
-    node_pointer node = root_;
-    node_pointer parent = nil_;
-    while (node != nil_) {
-      parent = node;
-      if (compare_(key, node->key_))
-        node = node->left_;
-      else
-        node = node->right_;
-    }
-    node = CreateNode(parent, key);
-    return std::make_pair(iterator(nil_, node), true);
-  }
+
+  // default - for set
+  virtual std::pair<iterator, bool> InsertNode(const_reference key) {
+    return InsertUniq(key);
+  };
 
   std::pair<iterator, bool> InsertUniq(const_reference key) {
     node_pointer node = root_;
@@ -223,9 +223,56 @@ class RBTree {
     return std::make_pair(iterator(nil_, node), false);
   }
 
-  virtual std::pair<iterator, bool> InsertNode(const_reference key) {
-    return RBTree<Key>::InsertUniq(key);
-  };
+
+  std::pair<iterator, bool> InsertMulti(const_reference key) {
+    node_pointer node = root_;
+    node_pointer parent = nil_;
+    while (node != nil_) {
+      parent = node;
+      if (compare_(key, node->key_))
+        node = node->left_;
+      else
+        node = node->right_;
+    }
+    node = CreateNode(parent, key);
+    return std::make_pair(iterator(nil_, node), true);
+  }
+
+  std::pair<iterator, bool> InsertMapPair(const_reference key) {
+    node_pointer node = root_;
+    node_pointer parent = nil_;
+    while (node != nil_ && node->key_.first != key.first) {
+      parent = node;
+      if (compare_(key, node->key_))
+        node = node->left_;
+      else
+        node = node->right_;
+    }
+    if (node == nil_) {
+      node = CreateNode(parent, key);
+      return std::make_pair(iterator(nil_, node), true);
+    }
+    return std::make_pair(iterator(nil_, node), false);
+  }
+
+
+  void PrintTree(node_pointer node, std::string space,
+                 bool which_child_is_node = true) const {
+    if (node == nil_) {
+      return;
+    }
+    std::cout << space << "[ " << node->key_ << " ]"
+              << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
+    std::string arrow = "   └————— ";
+    std::string blank =
+        (which_child_is_node == kRight) ? "   │      " : "          ";
+    size_type start_pos = space.find(arrow);
+    if (start_pos != std::string::npos)
+      space.replace(start_pos, arrow.size(), blank);
+    space += arrow;
+    PrintTree(node->right_, space, kRight);
+    PrintTree(node->left_, space, kLeft);
+  }
 
  private:
   node_pointer CreateNode(node_pointer parent, const_reference key) {
@@ -264,28 +311,6 @@ class RBTree {
     PrintValuesRec(node->left_);
     std::cout << node->key_ << " ";
     PrintValuesRec(node->right_);
-  }
-
-  void PrintTree(node_pointer node, std::string space,
-                 bool which_child_is_node = true) {
-    if (node == nil_) {
-      // std::cout << space << "[ nil_ ]" << std::endl;
-      return;
-    }
-    std::cout << space
-              // << "[" << (which_child_is_node == kRight ? "<" : ">") << "]"
-              << "[ " << node->key_ << " ]"
-              << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
-    std::string arrow = "   └————— ";
-    std::string blank =
-        (which_child_is_node == kRight) ? "   │      " : "          ";
-    size_type start_pos = space.find(arrow);
-    if (start_pos != std::string::npos)
-      space.replace(start_pos, arrow.size(), blank);
-    space += arrow;
-    PrintTree(node->right_, space, kRight);
-    PrintTree(node->left_, space, kLeft);
-    // std::cout << node->key_ << " ";
   }
 
   void DeleteNode(node_pointer node) {
@@ -488,6 +513,7 @@ class RBTree {
   node_pointer root_;
   size_type size_;
 };
+
 }  // namespace s21
 
 #include "s21_RBTree_iterator.tpp"

@@ -35,7 +35,6 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <cmath>
 #include <iostream>
 #include <list>
-// #include <set>
 #include <string>
 
 #include "s21_containers.h"
