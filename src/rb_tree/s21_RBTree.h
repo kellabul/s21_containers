@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "../map/s21_pair.h"
 #include "s21_RBTree_node.h"
 
 namespace s21 {
@@ -99,7 +100,7 @@ class RBTree {
     return InsertUniq(key);
   }
 
-  bool contains(const_reference key) const { return find(key) != end(); }
+  bool contains(const_reference key) const { return FindNode(key) != nil_; }
 
   void print() const { PrintTree(root_, ""); }
 
@@ -124,6 +125,8 @@ class RBTree {
     DeleteNode(const_cast<node_pointer>(pos.get_node_pointer()));
   }
 
+  void erase(map_iterator pos) { DeleteNode(pos.get_node_pointer()); }
+
   template <typename... Args>
   std::vector<std::pair<iterator, bool>> insert_many(Args &&...args) {
     // std::vector<std::pair<iterator, bool>> result;
@@ -134,14 +137,7 @@ class RBTree {
  protected:
   // ------ set ------
   iterator find(const_reference key) const {
-    node_pointer node = root_;
-    while (node != nil_ && node->key_ != key) {
-      if (compare_(key, node->key_))
-        node = node->left_;
-      else
-        node = node->right_;
-    }
-    return iterator(nil_, node);
+    return iterator(nil_, FindNode(key));
   }
 
   // ------ multiset ------
@@ -202,7 +198,9 @@ class RBTree {
 
   map_iterator NonConstEnd() { return map_iterator(nil_, nil_); }
 
-  // ------ common ------
+  node_pointer GetNil() const { return nil_; };
+
+  // ------ insert ------
 
   // default - for set
   virtual std::pair<iterator, bool> InsertNode(const_reference key) {
@@ -243,22 +241,23 @@ class RBTree {
     return std::make_pair(iterator(nil_, node), true);
   }
 
-  void PrintTree(node_pointer node, std::string space,
-                 bool which_child_is_node = true) const {
-    if (node == nil_) {
-      return;
+  node_pointer FindNode(const_reference key) const {
+    node_pointer node = root_;
+    while (node != nil_ && node->key_ != key) {
+      if (compare_(key, node->key_))
+        node = node->left_;
+      else
+        node = node->right_;
     }
-    std::cout << space << "[ " << node->key_ << " ]"
-              << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
-    std::string arrow = "   └————— ";
-    std::string blank =
-        (which_child_is_node == kRight) ? "   │      " : "          ";
-    size_type start_pos = space.find(arrow);
-    if (start_pos != std::string::npos)
-      space.replace(start_pos, arrow.size(), blank);
-    space += arrow;
-    PrintTree(node->right_, space, kRight);
-    PrintTree(node->left_, space, kLeft);
+    return node;
+  }
+
+  virtual void SwapNodes(node_pointer max_child, node_pointer node) {
+    std::swap(max_child->key_, node->key_);
+    // std::swap(max_child->parent_, node->parent_);
+    // std::swap(max_child->left_, node->left_);
+    // std::swap(max_child->right_, node->right_);
+    // std::swap(max_child->color_, node->color_);
   }
 
  private:
@@ -316,7 +315,7 @@ class RBTree {
     if (node == nil_) return;
     if (node->left_ != nil_ && node->right_ != nil_) {
       node_pointer max_child = MaxChild(node->left_);
-      std::swap(max_child->key_, node->key_);
+      SwapNodes(max_child, node);
       DeleteNode(max_child);
     } else if (node->left_ != nil_) {
       DeleteBlackWithOneChild(node, kLeft);
@@ -393,7 +392,7 @@ class RBTree {
   void DeleteBlackWithOneChild(node_pointer node, bool which_child_has_node) {
     node_pointer child =
         (which_child_has_node == kLeft) ? node->left_ : node->right_;
-    std::swap(child->key_, node->key_);
+    SwapNodes(child, node);
     node->left_ = nil_;
     node->right_ = nil_;
     CheckMinMaxDeletion(node, child);
@@ -418,6 +417,24 @@ class RBTree {
     ClearTree(node->left_);
     ClearTree(node->right_);
     delete node;
+  }
+
+  void PrintTree(node_pointer node, std::string space,
+                 bool which_child_is_node = true) const {
+    if (node == nil_) {
+      return;
+    }
+    std::cout << space << "[ " << node->key_ << " ]"
+              << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
+    std::string arrow = "   └————— ";
+    std::string blank =
+        (which_child_is_node == kRight) ? "   │      " : "          ";
+    size_type start_pos = space.find(arrow);
+    if (start_pos != std::string::npos)
+      space.replace(start_pos, arrow.size(), blank);
+    space += arrow;
+    PrintTree(node->right_, space, kRight);
+    PrintTree(node->left_, space, kLeft);
   }
 
   void CheckParent(const node_pointer node, node_pointer parent) {

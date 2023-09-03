@@ -40,22 +40,22 @@ class RBTree<Key, Compare>::RBTreeIterator {
     return !(*this == other);
   }
 
-  iterator &operator++() const noexcept {
+   iterator &operator++() {
     RBTreeIncrement();
     return *this;
   }
 
-  iterator &operator--() const noexcept {
+  iterator &operator--() {
     RBTreeDecrement();
     return *this;
   }
 
-  iterator operator++(int) const noexcept {
+  iterator operator++(int) {
     iterator tmp{*this};
     RBTreeIncrement();
     return tmp;
   }
-  iterator operator--(int) const noexcept {
+  iterator operator--(int) {
     iterator tmp{*this};
     RBTreeDecrement();
     return tmp;
