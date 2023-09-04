@@ -10,6 +10,7 @@ class multiset : public RBTree<Key, Compare> {
   using tree_type = RBTree<Key, Compare>;
   using tree_type::count;
   using tree_type::equal_range;
+  using tree_type::find;
   using tree_type::lower_bound;
   using tree_type::RBTree;
   using tree_type::upper_bound;

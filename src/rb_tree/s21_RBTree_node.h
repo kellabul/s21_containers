@@ -26,14 +26,7 @@ class RBTreeNode {
         key_(new key_type(other.key)),
         color_(other.color) {}
 
-  RBTreeNode(RBTreeNode &&other)
-      : parent_(other.parent),
-        left_(other.left),
-        right_(other.right),
-        key_(other.key),
-        color_(other.color) {
-    other.key_ = nullptr;
-  }
+  RBTreeNode(RBTreeNode &&other) { *this = std::move(other); }
 
   RBTreeNode operator=(const RBTreeNode &other) {
     RBTreeNode temp(other);
