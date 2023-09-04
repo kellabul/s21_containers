@@ -6,12 +6,12 @@
 
 namespace s21 {
 template <typename Key, typename T,
-          typename Compare = std::less<s21::pair<Key, T>>>
-class map : public RBTree<s21::pair<Key, T>, Compare> {
+          typename Compare = std::less<s21::pair<const Key, T>>>
+class map : public RBTree<s21::pair<const Key, T>, Compare> {
  public:
   using key_type = Key;
   using mapped_type = T;
-  using value_type = s21::pair<key_type, mapped_type>;
+  using value_type = s21::pair<const key_type, mapped_type>;
   using tree_type = RBTree<value_type, Compare>;
   using reference = value_type &;
   using const_reference = const value_type &;
@@ -48,12 +48,11 @@ class map : public RBTree<s21::pair<Key, T>, Compare> {
 
   iterator end() { return tree_type::NonConstEnd(); }
 
-  // access a specified element with bounds checking
   mapped_type &at(const Key &key) {
     auto node = tree_type::FindNode(value_type(key, mapped_type{}));
     ;
     if (node == tree_type::GetNil()) throw std::out_of_range("No such key");
-    return node->key_.second;
+    return node->key_->second;
   }
 
   std::pair<iterator, bool> insert_or_assign(const Key &key, const T &obj) {
@@ -65,12 +64,6 @@ class map : public RBTree<s21::pair<Key, T>, Compare> {
   bool contains(const Key &key) const {
     return tree_type::contains(value_type(key, mapped_type{}));
   }
-
-
-  // void SwapNodes(node_pointer max_child, node_pointer node) override {
-  //   std::cout << "asdflsal;dfkj" << std::endl;
-  //   std::swap(max_child->key_, node->key_);
-  // }
 };
 
 // overloading for print()

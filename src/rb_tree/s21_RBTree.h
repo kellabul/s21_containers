@@ -147,7 +147,7 @@ class RBTree {
     node_pointer node = root_;
     node_pointer lower_node = nil_;
     while (node != nil_) {
-      if (compare_(node->key_, key)) {
+      if (compare_(*(node->key_), key)) {
         node = node->right_;
       } else {
         lower_node = node;
@@ -162,7 +162,7 @@ class RBTree {
     node_pointer node = root_;
     node_pointer upper_node = nil_;
     while (node != nil_) {
-      if (compare_(key, node->key_)) {
+      if (compare_(key, *(node->key_))) {
         upper_node = node;
         node = node->left_;
       } else {
@@ -232,7 +232,7 @@ class RBTree {
     node_pointer parent = nil_;
     while (node != nil_) {
       parent = node;
-      if (compare_(key, node->key_))
+      if (compare_(key, *(node->key_)))
         node = node->left_;
       else
         node = node->right_;
@@ -243,8 +243,8 @@ class RBTree {
 
   node_pointer FindNode(const_reference key) const {
     node_pointer node = root_;
-    while (node != nil_ && node->key_ != key) {
-      if (compare_(key, node->key_))
+    while (node != nil_ && *(node->key_) != key) {
+      if (compare_(key, *(node->key_)))
         node = node->left_;
       else
         node = node->right_;
@@ -254,18 +254,14 @@ class RBTree {
 
   virtual void SwapNodes(node_pointer max_child, node_pointer node) {
     std::swap(max_child->key_, node->key_);
-    // std::swap(max_child->parent_, node->parent_);
-    // std::swap(max_child->left_, node->left_);
-    // std::swap(max_child->right_, node->right_);
-    // std::swap(max_child->color_, node->color_);
   }
 
  private:
   node_pointer SearchForPlace(node_pointer &parent, const_reference key) {
     node_pointer node = root_;
-    while (node != nil_ && node->key_ != key) {
+    while (node != nil_ && *(node->key_) != key) {
       parent = node;
-      if (compare_(key, node->key_))
+      if (compare_(key, *(node->key_)))
         node = node->left_;
       else
         node = node->right_;
@@ -293,7 +289,7 @@ class RBTree {
     if (other_node == other_nil) return;
     ImportElements(other_node->left_, other_nil);
     ImportElements(other_node->right_, other_nil);
-    InsertNode(other_node->key_);
+    InsertNode(*(other_node->key_));
   }
 
   void ImportElementsMulti(node_pointer const &other_node,
@@ -301,13 +297,13 @@ class RBTree {
     if (other_node == other_nil) return;
     ImportElementsMulti(other_node->left_, other_nil);
     ImportElementsMulti(other_node->right_, other_nil);
-    InsertMulti(other_node->key_);
+    InsertMulti(*(other_node->key_));
   }
 
   void PrintValuesRec(node_pointer node) {
     if (node == nil_) return;
     PrintValuesRec(node->left_);
-    std::cout << node->key_ << " ";
+    std::cout << *(node->key_) << " ";
     PrintValuesRec(node->right_);
   }
 
@@ -315,7 +311,7 @@ class RBTree {
     if (node == nil_) return;
     if (node->left_ != nil_ && node->right_ != nil_) {
       node_pointer max_child = MaxChild(node->left_);
-      SwapNodes(max_child, node);
+      std::swap(max_child->key_, node->key_);
       DeleteNode(max_child);
     } else if (node->left_ != nil_) {
       DeleteBlackWithOneChild(node, kLeft);
@@ -392,7 +388,7 @@ class RBTree {
   void DeleteBlackWithOneChild(node_pointer node, bool which_child_has_node) {
     node_pointer child =
         (which_child_has_node == kLeft) ? node->left_ : node->right_;
-    SwapNodes(child, node);
+    std::swap(child->key_, node->key_);
     node->left_ = nil_;
     node->right_ = nil_;
     CheckMinMaxDeletion(node, child);
@@ -424,7 +420,7 @@ class RBTree {
     if (node == nil_) {
       return;
     }
-    std::cout << space << "[ " << node->key_ << " ]"
+    std::cout << space << "[ " << *(node->key_) << " ]"
               << "(" << (node->color_ ? "+" : "-") << ")" << std::endl;
     std::string arrow = "   └————— ";
     std::string blank =
@@ -440,7 +436,7 @@ class RBTree {
   void CheckParent(const node_pointer node, node_pointer parent) {
     if (parent == nil_) {
       root_ = node;
-    } else if (compare_(node->key_, parent->key_)) {
+    } else if (compare_(*(node->key_), *(parent->key_))) {
       parent->left_ = node;
     } else {
       parent->right_ = node;
@@ -451,10 +447,10 @@ class RBTree {
     if (node == root_) {
       nil_->left_ = node;
       nil_->right_ = node;
-    } else if (compare_(nil_->left_->key_, node->key_) ||
-               nil_->left_->key_ == node->key_) {
+    } else if (compare_(*(nil_->left_->key_), *(node->key_)) ||
+               *(nil_->left_->key_) == *(node->key_)) {
       nil_->left_ = node;
-    } else if (compare_(node->key_, nil_->right_->key_)) {
+    } else if (compare_(*(node->key_), *(nil_->right_->key_))) {
       nil_->right_ = node;
     }
   }

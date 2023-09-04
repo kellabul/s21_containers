@@ -8,8 +8,8 @@ template <typename Key, typename Compare = std::less<Key> >
 class set : public RBTree<Key, Compare> {
  public:
   using tree_type = RBTree<Key, Compare>;
-  using tree_type::RBTree;
   using tree_type::find;
+  using tree_type::RBTree;
   using key_type = Key;
   using value_type = Key;
   using reference = value_type &;

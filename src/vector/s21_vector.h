@@ -8,14 +8,13 @@
 namespace s21 {
 template <typename T>
 class vector {
-public:
- using value_type = T;
+ public:
+  using value_type = T;
   using reference = T &;
   using const_reference = const T &;
   using iterator = T *;
   using const_iterator = const T *;
   using size_type = size_t;
-
 
   vector() : arr_(nullptr), size_(0), capacity_(0) {}
 
@@ -26,7 +25,7 @@ public:
       arr_ = new value_type[n];
     }
   }
-  
+
   vector(std::initializer_list<value_type> const &items) : vector() {
     size_ = items.size();
     capacity_ = items.size();
@@ -224,7 +223,7 @@ public:
 
   void sort() { std::sort(begin(), end()); }
 
-private:
+ private:
   iterator arr_;
   size_type size_;
   size_type capacity_;
@@ -238,6 +237,6 @@ private:
     }
   }
 };
-}
+}  // namespace s21
 
 #endif

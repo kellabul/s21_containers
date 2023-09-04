@@ -15,13 +15,13 @@ class pair {
   pair(pair&& other) : first(other.first), second(other.second) {}
 
   pair& operator=(const pair& other) noexcept {
-    const_cast<Key&>(first) = other.first;
+    // const_cast<Key&>(first) = other.first;
+    first = other.first;
     second = other.second;
     return *this;
   }
 
   pair& operator=(pair&& other) noexcept {
-    const_cast<Key&>(first) = other.first;
     first = other.first;
     second = other.second;
     return *this;
@@ -32,13 +32,6 @@ class pair {
   pair(const std_pair& other) : first(other.first), second(other.second) {}
 
   operator std_pair() const { return std::make_pair(first, second); }
-
-  // void swap(std_pair& other) {
-  //   pair<Key, Value> buffer;
-  //   buffer = other;
-  //   other = *this;
-  //   *this = buffer;
-  // }
 
   bool operator==(const pair& other) const { return first == other.first; }
 

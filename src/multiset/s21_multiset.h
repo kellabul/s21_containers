@@ -8,11 +8,11 @@ template <typename Key, typename Compare = std::less<Key> >
 class multiset : public RBTree<Key, Compare> {
  public:
   using tree_type = RBTree<Key, Compare>;
-  using tree_type::RBTree;
-  using tree_type::lower_bound;
-  using tree_type::upper_bound;
   using tree_type::count;
   using tree_type::equal_range;
+  using tree_type::lower_bound;
+  using tree_type::RBTree;
+  using tree_type::upper_bound;
   using key_type = Key;
   using value_type = Key;
   using reference = value_type &;

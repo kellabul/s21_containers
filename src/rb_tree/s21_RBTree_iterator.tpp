@@ -22,7 +22,7 @@ class RBTree<Key, Compare>::RBTreeIterator {
   explicit RBTreeIterator(node_pointer nil, node_pointer node)
       : nil_(nil), node_(node) {}
 
-  reference operator*() { return node_->key_; }
+  reference operator*() { return *(node_->key_); }
 
   bool operator==(const iterator &other) const noexcept {
     return node_ == other.node_;
@@ -40,7 +40,7 @@ class RBTree<Key, Compare>::RBTreeIterator {
     return !(*this == other);
   }
 
-   iterator &operator++() {
+  iterator &operator++() {
     RBTreeIncrement();
     return *this;
   }
@@ -126,7 +126,7 @@ class RBTree<Key, Compare>::RBTreeConstIterator {
   explicit RBTreeConstIterator(const_node_pointer nil, const_node_pointer node)
       : nil_(nil), node_(node) {}
 
-  const_reference operator*() const noexcept { return node_->key_; }
+  const_reference operator*() const noexcept { return *(node_->key_); }
 
   bool operator==(const const_iterator &other) const noexcept {
     return node_ == other.node_;
