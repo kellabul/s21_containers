@@ -118,7 +118,7 @@ class RBTree {
 
   void merge(RBTree &other) {
     RBTree tmp;
-    for (const auto& elem : other) {
+    for (const auto &elem : other) {
       auto result = InsertNode(elem);
       if (result.second == false) tmp.InsertNode(elem);
     }

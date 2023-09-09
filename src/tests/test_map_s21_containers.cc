@@ -84,8 +84,8 @@ TEST(map, pair) {
 }
 
 TEST(map, merge) {
-  s21::map<int, int> one{{1,2}, {3,4}, {5,6}};
-  s21::map<int, int> two{{1,5}, {4,4}, {5,8}};
+  s21::map<int, int> one{{1, 2}, {3, 4}, {5, 6}};
+  s21::map<int, int> two{{1, 5}, {4, 4}, {5, 8}};
   one.merge(two);
   EXPECT_EQ(one.size(), 4);
   EXPECT_EQ(two.size(), 2);
