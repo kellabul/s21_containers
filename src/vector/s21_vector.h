@@ -167,8 +167,7 @@ class vector {
 
   iterator insert(iterator pos, const_reference value) {
     if (pos < begin() || pos > end()) {
-      throw std::length_error(
-          "Error: erase(): Accessing an inaccessible area of memory");
+      throw std::length_error("Index out ot range");
     }
     if (pos == end()) {
       push_back(value);
@@ -190,7 +189,7 @@ class vector {
       throw std::length_error(
           "Error: erase(): Accessing an inaccessible area of memory");
     }
-    for (size_t i = std::distance(begin(), pos); i < size() - 1; i++) {
+    for (size_t i = std::distance(begin(), pos); i + 1 < size(); i++) {
       arr_[i] = arr_[i + 1];
     }
     size_ -= 1;
@@ -209,9 +208,6 @@ class vector {
   }
 
   void pop_back() {
-    if (size_ == 0) {
-      throw std::length_error("Error: size == 0, nothing to pop_back");
-    }
     size_ -= 1;
   }
 
@@ -222,6 +218,23 @@ class vector {
   }
 
   void sort() { std::sort(begin(), end()); }
+
+template<typename... Args>
+iterator insert_many(const_iterator pos, Args&&... args) {
+    if (pos < begin() || pos > end()) {
+        throw std::length_error("Index out of range");
+    }
+    size_type position_index = pos - begin();
+    insert_values_at(const_cast<iterator>(pos), std::forward<Args>(args)...);
+
+    return begin() + position_index;
+}
+
+template<typename... Args>
+void insert_many_back(Args&&... args) {
+    insert_values_at(end(), std::forward<Args>(args)...);
+}
+
 
  private:
   iterator arr_;
@@ -235,6 +248,21 @@ class vector {
       size_ = 0;
       capacity_ = 0;
     }
+  }
+  template<typename... Args>
+  void insert_values_at(iterator pos, Args&&... args) {
+      size_type elements_to_insert = sizeof...(args);
+      size_type position_index = pos - begin();
+
+      if (size_ + elements_to_insert > capacity_) {
+          size_type new_capacity = std::max(capacity_ * 2, size_ + elements_to_insert);
+          reserve(new_capacity);
+      }
+      std::move_backward(begin() + position_index, end(), end() + elements_to_insert);
+      iterator current_pos = begin() + position_index;
+      ((*(current_pos++) = std::forward<Args>(args)), ...);
+
+      size_ += elements_to_insert;
   }
 };
 }  // namespace s21
