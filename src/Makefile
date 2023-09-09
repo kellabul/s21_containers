@@ -4,14 +4,15 @@ GTEST_FLAGS := -lgtest_main -lgtest -pthread
 NAME := s21_containers
 TEST_NAME := test_$(NAME)
 ASAN_FLAGS := -g -fsanitize=address,undefined,leak
-GCOV_FLAGS := --coverage
+GCOV_FLAGS := -fprofile-arcs -ftest-coverage -fPIC -O0
 LCOV_REPORT_FOLDER := $(NAME)_report
 TEST_FOLDER := tests
 
+
 COVERAGE_FILES := tests/*.gcno
 COVERAGE_RESULTS := tests/*.gcda
-GCOV_FILES := tests/*.gcov
-LCOV_FILES := tests/*.info
+GCOV_FILES := tests/*.gcov *.gcov
+LCOV_FILES := tests/*.info *.info *html *css
 TEST_COVERAGE_FILES := $(COVERAGE_FILES) $(COVERAGE_RESULTS) $(GCOV_FILES) $(LCOV_FILES)
 
 GTEST_LIST_SRC := $(TEST_FOLDER)/test_list_s21_containers.cc
@@ -59,9 +60,18 @@ $(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ) $(GTEST_
 
 .PHONY: gcov_report
 gcov_report: $(GCDA_FILES)
-	lcov -t "$(NAME)" -o gcov.info -c -d . --rc lcov_branch_coverage=1 --no-external
-	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info --rc lcov_branch_coverage=1
+	lcov -t "$(NAME)" -o gcov.info -c -d . --no-external
+	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info
 	open $(LCOV_REPORT_FOLDER)/index.html
+
+.PHONY: gcovr_html
+gcovr_html: $(TEST_NAME)
+	gcovr --html >> $(TEST_NAME).html
+	open $(TEST_NAME).html
+
+.PHONY: gcovr
+gcovr: $(TEST_NAME)
+	gcovr
 
 .PHONY: gcov
 gcov: $(TEST_NAME)

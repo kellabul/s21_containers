@@ -95,3 +95,49 @@ TEST(multiset, count) {
   EXPECT_EQ(one.count(3), 0);
   EXPECT_EQ(one.count(4), 3);
 }
+
+TEST(multiset, insert_many) {
+  s21::multiset<int> one;
+  EXPECT_EQ(one.count(3), 0);
+  auto iter = one.begin();
+  EXPECT_EQ(iter, one.end());
+  EXPECT_EQ(one.size(), 0);
+  one.insert_many(4, 4, 4, 4, 4, 4, 4, 10);
+  iter = one.begin();
+  for (int i = 1; i < 8; ++i, ++iter) {
+    EXPECT_EQ(*iter, 4);
+  }
+  EXPECT_EQ(*iter, 10);
+  ++iter;
+  EXPECT_EQ(one.size(), 8);
+  EXPECT_EQ(one.count(4), 7);
+  EXPECT_EQ(iter, one.end());
+  one.clear();
+  iter = one.begin();
+  EXPECT_EQ(iter, one.end());
+  EXPECT_EQ(one.size(), 0);
+}
+
+TEST(multiset, swap) {
+  s21::multiset<int> one{4, 4, 4, 4, 4, 4, 4, 10};
+  s21::multiset<int> two;
+  two.swap(one);
+  auto iter = two.begin();
+  for (int i = 1; i < 8; ++i, ++iter) {
+    EXPECT_EQ(*iter, 4);
+  }
+  EXPECT_EQ(*iter, 10);
+}
+
+TEST(multiset, find) {
+  s21::multiset<int> one{4, 4, 4, 4, 4, 4, 4, 10};
+  auto iter = one.find(4);
+  EXPECT_EQ(*iter, 4);
+}
+
+TEST(multiset, contains) {
+  s21::multiset<int> one{4, 4, 4, 4, 4, 4, 4, 10};
+  EXPECT_EQ(one.contains(4), true);
+  EXPECT_EQ(one.contains(10), true);
+  EXPECT_EQ(one.contains(0), false);
+}

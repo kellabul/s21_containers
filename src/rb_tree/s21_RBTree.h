@@ -117,8 +117,12 @@ class RBTree {
   }
 
   void merge(RBTree &other) {
-    ImportElements(other.root_, other.nil_);
-    other.clear();
+    RBTree tmp;
+    for (const auto& elem : other) {
+      auto result = InsertNode(elem);
+      if (result.second == false) tmp.InsertNode(elem);
+    }
+    other.swap(tmp);
   }
 
   void erase(iterator pos) {
