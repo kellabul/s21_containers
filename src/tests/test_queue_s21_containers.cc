@@ -34,13 +34,14 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <iostream>
 #include <list>
-#include <queue>
 #include <string>
+#include <queue>
 
 #include "s21_containers.h"
 
 using std::cout;
 using std::endl;
+
 
 TEST(S21_queueTest, Constructor_Default) {
   s21::queue<int> S21_queueTest;
@@ -122,11 +123,9 @@ TEST(S21_queueTest, Modifier_Pop) {
 }
 
 TEST(S21_queueTest, Modifier_Swap) {
-  s21::queue<std::string> S21_queueTest_1{"aboba", "shleppa", "amogus",
-                                          "abobus"};
+  s21::queue<std::string> S21_queueTest_1{"aboba", "shleppa", "amogus", "abobus"};
   s21::queue<std::string> S21_queueTest_2{"shtirlits", "vovochka", "poruchik"};
-  s21::queue<std::string> S21_queueTest_3{"aboba", "shleppa", "amogus",
-                                          "abobus"};
+  s21::queue<std::string> S21_queueTest_3{"aboba", "shleppa", "amogus", "abobus"};
   s21::queue<std::string> S21_queueTest_4{"shtirlits", "vovochka", "poruchik"};
 
   S21_queueTest_1.swap(S21_queueTest_2);
@@ -230,4 +229,27 @@ TEST(S21_queueTest, insert_many_back) {
     my_queue.pop();
     res_queue.pop();
   }
+}
+
+TEST(S21_queueTest, operators) {
+  s21::queue<int> q1{6, 7, 9};
+  s21::queue<int> q2;
+  s21::queue<int> q3{6, 7, 9};
+  const s21::queue<int> const_q2;
+  q1 = q2;
+  q3 = q2;
+  EXPECT_EQ(q1, q2);
+  EXPECT_EQ(q3, const_q2);
+  EXPECT_EQ(q3 == const_q2, true);
+  EXPECT_EQ(q3 != const_q2, false);
+}
+
+TEST(S21_queueTest, move_operator) {
+  s21::queue<int> const q1{6, 7, 9};
+  EXPECT_EQ(q1.front(), 6);
+  EXPECT_EQ(q1.back(), 9);
+  s21::queue<int> q2;
+  q2 = std::move(q1);
+  EXPECT_EQ(q2.front(), 6);
+  EXPECT_EQ(q2.back(), 9);
 }

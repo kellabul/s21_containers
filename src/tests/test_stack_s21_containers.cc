@@ -33,8 +33,8 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <gtest/gtest.h>
 
 #include <iostream>
-#include <stack>
 #include <string>
+#include <stack>
 
 #include "s21_containers.h"
 
@@ -503,4 +503,17 @@ TEST(S21_stackTest, Swap_6) {
 
   EXPECT_EQ(s21_stack_swap.size(), std_stack_swap.size());
   EXPECT_EQ(s21_stack_swap.top(), std_stack_swap.top());
+}
+
+TEST(S21_stackTest, operators) {
+  s21::stack<int> q1{6, 7, 9};
+  s21::stack<int> q2;
+  s21::stack<int> q3{6, 7, 9};
+  const s21::stack<int> const_q2;
+  q1 = q2;
+  q3 = q2;
+  EXPECT_EQ(q1, q2);
+  EXPECT_EQ(q3, const_q2);
+  EXPECT_EQ(q3 == const_q2, true);
+  EXPECT_EQ(q3 != const_q2, false);
 }
