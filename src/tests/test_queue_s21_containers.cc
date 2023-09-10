@@ -34,117 +34,116 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <iostream>
 #include <list>
-#include <string>
 #include <queue>
+#include <string>
 
 #include "s21_containers.h"
 
 using std::cout;
 using std::endl;
 
-
-TEST(S21_queueTest, Constructor_Default) {
-  s21::queue<int> S21_queueTest;
+TEST(queue_test, Constructor_Default) {
+  s21::queue<int> queue_test;
   std::queue<int> std_queue;
-  EXPECT_EQ(S21_queueTest.size(), std_queue.size());
-  EXPECT_EQ(S21_queueTest.empty(), std_queue.empty());
+  EXPECT_EQ(queue_test.size(), std_queue.size());
+  EXPECT_EQ(queue_test.empty(), std_queue.empty());
 }
 
-TEST(S21_queueTest, Constructor_Initializer_queue) {
-  s21::queue<int> S21_queueTest{1, 2, 3, 4};
-  EXPECT_EQ(S21_queueTest.front(), 1);
-  EXPECT_EQ(S21_queueTest.back(), 4);
-  EXPECT_EQ(S21_queueTest.size(), size_t(4));
-  EXPECT_EQ(S21_queueTest.empty(), false);
+TEST(queue_test, Constructor_Initializer_queue) {
+  s21::queue<int> queue_test{1, 2, 3, 4};
+  EXPECT_EQ(queue_test.front(), 1);
+  EXPECT_EQ(queue_test.back(), 4);
+  EXPECT_EQ(queue_test.size(), size_t(4));
+  EXPECT_EQ(queue_test.empty(), false);
 }
 
-TEST(S21_queueTest, Constructor_Copy) {
-  s21::queue<char> S21_queueTest_1{'a', 'b', 'c', 'd'};
-  s21::queue<char> S21_queueTest_2 = S21_queueTest_1;
+TEST(queue_test, Constructor_Copy) {
+  s21::queue<char> queue_test_1{'a', 'b', 'c', 'd'};
+  s21::queue<char> queue_test_2 = queue_test_1;
 
-  EXPECT_EQ(S21_queueTest_1.size(), S21_queueTest_2.size());
+  EXPECT_EQ(queue_test_1.size(), queue_test_2.size());
 
   for (auto i = 0; i < 4; i++) {
-    EXPECT_EQ(S21_queueTest_1.front(), S21_queueTest_2.front());
-    EXPECT_EQ(S21_queueTest_1.size(), S21_queueTest_2.size());
-    S21_queueTest_1.pop(), S21_queueTest_2.pop();
+    EXPECT_EQ(queue_test_1.front(), queue_test_2.front());
+    EXPECT_EQ(queue_test_1.size(), queue_test_2.size());
+    queue_test_1.pop(), queue_test_2.pop();
   }
 }
 
-TEST(S21_queueTest, Constructor_Move) {
-  s21::queue<char> S21_queueTest_1{'a', 'b', 'c', 'd'};
-  s21::queue<char> S21_queueTest_2 = std::move(S21_queueTest_1);
-  s21::queue<char> S21_queueTest_3{'a', 'b', 'c', 'd'};
+TEST(queue_test, Constructor_Move) {
+  s21::queue<char> queue_test_1{'a', 'b', 'c', 'd'};
+  s21::queue<char> queue_test_2 = std::move(queue_test_1);
+  s21::queue<char> queue_test_3{'a', 'b', 'c', 'd'};
 
-  EXPECT_EQ(S21_queueTest_2.size(), S21_queueTest_3.size());
-  EXPECT_EQ(S21_queueTest_1.size(), size_t(0));
-  EXPECT_EQ(S21_queueTest_1.empty(), true);
+  EXPECT_EQ(queue_test_2.size(), queue_test_3.size());
+  EXPECT_EQ(queue_test_1.size(), size_t(0));
+  EXPECT_EQ(queue_test_1.empty(), true);
   for (auto i = 0; i < 4; i++) {
-    EXPECT_EQ(S21_queueTest_3.front(), S21_queueTest_2.front());
-    EXPECT_EQ(S21_queueTest_3.size(), S21_queueTest_2.size());
-    S21_queueTest_3.pop(), S21_queueTest_2.pop();
+    EXPECT_EQ(queue_test_3.front(), queue_test_2.front());
+    EXPECT_EQ(queue_test_3.size(), queue_test_2.size());
+    queue_test_3.pop(), queue_test_2.pop();
   }
 }
 
-TEST(S21_queueTest, Modifier_Push) {
-  s21::queue<int> S21_queueTest;
+TEST(queue_test, Modifier_Push) {
+  s21::queue<int> queue_test;
   std::queue<int> std_queue;
-  S21_queueTest.push(5);
-  S21_queueTest.push(0);
+  queue_test.push(5);
+  queue_test.push(0);
   std_queue.push(5);
   std_queue.push(0);
-  EXPECT_EQ(S21_queueTest.front(), std_queue.front());
-  EXPECT_EQ(S21_queueTest.back(), std_queue.back());
-  EXPECT_EQ(S21_queueTest.size(), std_queue.size());
-  EXPECT_EQ(S21_queueTest.empty(), std_queue.empty());
+  EXPECT_EQ(queue_test.front(), std_queue.front());
+  EXPECT_EQ(queue_test.back(), std_queue.back());
+  EXPECT_EQ(queue_test.size(), std_queue.size());
+  EXPECT_EQ(queue_test.empty(), std_queue.empty());
 }
 
-TEST(S21_queueTest, Modifier_Pop) {
-  s21::queue<int> S21_queueTest;
+TEST(queue_test, Modifier_Pop) {
+  s21::queue<int> queue_test;
   std::queue<int> std_queue;
-  S21_queueTest.push(5);
-  S21_queueTest.push(0);
+  queue_test.push(5);
+  queue_test.push(0);
   std_queue.push(5);
   std_queue.push(0);
-  S21_queueTest.pop();
-  S21_queueTest.pop();
+  queue_test.pop();
+  queue_test.pop();
   std_queue.pop();
   std_queue.pop();
-  S21_queueTest.push(15);
-  S21_queueTest.push(10);
+  queue_test.push(15);
+  queue_test.push(10);
   std_queue.push(15);
   std_queue.push(10);
-  S21_queueTest.pop();
+  queue_test.pop();
   std_queue.pop();
-  EXPECT_EQ(S21_queueTest.front(), std_queue.front());
-  EXPECT_EQ(S21_queueTest.back(), std_queue.back());
-  EXPECT_EQ(S21_queueTest.size(), std_queue.size());
-  EXPECT_EQ(S21_queueTest.empty(), std_queue.empty());
+  EXPECT_EQ(queue_test.front(), std_queue.front());
+  EXPECT_EQ(queue_test.back(), std_queue.back());
+  EXPECT_EQ(queue_test.size(), std_queue.size());
+  EXPECT_EQ(queue_test.empty(), std_queue.empty());
 }
 
-TEST(S21_queueTest, Modifier_Swap) {
-  s21::queue<std::string> S21_queueTest_1{"aboba", "shleppa", "amogus", "abobus"};
-  s21::queue<std::string> S21_queueTest_2{"shtirlits", "vovochka", "poruchik"};
-  s21::queue<std::string> S21_queueTest_3{"aboba", "shleppa", "amogus", "abobus"};
-  s21::queue<std::string> S21_queueTest_4{"shtirlits", "vovochka", "poruchik"};
+TEST(queue_test, Modifier_Swap) {
+  s21::queue<std::string> queue_test_1{"one", "two", "three", "four"};
+  s21::queue<std::string> queue_test_2{"aaaaa", "bbbbb", "ccccc"};
+  s21::queue<std::string> queue_test_3{"one", "two", "three", "four"};
+  s21::queue<std::string> queue_test_4{"aaaaa", "bbbbb", "ccccc"};
 
-  S21_queueTest_1.swap(S21_queueTest_2);
+  queue_test_1.swap(queue_test_2);
 
-  EXPECT_EQ(S21_queueTest_1.size(), S21_queueTest_4.size());
-  EXPECT_EQ(S21_queueTest_2.size(), S21_queueTest_3.size());
+  EXPECT_EQ(queue_test_1.size(), queue_test_4.size());
+  EXPECT_EQ(queue_test_2.size(), queue_test_3.size());
   for (auto i = 0; i < 4; i++) {
-    EXPECT_EQ(S21_queueTest_3.front(), S21_queueTest_2.front());
-    EXPECT_EQ(S21_queueTest_3.size(), S21_queueTest_2.size());
-    S21_queueTest_3.pop(), S21_queueTest_2.pop();
+    EXPECT_EQ(queue_test_3.front(), queue_test_2.front());
+    EXPECT_EQ(queue_test_3.size(), queue_test_2.size());
+    queue_test_3.pop(), queue_test_2.pop();
   }
   for (auto i = 0; i < 3; i++) {
-    EXPECT_EQ(S21_queueTest_1.front(), S21_queueTest_4.front());
-    EXPECT_EQ(S21_queueTest_1.size(), S21_queueTest_4.size());
-    S21_queueTest_1.pop(), S21_queueTest_4.pop();
+    EXPECT_EQ(queue_test_1.front(), queue_test_4.front());
+    EXPECT_EQ(queue_test_1.size(), queue_test_4.size());
+    queue_test_1.pop(), queue_test_4.pop();
   }
 }
 
-TEST(S21_queueTest, test1) {
+TEST(queue_test, test1) {
   s21::queue<int> my_queue;
   std::queue<int> lib_queue;
   my_queue.push(3);
@@ -156,7 +155,7 @@ TEST(S21_queueTest, test1) {
   ASSERT_EQ(lib_queue.size(), my_queue.size());
 }
 
-TEST(S21_queueTest, test2) {
+TEST(queue_test, test2) {
   s21::queue<int> my_queue({1, 2, 3, 4});
   std::queue<int> lib_queue({1, 2, 3, 4});
   ASSERT_EQ(lib_queue.front(), my_queue.front());
@@ -173,7 +172,7 @@ TEST(S21_queueTest, test2) {
   ASSERT_EQ(4, lib_queue.back());
 }
 
-TEST(S21_queueTest, test3) {
+TEST(queue_test, test3) {
   s21::queue<int> test_queue;
   test_queue.push(500);
   test_queue.push(1000);
@@ -187,7 +186,7 @@ TEST(S21_queueTest, test3) {
   ASSERT_EQ(lib_queue.back(), my_queue.back());
 }
 
-TEST(S21_queueTest, test4) {
+TEST(queue_test, test4) {
   s21::queue<int> test_queue;
   test_queue.push(500);
   test_queue.push(1000);
@@ -203,7 +202,7 @@ TEST(S21_queueTest, test4) {
   ASSERT_EQ(0, test_queue1.size());
 }
 
-TEST(S21_queueTest, test5) {
+TEST(queue_test, test5) {
   s21::queue<int> my_queue({1, 2, 3, 4});
   std::queue<int> lib_queue({1, 2, 3, 4});
   s21::queue<int> to_swap({15, 125, 20});
@@ -220,7 +219,7 @@ TEST(S21_queueTest, test5) {
   ASSERT_EQ(4, to_swap1.back());
 }
 
-TEST(S21_queueTest, insert_many_back) {
+TEST(queue_test, insert_many_back) {
   s21::queue<int> my_queue{6, 7, 9};
   s21::queue<int> res_queue{6, 7, 9, 1, 2, 8};
   my_queue.insert_many_back(1, 2, 8);
@@ -231,7 +230,7 @@ TEST(S21_queueTest, insert_many_back) {
   }
 }
 
-TEST(S21_queueTest, operators) {
+TEST(queue_test, operators) {
   s21::queue<int> q1{6, 7, 9};
   s21::queue<int> q2;
   s21::queue<int> q3{6, 7, 9};
@@ -244,7 +243,7 @@ TEST(S21_queueTest, operators) {
   EXPECT_EQ(q3 != const_q2, false);
 }
 
-TEST(S21_queueTest, move_operator) {
+TEST(queue_test, move_operator) {
   s21::queue<int> const q1{6, 7, 9};
   EXPECT_EQ(q1.front(), 6);
   EXPECT_EQ(q1.back(), 9);

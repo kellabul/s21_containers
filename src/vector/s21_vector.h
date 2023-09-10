@@ -136,26 +136,6 @@ class vector {
     }
   }
 
-  void resize(size_type size) {
-    if (size > max_size()) {
-      throw std::length_error(
-          "Error: in reserve(size_type size): size > s21::vector::max_size()");
-    }
-    if (size > capacity_) {
-      reserve(size);
-      size_ = size;
-    }
-    if (size < capacity_) {
-      value_type *temp = arr_;
-      arr_ = new value_type[capacity_];
-      for (size_type i = 0; i < size; i += 1) {
-        arr_[i] = temp[i];
-      }
-      delete[] temp;
-      size_ = size;
-    }
-  }
-
   size_type capacity() { return capacity_; }
 
   void shrink_to_fit() {

@@ -142,15 +142,15 @@ TEST(multiset, contains) {
   EXPECT_EQ(one.contains(0), false);
 }
 
-TEST(multicet, upperBound_1) {
-  s21::multiset<int> keka{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
-  std::multiset<int> std_keka{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, upperBound_1) {
+  s21::multiset<int> mult{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
+  std::multiset<int> std_mult{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -159,15 +159,15 @@ TEST(multicet, upperBound_1) {
   }
 }
 
-TEST(multicet, upperBound_2) {
-  s21::multiset<int> keka{1, 1};
-  std::multiset<int> std_keka{1, 1};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, upperBound_2) {
+  s21::multiset<int> mult{1, 1};
+  std::multiset<int> std_mult{1, 1};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -176,15 +176,15 @@ TEST(multicet, upperBound_2) {
   }
 }
 
-TEST(multicet, UpperBound_3) {
-  s21::multiset<int> keka{};
-  std::multiset<int> std_keka{};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_3) {
+  s21::multiset<int> mult{};
+  std::multiset<int> std_mult{};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -193,15 +193,15 @@ TEST(multicet, UpperBound_3) {
   }
 }
 
-TEST(multicet, UpperBound_4) {
-  s21::multiset<int> keka{1, 2, 2, 2, 2, 3};
-  std::multiset<int> std_keka{1, 2, 2, 2, 2, 3};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_4) {
+  s21::multiset<int> mult{1, 2, 2, 2, 2, 3};
+  std::multiset<int> std_mult{1, 2, 2, 2, 2, 3};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -210,15 +210,15 @@ TEST(multicet, UpperBound_4) {
   }
 }
 
-TEST(multicet, UpperBound_5) {
-  s21::multiset<int> keka{1, 2, 3, 3, 3, 3, 3};
-  std::multiset<int> std_keka{1, 2, 3, 3, 3, 3, 3};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_5) {
+  s21::multiset<int> mult{1, 2, 3, 3, 3, 3, 3};
+  std::multiset<int> std_mult{1, 2, 3, 3, 3, 3, 3};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -227,15 +227,15 @@ TEST(multicet, UpperBound_5) {
   }
 }
 
-TEST(multicet, UpperBound_6) {
-  s21::multiset<int> keka{1, 6, 6, 6, 6, 27};
-  std::multiset<int> std_keka{1, 6, 6, 6, 6, 27};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_6) {
+  s21::multiset<int> mult{1, 6, 6, 6, 6, 27};
+  std::multiset<int> std_mult{1, 6, 6, 6, 6, 27};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -244,15 +244,15 @@ TEST(multicet, UpperBound_6) {
   }
 }
 
-TEST(multicet, UpperBound_7) {
-  s21::multiset<int> keka{3, 3, 3, 3, 3, 9, 11};
-  std::multiset<int> std_keka{3, 3, 3, 3, 3, 9, 11};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_7) {
+  s21::multiset<int> mult{3, 3, 3, 3, 3, 9, 11};
+  std::multiset<int> std_mult{3, 3, 3, 3, 3, 9, 11};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -261,15 +261,15 @@ TEST(multicet, UpperBound_7) {
   }
 }
 
-TEST(multicet, UpperBound_8) {
-  s21::multiset<int> keka{9, 19, 23, 23, 23, 23, 23};
-  std::multiset<int> std_keka{9, 19, 23, 23, 23, 23, 23};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_8) {
+  s21::multiset<int> mult{9, 19, 23, 23, 23, 23, 23};
+  std::multiset<int> std_mult{9, 19, 23, 23, 23, 23, 23};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -278,15 +278,15 @@ TEST(multicet, UpperBound_8) {
   }
 }
 
-TEST(multicet, UpperBound_9) {
-  s21::multiset<int> keka{13};
-  std::multiset<int> std_keka{13};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, UpperBound_9) {
+  s21::multiset<int> mult{13};
+  std::multiset<int> std_mult{13};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.upper_bound(key);
-    auto std_iter = std_keka.upper_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.upper_bound(key);
+    auto std_iter = std_mult.upper_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -295,15 +295,15 @@ TEST(multicet, UpperBound_9) {
   }
 }
 
-TEST(multicet, LowerBound_1) {
-  s21::multiset<int> keka{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
-  std::multiset<int> std_keka{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_1) {
+  s21::multiset<int> mult{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
+  std::multiset<int> std_mult{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -312,15 +312,15 @@ TEST(multicet, LowerBound_1) {
   }
 }
 
-TEST(multicet, LowerBound_2) {
-  s21::multiset<int> keka{1, 1};
-  std::multiset<int> std_keka{1, 1};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_2) {
+  s21::multiset<int> mult{1, 1};
+  std::multiset<int> std_mult{1, 1};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -329,15 +329,15 @@ TEST(multicet, LowerBound_2) {
   }
 }
 
-TEST(multicet, LowerBound_3) {
-  s21::multiset<int> keka{};
-  std::multiset<int> std_keka{};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_3) {
+  s21::multiset<int> mult{};
+  std::multiset<int> std_mult{};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -346,15 +346,15 @@ TEST(multicet, LowerBound_3) {
   }
 }
 
-TEST(multicet, LowerBound_4) {
-  s21::multiset<int> keka{1, 2, 2, 2, 2, 3};
-  std::multiset<int> std_keka{1, 2, 2, 2, 2, 3};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_4) {
+  s21::multiset<int> mult{1, 2, 2, 2, 2, 3};
+  std::multiset<int> std_mult{1, 2, 2, 2, 2, 3};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -363,15 +363,15 @@ TEST(multicet, LowerBound_4) {
   }
 }
 
-TEST(multicet, LowerBound_5) {
-  s21::multiset<int> keka{1, 2, 3, 3, 3, 3, 3};
-  std::multiset<int> std_keka{1, 2, 3, 3, 3, 3, 3};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_5) {
+  s21::multiset<int> mult{1, 2, 3, 3, 3, 3, 3};
+  std::multiset<int> std_mult{1, 2, 3, 3, 3, 3, 3};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -380,15 +380,15 @@ TEST(multicet, LowerBound_5) {
   }
 }
 
-TEST(multicet, LowerBound_6) {
-  s21::multiset<int> keka{1, 6, 6, 6, 6, 27};
-  std::multiset<int> std_keka{1, 6, 6, 6, 6, 27};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_6) {
+  s21::multiset<int> mult{1, 6, 6, 6, 6, 27};
+  std::multiset<int> std_mult{1, 6, 6, 6, 6, 27};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -397,15 +397,15 @@ TEST(multicet, LowerBound_6) {
   }
 }
 
-TEST(multicet, LowerBound_7) {
-  s21::multiset<int> keka{3, 3, 3, 3, 3, 9, 11};
-  std::multiset<int> std_keka{3, 3, 3, 3, 3, 9, 11};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_7) {
+  s21::multiset<int> mult{3, 3, 3, 3, 3, 9, 11};
+  std::multiset<int> std_mult{3, 3, 3, 3, 3, 9, 11};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -414,15 +414,15 @@ TEST(multicet, LowerBound_7) {
   }
 }
 
-TEST(multicet, LowerBound_8) {
-  s21::multiset<int> keka{9, 19, 23, 23, 23, 23, 23};
-  std::multiset<int> std_keka{9, 19, 23, 23, 23, 23, 23};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_8) {
+  s21::multiset<int> mult{9, 19, 23, 23, 23, 23, 23};
+  std::multiset<int> std_mult{9, 19, 23, 23, 23, 23, 23};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -431,15 +431,15 @@ TEST(multicet, LowerBound_8) {
   }
 }
 
-TEST(multicet, LowerBound_9) {
-  s21::multiset<int> keka{13};
-  std::multiset<int> std_keka{13};
-  auto end_iter = keka.end();
-  auto std_end_iter = std_keka.end();
+TEST(multiset, LowerBound_9) {
+  s21::multiset<int> mult{13};
+  std::multiset<int> std_mult{13};
+  auto end_iter = mult.end();
+  auto std_end_iter = std_mult.end();
 
-  for (const auto &key : keka) {
-    auto iter = keka.lower_bound(key);
-    auto std_iter = std_keka.lower_bound(key);
+  for (const auto &key : mult) {
+    auto iter = mult.lower_bound(key);
+    auto std_iter = std_mult.lower_bound(key);
     if (iter == end_iter) {
       ASSERT_EQ(std_end_iter, std_iter);
     } else {
@@ -448,93 +448,93 @@ TEST(multicet, LowerBound_9) {
   }
 }
 
-TEST(multicet, EqualRange_1) {
-  std::multiset<int> std_keka{3, 4,   5,   5,   7,   7,   7,   7,
+TEST(multiset, EqualRange_1) {
+  std::multiset<int> std_mult{3, 4,   5,   5,   7,   7,   7,   7,
                               9, 198, 200, 200, 200, 200, 200, 232};
-  s21::multiset<int> keka{3, 4,   5,   5,   7,   7,   7,   7,
+  s21::multiset<int> mult{3, 4,   5,   5,   7,   7,   7,   7,
                           9, 198, 200, 200, 200, 200, 200, 232};
 
-  auto range = keka.equal_range(7);
-  auto std_range = std_keka.equal_range(7);
+  auto range = mult.equal_range(7);
+  auto std_range = std_mult.equal_range(7);
   ASSERT_EQ(*range.first, *std_range.first);
   ASSERT_EQ(*range.second, *std_range.second);
 }
 
-TEST(multicet, EqualRange_2) {
-  std::multiset<int> std_keka{3, 4,   5,   5,   7,   7,   7,   7,
+TEST(multiset, EqualRange_2) {
+  std::multiset<int> std_mult{3, 4,   5,   5,   7,   7,   7,   7,
                               9, 198, 200, 200, 200, 200, 200, 232};
-  s21::multiset<int> keka{3, 4,   5,   5,   7,   7,   7,   7,
+  s21::multiset<int> mult{3, 4,   5,   5,   7,   7,   7,   7,
                           9, 198, 200, 200, 200, 200, 200, 232};
 
-  auto range = keka.equal_range(3);
-  auto std_range = std_keka.equal_range(3);
+  auto range = mult.equal_range(3);
+  auto std_range = std_mult.equal_range(3);
   ASSERT_EQ(*range.first, *std_range.first);
   ASSERT_EQ(*range.second, *std_range.second);
 }
 
-TEST(multicet, EqualRange_3) {
-  std::multiset<int> std_keka{3, 4,   5,   5,   7,   7,   7,   7,
+TEST(multiset, EqualRange_3) {
+  std::multiset<int> std_mult{3, 4,   5,   5,   7,   7,   7,   7,
                               9, 198, 200, 200, 200, 200, 200, 232};
-  s21::multiset<int> keka{3, 4,   5,   5,   7,   7,   7,   7,
+  s21::multiset<int> mult{3, 4,   5,   5,   7,   7,   7,   7,
                           9, 198, 200, 200, 200, 200, 200, 232};
 
-  auto range = keka.equal_range(198);
-  auto std_range = std_keka.equal_range(198);
+  auto range = mult.equal_range(198);
+  auto std_range = std_mult.equal_range(198);
   ASSERT_EQ(*range.first, *std_range.first);
   ASSERT_EQ(*range.second, *std_range.second);
 }
 
-TEST(multicet, EqualRange_4) {
-  std::multiset<int> std_keka{3, 4,   5,   5,   7,   7,   7,   7,
+TEST(multiset, EqualRange_4) {
+  std::multiset<int> std_mult{3, 4,   5,   5,   7,   7,   7,   7,
                               9, 198, 200, 200, 200, 200, 200, 232};
-  s21::multiset<int> keka{3, 4,   5,   5,   7,   7,   7,   7,
+  s21::multiset<int> mult{3, 4,   5,   5,   7,   7,   7,   7,
                           9, 198, 200, 200, 200, 200, 200, 232};
 
-  auto range = keka.equal_range(5);
-  auto std_range = std_keka.equal_range(5);
+  auto range = mult.equal_range(5);
+  auto std_range = std_mult.equal_range(5);
   ASSERT_EQ(*range.first, *std_range.first);
   ASSERT_EQ(*range.second, *std_range.second);
 }
 
-TEST(multicet, EqualRange_5) {
-  std::multiset<int> std_keka{3, 4,   5,   5,   7,   7,   7,   7,
+TEST(multiset, EqualRange_5) {
+  std::multiset<int> std_mult{3, 4,   5,   5,   7,   7,   7,   7,
                               9, 198, 200, 200, 200, 200, 200, 232};
-  s21::multiset<int> keka{3, 4,   5,   5,   7,   7,   7,   7,
+  s21::multiset<int> mult{3, 4,   5,   5,   7,   7,   7,   7,
                           9, 198, 200, 200, 200, 200, 200, 232};
 
-  auto range = keka.equal_range(232);
-  auto std_range = std_keka.equal_range(232);
-  auto ms_end = keka.end();
-  auto std_end = std_keka.end();
+  auto range = mult.equal_range(232);
+  auto std_range = std_mult.equal_range(232);
+  auto ms_end = mult.end();
+  auto std_end = std_mult.end();
   ASSERT_EQ(*range.first, *std_range.first);
   ASSERT_EQ(range.second, ms_end);
   ASSERT_EQ(std_end, std_range.second);
 }
 
-TEST(multicet, EqualRange_6) {
-  std::multiset<int> std_keka{};
-  s21::multiset<int> keka{};
+TEST(multiset, EqualRange_6) {
+  std::multiset<int> std_mult{};
+  s21::multiset<int> mult{};
 
-  auto range = keka.equal_range(232);
-  auto std_range = std_keka.equal_range(232);
-  auto ms_end = keka.end();
-  auto std_end = std_keka.end();
+  auto range = mult.equal_range(232);
+  auto std_range = std_mult.equal_range(232);
+  auto ms_end = mult.end();
+  auto std_end = std_mult.end();
   ASSERT_EQ(range.first, ms_end);
   ASSERT_EQ(range.second, ms_end);
   ASSERT_EQ(std_end, std_range.first);
   ASSERT_EQ(std_end, std_range.second);
 }
 
-TEST(multicet, EqualRange_7) {
-  std::multiset<int> std_keka{3, 3, 3, 3, 3, 3, 3, 3, 3};
-  s21::multiset<int> keka{3, 3, 3, 3, 3, 3, 3, 3, 3};
+TEST(multiset, EqualRange_7) {
+  std::multiset<int> std_mult{3, 3, 3, 3, 3, 3, 3, 3, 3};
+  s21::multiset<int> mult{3, 3, 3, 3, 3, 3, 3, 3, 3};
 
-  auto range = keka.equal_range(3);
-  auto std_range = std_keka.equal_range(3);
-  auto ms_end = keka.end();
-  auto std_end = std_keka.end();
-  auto ms_begin = keka.begin();
-  auto std_begin = std_keka.begin();
+  auto range = mult.equal_range(3);
+  auto std_range = std_mult.equal_range(3);
+  auto ms_end = mult.end();
+  auto std_end = std_mult.end();
+  auto ms_begin = mult.begin();
+  auto std_begin = std_mult.begin();
   ASSERT_EQ(*range.first, *std_range.first);
   ASSERT_EQ(range.first, ms_begin);
   ASSERT_EQ(std_range.first, std_begin);
@@ -542,14 +542,14 @@ TEST(multicet, EqualRange_7) {
   ASSERT_EQ(std_end, std_range.second);
 }
 
-TEST(multicet, EqualRange_8) {
-  std::multiset<int> std_keka{3, 3, 3, 3, 3, 3, 3, 3, 3};
-  s21::multiset<int> keka{3, 3, 3, 3, 3, 3, 3, 3, 3};
+TEST(multiset, EqualRange_8) {
+  std::multiset<int> std_mult{3, 3, 3, 3, 3, 3, 3, 3, 3};
+  s21::multiset<int> mult{3, 3, 3, 3, 3, 3, 3, 3, 3};
 
-  auto range = keka.equal_range(198);
-  auto std_range = std_keka.equal_range(198);
-  auto ms_end = keka.end();
-  auto std_end = std_keka.end();
+  auto range = mult.equal_range(198);
+  auto std_range = std_mult.equal_range(198);
+  auto ms_end = mult.end();
+  auto std_end = std_mult.end();
   ASSERT_EQ(range.first, ms_end);
   ASSERT_EQ(range.second, ms_end);
   ASSERT_EQ(std_range.first, std_end);

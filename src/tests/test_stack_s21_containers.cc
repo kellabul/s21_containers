@@ -33,15 +33,15 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <gtest/gtest.h>
 
 #include <iostream>
-#include <string>
 #include <stack>
+#include <string>
 
 #include "s21_containers.h"
 
 using std::cout;
 using std::endl;
 
-TEST(S21_stackTest, test1) {
+TEST(stack, test1) {
   s21::stack<int> my_stack;
   std::stack<int> lib_stack;
   my_stack.push(3);
@@ -52,7 +52,7 @@ TEST(S21_stackTest, test1) {
   ASSERT_EQ(lib_stack.size(), my_stack.size());
 }
 
-TEST(S21_stackTest, test2) {
+TEST(stack, test2) {
   s21::stack<int> my_stack({1, 2, 3, 4});
   std::stack<int> lib_stack({1, 2, 3, 4});
   ASSERT_EQ(lib_stack.size(), my_stack.size());
@@ -66,7 +66,7 @@ TEST(S21_stackTest, test2) {
   ASSERT_EQ(2, lib_stack.top());
 }
 
-TEST(S21_stackTest, test3) {
+TEST(stack, test3) {
   s21::stack<int> test_stack;
   test_stack.push(500);
   test_stack.push(1000);
@@ -79,7 +79,7 @@ TEST(S21_stackTest, test3) {
   ASSERT_EQ(lib_stack.top(), my_stack.top());
 }
 
-TEST(S21_stackTest, test4) {
+TEST(stack, test4) {
   s21::stack<int> test_stack;
   test_stack.push(500);
   test_stack.push(1000);
@@ -94,7 +94,7 @@ TEST(S21_stackTest, test4) {
   ASSERT_EQ(0, test_stack1.size());
 }
 
-TEST(S21_stackTest, test5) {
+TEST(stack, test5) {
   s21::stack<int> my_stack({1, 2, 3, 4});
   std::stack<int> lib_stack({1, 2, 3, 4});
   s21::stack<int> to_swap({15, 125, 20});
@@ -111,7 +111,7 @@ TEST(S21_stackTest, test5) {
   ASSERT_EQ(4, to_swap1.top());
 }
 
-TEST(S21_stackTest, insert_front) {
+TEST(stack, insert_front) {
   s21::stack<int> my_stack{6, 7, 9};
   s21::stack<int> res_stack{6, 7, 9, 1, 2, 8};
   my_stack.insert_many_front(1, 2, 8);
@@ -123,21 +123,21 @@ TEST(S21_stackTest, insert_front) {
   }
 }
 
-TEST(S21_stackTest, Constructor_Default) {
+TEST(stack, Constructor_Default) {
   s21::stack<int> s21_stack;
   std::stack<int> std_stack;
   EXPECT_EQ(s21_stack.size(), std_stack.size());
   EXPECT_EQ(s21_stack.empty(), std_stack.empty());
 }
 
-TEST(S21_stackTest, Constructor_Initializer_stack) {
+TEST(stack, Constructor_Initializer_stack) {
   s21::stack<int> s21_stack{1, 2, 3, 4};
   EXPECT_EQ(s21_stack.top(), 4);
   EXPECT_EQ(s21_stack.size(), size_t(4));
   EXPECT_EQ(s21_stack.empty(), false);
 }
 
-TEST(S21_stackTest, Constructor_Copy) {
+TEST(stack, Constructor_Copy) {
   s21::stack<char> s21_stack_1{'a', 'b', 'c', 'd'};
   s21::stack<char> s21_stack_2 = s21_stack_1;
 
@@ -150,7 +150,7 @@ TEST(S21_stackTest, Constructor_Copy) {
   }
 }
 
-TEST(S21_stackTest, Constructor_Move) {
+TEST(stack, Constructor_Move) {
   s21::stack<char> s21_stack_1{'a', 'b', 'c', 'd'};
   s21::stack<char> s21_stack_2 = std::move(s21_stack_1);
   s21::stack<char> s21_stack_3{'a', 'b', 'c', 'd'};
@@ -165,7 +165,7 @@ TEST(S21_stackTest, Constructor_Move) {
   }
 }
 
-TEST(S21_stackTest, Modifier_Push) {
+TEST(stack, Modifier_Push) {
   s21::stack<int> s21_stack;
   std::stack<int> std_stack;
   s21_stack.push(5);
@@ -177,7 +177,7 @@ TEST(S21_stackTest, Modifier_Push) {
   EXPECT_EQ(s21_stack.empty(), std_stack.empty());
 }
 
-TEST(S21_stackTest, Modifier_Pop) {
+TEST(stack, Modifier_Pop) {
   s21::stack<int> s21_stack;
   std::stack<int> std_stack;
   s21_stack.push(5);
@@ -199,11 +199,11 @@ TEST(S21_stackTest, Modifier_Pop) {
   EXPECT_EQ(s21_stack.empty(), std_stack.empty());
 }
 
-TEST(S21_stackTest, Modifier_Swap) {
-  s21::stack<std::string> s21_stack_1{"aboba", "shleppa", "amogus", "abobus"};
-  s21::stack<std::string> s21_stack_2{"shtirlits", "vovochka", "poruchik"};
-  s21::stack<std::string> s21_stack_3{"aboba", "shleppa", "amogus", "abobus"};
-  s21::stack<std::string> s21_stack_4{"shtirlits", "vovochka", "poruchik"};
+TEST(stack, Modifier_Swap) {
+  s21::stack<std::string> s21_stack_1{"one", "two", "three", "four"};
+  s21::stack<std::string> s21_stack_2{"aaaaa", "bbbbb", "ccccc"};
+  s21::stack<std::string> s21_stack_3{"one", "two", "three", "four"};
+  s21::stack<std::string> s21_stack_4{"aaaaa", "bbbbb", "ccccc"};
 
   s21_stack_1.swap(s21_stack_2);
 
@@ -221,26 +221,26 @@ TEST(S21_stackTest, Modifier_Swap) {
   }
 }
 
-TEST(S21_stackTest, Constructor_default) {
+TEST(stack, Constructor_default) {
   s21::stack<int> s21_stack;
   std::stack<int> std_stack;
   EXPECT_EQ(s21_stack.size(), std_stack.size());
 }
 
-TEST(S21_stackTest, Constructor_initializer_list_1) {
+TEST(stack, Constructor_initializer_list_1) {
   s21::stack<int> s21_stack{1, 2, 4};
   EXPECT_EQ(s21_stack.size(), 3);
   EXPECT_EQ(s21_stack.top(), 4);
 }
 
-TEST(S21_stackTest, Constructor_initializer_list_2) {
+TEST(stack, Constructor_initializer_list_2) {
   std::initializer_list<int> b;
   s21::stack<int> s21_stack{b};
   std::stack<int> std_stack{b};
   EXPECT_EQ(s21_stack.size(), std_stack.size());
 }
 
-TEST(S21_stackTest, Constructor_copy_1) {
+TEST(stack, Constructor_copy_1) {
   std::initializer_list<int> il1 = {1, 2, 3};
 
   s21::stack<int> s21_stack{il1};
@@ -251,7 +251,7 @@ TEST(S21_stackTest, Constructor_copy_1) {
   EXPECT_EQ(s21_stack_copy.top(), std_stack_copy.top());
 }
 
-TEST(S21_stackTest, Constructor_move_1) {
+TEST(stack, Constructor_move_1) {
   std::initializer_list<int> il1 = {1, 2, 3};
 
   s21::stack<int> s21_stack{il1};
@@ -262,7 +262,7 @@ TEST(S21_stackTest, Constructor_move_1) {
   EXPECT_EQ(s21_stack_move.top(), std_stack_move.top());
 }
 
-TEST(S21_stackTest, Opertator_move_1) {
+TEST(stack, Opertator_move_1) {
   std::initializer_list<int> il1 = {1, 2, 3};
   std::initializer_list<int> il2 = {4, 5, 6, 7};
 
@@ -278,7 +278,7 @@ TEST(S21_stackTest, Opertator_move_1) {
   EXPECT_EQ(s21_stack.top(), std_stack.top());
 }
 
-TEST(S21_stackTest, Opertator_move_2) {
+TEST(stack, Opertator_move_2) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
   std::initializer_list<int> il2 = {1, 2, 3};
 
@@ -294,7 +294,7 @@ TEST(S21_stackTest, Opertator_move_2) {
   EXPECT_EQ(s21_stack.top(), std_stack.top());
 }
 
-TEST(S21_stackTest, Opertator_move_3) {
+TEST(stack, Opertator_move_3) {
   std::initializer_list<int> il1;
   std::initializer_list<int> il2 = {4, 5, 6, 7};
 
@@ -310,7 +310,7 @@ TEST(S21_stackTest, Opertator_move_3) {
   EXPECT_EQ(s21_stack.top(), std_stack.top());
 }
 
-TEST(S21_stackTest, Top_1) {
+TEST(stack, Top_1) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
 
   s21::stack<int> s21_stack{il1};
@@ -320,14 +320,14 @@ TEST(S21_stackTest, Top_1) {
   EXPECT_EQ(s21_stack.top(), std_stack.top());
 }
 
-TEST(S21_stackTest, Top_2_throw) {
+TEST(stack, Top_2_throw) {
   std::initializer_list<int> il1;
 
   s21::stack<int> s21_stack{il1};
   EXPECT_ANY_THROW(s21_stack.top());
 }
 
-TEST(S21_stackTest, Empty_1) {
+TEST(stack, Empty_1) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
 
   s21::stack<int> s21_stack{il1};
@@ -336,7 +336,7 @@ TEST(S21_stackTest, Empty_1) {
   EXPECT_EQ(s21_stack.empty(), std_stack.empty());
 }
 
-TEST(S21_stackTest, Empty_2) {
+TEST(stack, Empty_2) {
   std::initializer_list<int> il1;
 
   s21::stack<int> s21_stack{il1};
@@ -345,7 +345,7 @@ TEST(S21_stackTest, Empty_2) {
   EXPECT_EQ(s21_stack.empty(), std_stack.empty());
 }
 
-TEST(S21_stackTest, Size_1) {
+TEST(stack, Size_1) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
 
   s21::stack<int> s21_stack{il1};
@@ -354,7 +354,7 @@ TEST(S21_stackTest, Size_1) {
   EXPECT_EQ(s21_stack.size(), std_stack.size());
 }
 
-TEST(S21_stackTest, Size_2) {
+TEST(stack, Size_2) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
 
   s21::stack<int> s21_stack{il1};
@@ -363,7 +363,7 @@ TEST(S21_stackTest, Size_2) {
   EXPECT_EQ(s21_stack.size(), std_stack.size());
 }
 
-TEST(S21_stackTest, Push_1) {
+TEST(stack, Push_1) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
 
   s21::stack<int> s21_stack{il1};
@@ -374,7 +374,7 @@ TEST(S21_stackTest, Push_1) {
   EXPECT_EQ(s21_stack.top(), std_stack.top());
 }
 
-TEST(S21_stackTest, Push_2) {
+TEST(stack, Push_2) {
   std::initializer_list<int> il1;
 
   s21::stack<int> s21_stack{il1};
@@ -385,7 +385,7 @@ TEST(S21_stackTest, Push_2) {
   EXPECT_EQ(s21_stack.top(), std_stack.top());
 }
 
-TEST(S21_stackTest, Pop_1) {
+TEST(stack, Pop_1) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
 
   s21::stack<int> s21_stack{il1};
@@ -395,7 +395,7 @@ TEST(S21_stackTest, Pop_1) {
   EXPECT_EQ(s21_stack.size(), std_stack.size());
 }
 
-TEST(S21_stackTest, Pop_2) {
+TEST(stack, Pop_2) {
   std::initializer_list<int> il1;
 
   s21::stack<int> s21_stack{il1};
@@ -403,7 +403,7 @@ TEST(S21_stackTest, Pop_2) {
   EXPECT_EQ(s21_stack.size(), std_stack.size());
 }
 
-TEST(S21_stackTest, Swap_1) {
+TEST(stack, Swap_1) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
   std::initializer_list<int> il2 = {1, 2, 3};
 
@@ -421,7 +421,7 @@ TEST(S21_stackTest, Swap_1) {
   EXPECT_EQ(s21_stack_swap.top(), std_stack_swap.top());
 }
 
-TEST(S21_stackTest, Swap_2) {
+TEST(stack, Swap_2) {
   std::initializer_list<int> il1 = {1, 2, 3};
   std::initializer_list<int> il2 = {4, 5, 6, 7};
 
@@ -439,7 +439,7 @@ TEST(S21_stackTest, Swap_2) {
   EXPECT_EQ(s21_stack_swap.top(), std_stack_swap.top());
 }
 
-TEST(S21_stackTest, Swap_3) {
+TEST(stack, Swap_3) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
   std::initializer_list<int> il2;
 
@@ -455,7 +455,7 @@ TEST(S21_stackTest, Swap_3) {
   EXPECT_EQ(s21_stack_swap.size(), std_stack_swap.size());
 }
 
-TEST(S21_stackTest, Swap_4) {
+TEST(stack, Swap_4) {
   std::initializer_list<int> il1;
   std::initializer_list<int> il2 = {4, 5, 6, 7};
 
@@ -471,7 +471,7 @@ TEST(S21_stackTest, Swap_4) {
   EXPECT_EQ(s21_stack_swap.size(), std_stack_swap.size());
 }
 
-TEST(S21_stackTest, Swap_5) {
+TEST(stack, Swap_5) {
   std::initializer_list<int> il1;
   std::initializer_list<int> il2;
 
@@ -487,7 +487,7 @@ TEST(S21_stackTest, Swap_5) {
   EXPECT_EQ(s21_stack_swap.size(), std_stack_swap.size());
 }
 
-TEST(S21_stackTest, Swap_6) {
+TEST(stack, Swap_6) {
   std::initializer_list<int> il1 = {4, 5, 6, 7};
   std::initializer_list<int> il2 = {4, 5, 6, 7};
 
@@ -505,7 +505,7 @@ TEST(S21_stackTest, Swap_6) {
   EXPECT_EQ(s21_stack_swap.top(), std_stack_swap.top());
 }
 
-TEST(S21_stackTest, operators) {
+TEST(stack, operators) {
   s21::stack<int> q1{6, 7, 9};
   s21::stack<int> q2;
   s21::stack<int> q3{6, 7, 9};
