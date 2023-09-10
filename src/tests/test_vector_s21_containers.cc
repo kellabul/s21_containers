@@ -1,4 +1,5 @@
-#include "s21_containers.h"
+#include <gtest/gtest.h>
+#include "../s21_containers.h"
 
 TEST(Vector, Constructor_Default) {
   s21::vector<int> s21_vector;

@@ -35,7 +35,7 @@ class vector {
 
   vector(const vector &v) : vector() { operator=(v); }
 
-  vector(vector &&v) : vector() { operator=(std::move(v)); }
+  vector(vector &&v)  noexcept : vector() { operator=(std::move(v)); }
 
   ~vector() { clear_(); }
 
@@ -55,7 +55,7 @@ class vector {
     return *this;
   }
 
-  vector &operator=(vector &&v) {
+  vector &operator=(vector &&v)  noexcept {
     if (this != &v) {
       clear_();
       size_ = v.size_;

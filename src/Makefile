@@ -15,15 +15,7 @@ GCOV_FILES := tests/*.gcov *.gcov *.gcov
 LCOV_FILES := tests/*.info *.info *html *css
 TEST_COVERAGE_FILES := $(COVERAGE_FILES) $(COVERAGE_RESULTS) $(GCOV_FILES) $(LCOV_FILES)
 
-GTEST_LIST_SRC := $(TEST_FOLDER)/test_list_s21_containers.cc
-GTEST_LIST_OBJ := $(GTEST_LIST_SRC:.cc=.o)
-GTEST_SET_SRC := $(TEST_FOLDER)/test_set_s21_containers.cc
-GTEST_SET_OBJ := $(GTEST_SET_SRC:.cc=.o)
-GTEST_MULTISET_SRC := $(TEST_FOLDER)/test_multiset_s21_containers.cc
-GTEST_MULTISET_OBJ := $(GTEST_MULTISET_SRC:.cc=.o)
-GTEST_MAP_SRC := $(TEST_FOLDER)/test_map_s21_containers.cc
-GTEST_MAP_OBJ := $(GTEST_MAP_SRC:.cc=.o)
-GTEST_SRC := $(GTEST_LIST_SRC) $(GTEST_SET_SRC) $(GTEST_MULTISET_SRC) $(GTEST_MAP_SRC) #$(wildcard tests/test_*.cc)
+GTEST_SRC := $(wildcard tests/test_*.cc)
 GTEST_OBJ := $(GTEST_SRC:.cc=.o)
 GCDA_FILES := $(GTEST_SRC:.cc=.gcda)
 HEADERS := $(shell find . -name "*.h" -o -name "*.tpp")
@@ -40,23 +32,14 @@ clean:
 test: $(TEST_NAME)
 	./$(TEST_NAME)
 
-$(GTEST_LIST_OBJ): $(GTEST_LIST_SRC) s21_containers.h $(shell find ./list -name "*.h" -o -name "*.tpp")
-	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
+$(TEST_NAME): $(GTEST_OBJ)
+	$(CC) $(GTEST_FLAGS) $^ -o $@ -fprofile-arcs
 
-$(GTEST_SET_OBJ): $(GTEST_SET_SRC) s21_containers.h $(shell find ./rb_tree ./set -name "*.h" -o -name "*.tpp")
-	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
-
-$(GTEST_MULTISET_OBJ): $(GTEST_MULTISET_SRC) s21_containers.h $(shell find ./rb_tree ./multiset -name "*.h" -o -name "*.tpp")
-	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
-
-$(GTEST_MAP_OBJ): $(GTEST_MAP_SRC) s21_containers.h $(shell find ./rb_tree ./map -name "*.h" -o -name "*.tpp")
-	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
-
-$(TEST_NAME): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ) $(GTEST_MAP_OBJ)
-	$(CC) $(GTEST_OBJ) $(GTEST_FLAGS) -o $(TEST_NAME) -fprofile-arcs
-
-$(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ) $(GTEST_MAP_OBJ)
+$(GCDA_FILES): $(GTEST_OBJ)
 	make test
+
+.cc.o:
+	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
 
 .PHONY: gcov_report
 gcov_report: $(GCDA_FILES)
