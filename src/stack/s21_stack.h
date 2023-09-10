@@ -12,7 +12,7 @@ private:
     struct Node {
         T data;
         std::unique_ptr<Node> next;
-        Node(const T& data) : data(data), next(nullptr) {}
+        explicit Node(const T& data) : data(data), next(nullptr) {}
     };
     std::size_t node_count = 0;
     std::unique_ptr<Node> top_node;
@@ -154,7 +154,7 @@ public:
         using pointer = T*;
         using reference = T&;
 
-        iterator(Node* ptr) : current(ptr) {}
+        explicit iterator(Node* ptr) : current(ptr) {}
 
         reference operator*() { return current->data; }
         pointer operator->() { return &current->data; }

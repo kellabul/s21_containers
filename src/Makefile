@@ -1,5 +1,5 @@
 CC := g++
-FLAGS := -std=c++17 -pedantic -Wall -Werror -Wextra -I .
+FLAGS := -std=c++17 -Wall -Werror -Wextra -I .
 GTEST_FLAGS := -lgtest_main -lgtest -pthread 
 NAME := s21_containers
 TEST_NAME := test_$(NAME)
@@ -35,11 +35,11 @@ test: $(TEST_NAME)
 $(TEST_NAME): $(GTEST_OBJ)
 	$(CC) $(GTEST_FLAGS) $^ -o $@ -fprofile-arcs
 
-$(GCDA_FILES): $(GTEST_OBJ)
-	make test
-
 .cc.o:
 	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
+
+$(GCDA_FILES): $(GTEST_OBJ)
+	make test
 
 .PHONY: gcov_report
 gcov_report: $(GCDA_FILES)

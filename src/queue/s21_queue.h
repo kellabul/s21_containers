@@ -14,7 +14,7 @@ private:
     struct Node {
         T data;
         std::unique_ptr<Node> next;
-        Node(const T& data) : data(data), next(nullptr) {}
+        explicit Node(const T& data) : data(data), next(nullptr) {}
     };
 
     std::unique_ptr<Node> head;
@@ -196,6 +196,7 @@ public:
             ++(*this);
             return tmp;
         }
+
         iterator operator--(int) {
             iterator tmp = *this;
             --(*this);
