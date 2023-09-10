@@ -33,7 +33,7 @@ test: $(TEST_NAME)
 	./$(TEST_NAME)
 
 $(TEST_NAME): $(GTEST_OBJ)
-	$(CC) $(GTEST_FLAGS) $^ -o $@
+	$(CC) $(GTEST_FLAGS) $^ -o $@ -fprofile-arcs
 
 .cc.o:
 	$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@
