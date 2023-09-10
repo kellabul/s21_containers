@@ -35,7 +35,7 @@ class array {
     }
   }
 
-  array(array &&other)  noexcept {
+  array(array &&other) noexcept {
     if (this != &other) {
       for (size_type i = 0; i < Size; ++i) {
         arr_[i] = std::move(other.arr_[i]);
@@ -49,7 +49,7 @@ class array {
     return *this;
   }
 
-  array &operator=(array &&other)  noexcept {
+  array &operator=(array &&other) noexcept {
     array tmp(std::move(other));
     swap(tmp);
     return *this;
@@ -64,7 +64,9 @@ class array {
 
   constexpr reference operator[](size_type pos) { return arr_[pos]; }
 
-  constexpr const_reference operator[](size_type pos) const { return arr_[pos]; }
+  constexpr const_reference operator[](size_type pos) const {
+    return arr_[pos];
+  }
 
   constexpr const_reference front() const { return arr_[0]; };
 
@@ -75,6 +77,13 @@ class array {
   constexpr iterator begin() noexcept { return arr_; };
 
   constexpr iterator end() noexcept {
+    if (empty()) return arr_;
+    return arr_ + Size;
+  };
+
+  constexpr const_iterator begin() const noexcept { return arr_; };
+
+  constexpr const_iterator end() const noexcept {
     if (empty()) return arr_;
     return arr_ + Size;
   };

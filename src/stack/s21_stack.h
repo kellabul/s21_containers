@@ -14,8 +14,8 @@ private:
         std::unique_ptr<Node> next;
         explicit Node(const T& data) : data(data), next(nullptr) {}
     };
-    std::size_t node_count = 0;
     std::unique_ptr<Node> top_node;
+    std::size_t node_count = 0;
 
 public:
     using value_type = T;
@@ -88,7 +88,7 @@ public:
     }
 
     stack(stack&& other) noexcept
-    : node_count(other.node_count), top_node(std::move(other.top_node)) {
+    : top_node(std::move(other.top_node)), node_count(other.node_count) {
     other.node_count = 0;
     }
     stack& operator=(stack&& other) noexcept {

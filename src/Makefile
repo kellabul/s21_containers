@@ -43,17 +43,17 @@ $(GCDA_FILES): $(GTEST_OBJ)
 
 .PHONY: gcov_report
 gcov_report: $(GCDA_FILES)
-	lcov -t "$(NAME)" -o gcov.info -c -d . --rc lcov_branch_coverage=1 --no-external
-	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info --rc lcov_branch_coverage=1
+	lcov -t "$(NAME)" -o gcov.info -c -d . --no-external
+	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info
 	open $(LCOV_REPORT_FOLDER)/index.html
 
 .PHONY: gcovr_html
-gcovr_html: $(TEST_NAME)
-	gcovr --html >> $(TEST_NAME).html
-	open $(TEST_NAME).html
+gcovr_html: test
+	gcovr --html-details $(TEST_NAME).details.html
+	open $(TEST_NAME).details.html
 
 .PHONY: gcovr
-gcovr: $(TEST_NAME)
+gcovr: test
 	gcovr
 
 .PHONY: gcov

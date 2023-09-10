@@ -12,9 +12,11 @@ class map : public RBTree<s21::pair<const Key, T>, Compare> {
   using key_type = Key;
   using mapped_type = T;
   using value_type = s21::pair<const key_type, mapped_type>;
+  using std_type = std::pair<const key_type, mapped_type>;
   using tree_type = RBTree<value_type, Compare>;
   using reference = value_type &;
   using const_reference = const value_type &;
+  using const_std_reference = const std_type &;
   using const_iterator = typename tree_type::RBTreeConstIterator;
   using iterator = typename tree_type::RBTreeIterator;
   using size_type = size_t;
@@ -26,11 +28,20 @@ class map : public RBTree<s21::pair<const Key, T>, Compare> {
 
   map(std::initializer_list<value_type> const &items) : tree_type::RBTree() {
     for (const auto &element : items) {
-      tree_type::InsertMapPair(element);
+      insert(element);
     }
   }
 
+  map(const_std_reference key) : tree_type::RBTree() {
+      tree_type::InsertMapPair(key);
+  }
+
+
   std::pair<iterator, bool> insert(const_reference key) {
+    return tree_type::InsertMapPair(key);
+  }
+
+  std::pair<iterator, bool> insert(const_std_reference key) {
     return tree_type::InsertMapPair(key);
   }
 
@@ -49,7 +60,6 @@ class map : public RBTree<s21::pair<const Key, T>, Compare> {
 
   mapped_type &at(const Key &key) {
     auto node = tree_type::FindNode(value_type(key, mapped_type{}));
-    ;
     if (node == tree_type::GetNil()) throw std::out_of_range("No such key");
     return node->key_->second;
   }

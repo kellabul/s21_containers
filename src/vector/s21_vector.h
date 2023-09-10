@@ -117,8 +117,9 @@ class vector {
   inline size_type size() { return std::distance(begin(), end()); }
 
   inline size_type max_size() {
-    return std::numeric_limits<size_type>::max() / sizeof(size_type);
+    return (std::numeric_limits<size_type>::max() / 2) / sizeof(value_type);
   }
+
 
   void reserve(size_type size) {
     if (size > max_size()) {

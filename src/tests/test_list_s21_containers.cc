@@ -115,6 +115,18 @@ TEST(list, copy_constructor) {
   EXPECT_EQ(444, *iter);
 }
 
+TEST(list, move_operator) {
+  s21::list<int> zero{111, 222, 444};
+  s21::list<int> one;
+  one = std::move(zero);
+  auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+}
+
 TEST(list, erase) {
   s21::list<std::string> alpha{"one", "two", "three"};
   alpha.erase(alpha.begin());
