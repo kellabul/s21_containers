@@ -101,8 +101,13 @@ TEST(map, contains) {
   s21::map<int, int> one(std::make_pair(99, 777));
   EXPECT_EQ(one[99], 777);
   EXPECT_EQ(one.contains(99), true);
-  
-  s21::map<int, int> two{{77, 777}, {55, 555}, {33, 333}, {11, 111},};
+
+  s21::map<int, int> two{
+      {77, 777},
+      {55, 555},
+      {33, 333},
+      {11, 111},
+  };
   EXPECT_EQ(two.contains(77), true);
   EXPECT_EQ(two.contains(66), false);
   two.insert(std::make_pair(66, 666));
@@ -112,13 +117,18 @@ TEST(map, contains) {
   EXPECT_EQ(three[11], 111);
   EXPECT_EQ(three.contains(11), true);
   for (auto iter = three.begin(); iter != three.end(); ++iter) {
-      EXPECT_EQ((*iter).first, 11);
-      EXPECT_EQ((*iter).second, 111);
+    EXPECT_EQ((*iter).first, 11);
+    EXPECT_EQ((*iter).second, 111);
   }
 }
 
 TEST(map, at__insert_or_assign) {
-  s21::map<int, int> one{{77, 777}, {55, 555}, {33, 333}, {11, 111},};
+  s21::map<int, int> one{
+      {77, 777},
+      {55, 555},
+      {33, 333},
+      {11, 111},
+  };
   EXPECT_EQ(one.at(77), 777);
   EXPECT_ANY_THROW(one.at(66));
   one.insert_or_assign(66, 666);
@@ -127,5 +137,18 @@ TEST(map, at__insert_or_assign) {
   EXPECT_EQ(one.at(77), 999);
 }
 
-
-
+TEST(map, iterator) {
+  s21::map<int, int> one{{1, 2},   {3, 4},   {5, 6},   {7, 8},
+                         {9, 10},  {11, 12}, {13, 14}, {15, 16},
+                         {17, 18}, {19, 20}, {20, 21}, {22, 23}};
+  auto iter = one.begin();
+  for (; iter != one.end(); ++iter) {
+  }
+  iter++;
+  EXPECT_EQ((*iter).first, 1);
+  iter--;
+  iter--;
+  for (; iter != one.begin(); --iter) {
+  }
+  EXPECT_EQ((*iter).first, 1);
+}

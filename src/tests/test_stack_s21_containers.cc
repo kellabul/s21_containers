@@ -33,8 +33,8 @@ ADD_FAILURE_AT(«file_path», line_number);
 #include <gtest/gtest.h>
 
 #include <iostream>
-#include <string>
 #include <stack>
+#include <string>
 
 #include "s21_containers.h"
 

@@ -1,8 +1,6 @@
 #ifndef CPP2_S21_CONTAINERS_LIST_S21_LIST_NODE_H_
 #define CPP2_S21_CONTAINERS_LIST_S21_LIST_NODE_H_
 
-
-
 namespace s21 {
 template <typename T>
 struct ListNode {

@@ -32,10 +32,10 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <gtest/gtest.h>
 
+#include <initializer_list>
 #include <iostream>
 #include <list>
 #include <string>
-#include <initializer_list>
 
 #include "s21_containers.h"
 
@@ -93,11 +93,6 @@ TEST(array, move_operator) {
   EXPECT_EQ(one.size(), 6);
 }
 
-
-
-
-
-
 TEST(array, at_and_brackets) {
   s21::array<int, 6> one{1, 2, 3, 4, 5, 6};
   EXPECT_EQ(one.at(3), 4);
@@ -143,7 +138,6 @@ TEST(array, fill) {
   }
   EXPECT_EQ(iter, one.end());
 }
-
 
 TEST(array, const) {
   const s21::array<int, 6> one{1, 2, 3, 4, 5, 6};

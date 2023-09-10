@@ -34,14 +34,13 @@ ADD_FAILURE_AT(«file_path», line_number);
 
 #include <iostream>
 #include <list>
-#include <string>
 #include <queue>
+#include <string>
 
 #include "s21_containers.h"
 
 using std::cout;
 using std::endl;
-
 
 TEST(S21_queueTest, Constructor_Default) {
   s21::queue<int> S21_queueTest;
@@ -123,9 +122,11 @@ TEST(S21_queueTest, Modifier_Pop) {
 }
 
 TEST(S21_queueTest, Modifier_Swap) {
-  s21::queue<std::string> S21_queueTest_1{"aboba", "shleppa", "amogus", "abobus"};
+  s21::queue<std::string> S21_queueTest_1{"aboba", "shleppa", "amogus",
+                                          "abobus"};
   s21::queue<std::string> S21_queueTest_2{"shtirlits", "vovochka", "poruchik"};
-  s21::queue<std::string> S21_queueTest_3{"aboba", "shleppa", "amogus", "abobus"};
+  s21::queue<std::string> S21_queueTest_3{"aboba", "shleppa", "amogus",
+                                          "abobus"};
   s21::queue<std::string> S21_queueTest_4{"shtirlits", "vovochka", "poruchik"};
 
   S21_queueTest_1.swap(S21_queueTest_2);
@@ -230,4 +231,3 @@ TEST(S21_queueTest, insert_many_back) {
     res_queue.pop();
   }
 }
-

@@ -33,9 +33,8 @@ class map : public RBTree<s21::pair<const Key, T>, Compare> {
   }
 
   map(const_std_reference key) : tree_type::RBTree() {
-      tree_type::InsertMapPair(key);
+    tree_type::InsertMapPair(key);
   }
-
 
   std::pair<iterator, bool> insert(const_reference key) {
     return tree_type::InsertMapPair(key);

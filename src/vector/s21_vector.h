@@ -35,7 +35,7 @@ class vector {
 
   vector(const vector &v) : vector() { operator=(v); }
 
-  vector(vector &&v)  noexcept : vector() { operator=(std::move(v)); }
+  vector(vector &&v) noexcept : vector() { operator=(std::move(v)); }
 
   ~vector() { clear_(); }
 
@@ -55,7 +55,7 @@ class vector {
     return *this;
   }
 
-  vector &operator=(vector &&v)  noexcept {
+  vector &operator=(vector &&v) noexcept {
     if (this != &v) {
       clear_();
       size_ = v.size_;
@@ -119,7 +119,6 @@ class vector {
   inline size_type max_size() {
     return (std::numeric_limits<size_type>::max() / 2) / sizeof(value_type);
   }
-
 
   void reserve(size_type size) {
     if (size > max_size()) {

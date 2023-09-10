@@ -115,11 +115,25 @@ TEST(list, copy_constructor) {
   EXPECT_EQ(444, *iter);
 }
 
-TEST(list, move_operator) {
+TEST(list, move__assignment__operators) {
   s21::list<int> zero{111, 222, 444};
   s21::list<int> one;
   one = std::move(zero);
   auto iter = one.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  s21::list<int> two;
+  two = one;
+  iter = two.begin();
+  EXPECT_EQ(111, *iter);
+  ++iter;
+  EXPECT_EQ(222, *iter);
+  ++iter;
+  EXPECT_EQ(444, *iter);
+  iter = one.begin();
   EXPECT_EQ(111, *iter);
   ++iter;
   EXPECT_EQ(222, *iter);
@@ -379,43 +393,3 @@ TEST(list, insert_many) {
   one.insert_many_front();
   one.insert_many(one.begin());
 }
-
-// s21::list<int> sort_list;
-
-// TEST(list, fill_sort) {
-//   for (int i = 0; i < 10'000'000; ++i) sort_list.push_back(rand());
-// }
-
-// TEST(list, sort_big_fast) {
-//   s21::list<int> sort_list_fast(sort_list);
-//   sort_list_fast.sort_fast();
-//   auto iter = sort_list_fast.begin();
-//   for (int i = 0; i < 11; ++i) {
-//     cout << *iter << " ";
-//     ++iter;
-//   }
-//   cout << endl;
-//   iter = --sort_list_fast.end();
-//   for (int i = 0; i < 5; ++i) {
-//     cout << *iter << " ";
-//     --iter;
-//   }
-//   cout << endl;
-// }
-
-// TEST(list, sort_big) {
-//   s21::list<int> sort_list_iter(sort_list);
-//   sort_list_iter.sort();
-//   auto iter = sort_list_iter.begin();
-//   for (int i = 0; i < 11; ++i) {
-//     cout << *iter << " ";
-//     ++iter;
-//   }
-//   cout << endl;
-//   iter = --sort_list_iter.end();
-//   for (int i = 0; i < 5; ++i) {
-//     cout << *iter << " ";
-//     --iter;
-//   }
-//   cout << endl;
-// }

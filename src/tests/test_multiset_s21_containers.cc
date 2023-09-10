@@ -142,7 +142,6 @@ TEST(multiset, contains) {
   EXPECT_EQ(one.contains(0), false);
 }
 
-
 TEST(multicet, upperBound_1) {
   s21::multiset<int> keka{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
   std::multiset<int> std_keka{1, 1, 2, 3, 3, 3, 4, 8, 99, 100, 99, 102, 243};
@@ -449,7 +448,6 @@ TEST(multicet, LowerBound_9) {
   }
 }
 
-
 TEST(multicet, EqualRange_1) {
   std::multiset<int> std_keka{3, 4,   5,   5,   7,   7,   7,   7,
                               9, 198, 200, 200, 200, 200, 200, 232};
@@ -557,4 +555,3 @@ TEST(multicet, EqualRange_8) {
   ASSERT_EQ(std_range.first, std_end);
   ASSERT_EQ(std_range.second, std_end);
 }
-
