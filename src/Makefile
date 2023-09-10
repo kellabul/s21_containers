@@ -9,9 +9,9 @@ LCOV_REPORT_FOLDER := $(NAME)_report
 TEST_FOLDER := tests
 
 
-COVERAGE_FILES := tests/*.gcno
-COVERAGE_RESULTS := tests/*.gcda
-GCOV_FILES := tests/*.gcov *.gcov
+COVERAGE_FILES := tests/*.gcno *.gcno
+COVERAGE_RESULTS := tests/*.gcda *.gcda
+GCOV_FILES := tests/*.gcov *.gcov *.gcov
 LCOV_FILES := tests/*.info *.info *html *css
 TEST_COVERAGE_FILES := $(COVERAGE_FILES) $(COVERAGE_RESULTS) $(GCOV_FILES) $(LCOV_FILES)
 
@@ -34,7 +34,7 @@ all: test
 
 .PHONY: clean
 clean:
-	rm -rf tests/*.o $(TEST_NAME) $(TEST_COVERAGE_FILES) $(LCOV_REPORT_FOLDER) 
+	rm -rf *.o tests/*.o $(TEST_NAME) $(TEST_COVERAGE_FILES) $(LCOV_REPORT_FOLDER) 
 
 .PHONY: test
 test: $(TEST_NAME)
@@ -60,8 +60,8 @@ $(GCDA_FILES): $(GTEST_LIST_OBJ) $(GTEST_SET_OBJ) $(GTEST_MULTISET_OBJ) $(GTEST_
 
 .PHONY: gcov_report
 gcov_report: $(GCDA_FILES)
-	lcov -t "$(NAME)" -o gcov.info -c -d . --no-external
-	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info
+	lcov -t "$(NAME)" -o gcov.info -c -d . --rc lcov_branch_coverage=1 --no-external
+	genhtml -o  $(LCOV_REPORT_FOLDER)  gcov.info --rc lcov_branch_coverage=1
 	open $(LCOV_REPORT_FOLDER)/index.html
 
 .PHONY: gcovr_html

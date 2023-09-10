@@ -28,7 +28,7 @@ class list {
     while (n--) push_back(value_type());
   }
   // 	initializer list
-  explicit list(std::initializer_list<value_type> const &items) : list() {
+  list(std::initializer_list<value_type> const &items) : list() {
     for (const value_type &element : items) {
       push_back(element);
     }

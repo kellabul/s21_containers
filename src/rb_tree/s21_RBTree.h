@@ -50,7 +50,7 @@ class RBTree {
     ImportElementsMulti(other.root_, other.nil_);
   }
 
-  RBTree(RBTree &&other)
+  RBTree(RBTree &&other) noexcept
       : nil_(other.nil_), root_(other.root_), size_(other.size_) {
     other.root_ = nullptr;
     other.nil_ = nullptr;

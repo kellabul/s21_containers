@@ -24,8 +24,7 @@ class map : public RBTree<s21::pair<const Key, T>, Compare> {
   using tree_type::end;
   using tree_type::RBTree;
 
-  explicit map(std::initializer_list<value_type> const &items)
-      : tree_type::RBTree() {
+  map(std::initializer_list<value_type> const &items) : tree_type::RBTree() {
     for (const auto &element : items) {
       tree_type::InsertMapPair(element);
     }
